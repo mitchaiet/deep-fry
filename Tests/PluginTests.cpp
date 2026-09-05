@@ -3,6 +3,7 @@
 // See LICENSE and COPYRIGHT for terms and warranty disclaimer.
 
 #include "PluginProcessor.h"
+#include "PluginEditor.h"
 
 #include <juce_audio_utils/juce_audio_utils.h>
 #include <algorithm>
@@ -47,14 +48,14 @@ void setParameter(DeepFryAudioProcessor& processor, const char* id, float value)
     parameter->setValueNotifyingHost(parameter->convertTo0to1(value));
 }
 
-void prepare(DeepFryAudioProcessor& processor, int channelCount = 2)
+void prepare(DeepFryAudioProcessor& processor, int channelCount = 2, double rate = sampleRate)
 {
     auto layout = processor.getBusesLayout();
     layout.inputBuses.set(0, juce::AudioChannelSet::canonicalChannelSet(channelCount));
     layout.outputBuses.set(0, juce::AudioChannelSet::canonicalChannelSet(channelCount));
     require(processor.setBusesLayout(layout), "requested processing layout is accepted");
-    processor.setRateAndBufferSizeDetails(sampleRate, 511);
-    processor.prepareToPlay(sampleRate, 511);
+    processor.setRateAndBufferSizeDetails(rate, 511);
+    processor.prepareToPlay(rate, 511);
 }
 
 Audio stimulus(int channels = 2, int length = 8197)
@@ -71,7 +72,8 @@ Audio stimulus(int channels = 2, int length = 8197)
 
 Audio processSamples(DeepFryAudioProcessor& processor, const Audio& input,
                      const std::vector<int>& blockPattern = { 511 },
-                     bool automate = false, bool hostBypass = false)
+                     bool automate = false, bool hostBypass = false,
+                     std::vector<deepfry::VisualFrame>* capturedFrames = nullptr)
 {
     require(!input.empty() && !blockPattern.empty(), "processing input and partition are nonempty");
     require(std::any_of(blockPattern.begin(), blockPattern.end(), [](int size) { return size > 0; }),
@@ -109,6 +111,12 @@ Audio processSamples(DeepFryAudioProcessor& processor, const Audio& input,
                 std::copy_n(buffer.getReadPointer(channel), size,
                             output[static_cast<std::size_t>(channel)].begin() + position);
         position += size;
+        if (capturedFrames != nullptr)
+        {
+            deepfry::VisualFrame frame;
+            while (processor.popVisualFrame(frame))
+                capturedFrames->push_back(frame);
+        }
     }
     return output;
 }
@@ -303,55 +311,208 @@ void stateRecall()
     require(processSamples(source, input) == processSamples(restored, input), "restored state produces identical audio");
 }
 
-void visualizationAndInvalidInput()
+std::vector<deepfry::VisualFrame> drainVisualFrames(DeepFryAudioProcessor& processor)
 {
-    DeepFryAudioProcessor processor;
-    setParameter(processor, "output", 0);
-    prepare(processor);
-    const auto input = stimulus(2, 32768);
-    const auto output = processSamples(processor, input);
-    deepfry::TileFrame frame;
-    int count = 0;
+    std::vector<deepfry::VisualFrame> frames;
+    deepfry::VisualFrame frame;
     while (processor.popVisualFrame(frame))
+        frames.push_back(frame);
+    require(!processor.popVisualFrame(frame), "visual queue cleanly reports empty after draining");
+    return frames;
+}
+
+void checkCapturedFrames(const std::vector<deepfry::VisualFrame>& frames,
+                         const Audio& input, const Audio& output, bool wetOnly = false, double rate = sampleRate)
+{
+    require(!frames.empty(), "processor supplies completed visualization frames");
+    std::uint64_t previousPosition = 0;
+    bool first = true;
+    for (const auto& frame : frames)
     {
-        const int sourceStart = (++count * 12 - 1) * 64;
-        require(std::isfinite(frame.retained) && frame.retained >= 0 && frame.retained <= 1,
-                "visual coefficient retention is a finite fraction");
-        for (std::size_t i = 0; i < frame.before.size(); ++i)
+        require(frame.channelCount == static_cast<int>(input.size()), "visual frame identifies the active mono or stereo layout");
+        require(frame.sampleRate == rate, "visual frame carries the processing sample rate");
+        require(frame.streamGeneration == frames.front().streamGeneration,
+                "all frames captured during one uninterrupted prepare session identify the same audio stream");
+        require(frame.samplePosition % latency == 0, "visual source position begins at an audio tile boundary");
+        require(first || frame.samplePosition > previousPosition, "published visual tiles retain chronological sample positions");
+        previousPosition = frame.samplePosition;
+        first = false;
+        require(frame.samplePosition + latency * 2 <= output.front().size(),
+                "visual frame is published only after its entire delayed output tile has been emitted");
+        for (std::size_t channel = 0; channel < input.size(); ++channel)
         {
-            require(std::isfinite(frame.before[i]) && frame.before[i] >= 0 && frame.before[i] <= 255,
-                    "live source pixels are finite luminance values");
-            require(std::isfinite(frame.after[i]) && frame.after[i] >= 0 && frame.after[i] <= 255,
-                    "live processed pixels are finite luminance values");
-            require(frame.before[i] == 128.0f + std::round(input[0][static_cast<std::size_t>(sourceStart) + i] * 127.0f),
-                    "live input visualization contains actual input samples mapped to pixels");
-            const auto outputIndex = static_cast<std::size_t>(sourceStart + latency) + i;
-            if (outputIndex < output[0].size())
-                require(std::abs(frame.after[i] - (128.0f + output[0][outputIndex] * 127.0f)) < 0.0001f,
-                        "live output visualization is the actual audible decoded tile");
+            const auto& captured = frame.channels[channel];
+            require(std::isfinite(captured.image.retained) && captured.image.retained >= 0 && captured.image.retained <= 1,
+                    "each channel has a finite visual coefficient-retention fraction");
+            for (std::size_t i = 0; i < captured.output.size(); ++i)
+            {
+                const auto sourceIndex = static_cast<std::size_t>(frame.samplePosition) + i;
+                const auto outputIndex = sourceIndex + latency;
+                const float source = std::isfinite(input[channel][sourceIndex]) ? input[channel][sourceIndex] : 0.0f;
+                require(std::isfinite(captured.image.before[i]) && captured.image.before[i] >= 0 && captured.image.before[i] <= 255,
+                        "live source pixels are finite luminance values");
+                require(std::isfinite(captured.image.after[i]) && captured.image.after[i] >= 0 && captured.image.after[i] <= 255,
+                        "live JPEG pixels are finite luminance values");
+                require(captured.image.before[i] == 128.0f + std::round(std::clamp(source, -1.0f, 1.0f) * 127.0f),
+                        "each channel's input image is derived from its own actual source samples");
+                require(std::isfinite(captured.output[i]) && captured.output[i] == output[channel][outputIndex],
+                        "final-output visualization exactly matches the delayed audible sample after Mix, gain, and bypass");
+                if (wetOnly)
+                    require(std::abs(captured.image.after[i] - (128.0f + captured.output[i] * 127.0f)) < 0.0001f,
+                            "JPEG pixels map back to the corresponding audible sample at 100 percent wet and unity gain");
+            }
         }
     }
-    require(count > 30, "processor supplies a continuous stream of real visual frames");
-    require(!processor.popVisualFrame(frame), "visual queue cleanly reports empty after draining");
-    require(std::isfinite(processor.inputLevel.load()) && processor.inputLevel.load() > 0,
-            "input meter receives a finite live level");
-    require(std::isfinite(processor.outputLevel.load()) && processor.outputLevel.load() > 0,
-            "output meter receives a finite live level");
+}
 
-    // Fill the bounded FIFO without an editor, then confirm processing continues.
+void visualizationAndInvalidInput()
+{
+    const auto input = stimulus(2, 32768);
+    for (int mode = 0; mode < 5; ++mode)
+    {
+        DeepFryAudioProcessor processor;
+        setParameter(processor, "mix", mode == 0 ? 100.0f : mode == 1 ? 0.0f : 37.0f);
+        setParameter(processor, "output", mode == 0 ? 0.0f : -9.0f);
+        setParameter(processor, "bypass", mode == 3 ? 1.0f : 0.0f);
+        prepare(processor);
+        const auto output = processSamples(processor, input, { 0, 1, 17, 64, 511 }, mode == 2, mode == 4);
+        const auto frames = drainVisualFrames(processor);
+        require(frames.size() > 30, "processor supplies a continuous stream of stereo visual frames");
+        checkCapturedFrames(frames, input, output, mode == 0);
+        require(std::isfinite(processor.inputLevel.load()) && processor.inputLevel.load() > 0,
+                "input meter receives a finite live level");
+        require(std::isfinite(processor.outputLevel.load()) && processor.outputLevel.load() > 0,
+                "output meter receives a finite live level");
+    }
+
+    // A bypass transition inside a selected output tile must be represented
+    // sample for sample, including smoothing and host bypass's gain-neutral path.
+    for (bool hostBypass : { false, true })
+    {
+        DeepFryAudioProcessor processor;
+        setParameter(processor, "mix", 59);
+        setParameter(processor, "output", -17);
+        prepare(processor);
+        Audio output(2);
+        int position = 0;
+        for (const int end : { 1559, 2317, static_cast<int>(input.front().size()) })
+        {
+            Audio section(2);
+            for (std::size_t channel = 0; channel < input.size(); ++channel)
+                section[channel].assign(input[channel].begin() + position, input[channel].begin() + end);
+            const bool bypassed = position == 1559;
+            if (!hostBypass)
+                setParameter(processor, "bypass", bypassed ? 1.0f : 0.0f);
+            const auto rendered = processSamples(processor, section, { 17, 0, 1, 511 }, false, hostBypass && bypassed);
+            for (std::size_t channel = 0; channel < output.size(); ++channel)
+                output[channel].insert(output[channel].end(), rendered[channel].begin(), rendered[channel].end());
+            position = end;
+        }
+        checkCapturedFrames(drainVisualFrames(processor), input, output);
+    }
+
+    // Pixel colors saturate at full scale, but captured final audio must retain
+    // finite values above it so the inspector can report actual output headroom.
+    DeepFryAudioProcessor overrange;
+    setParameter(overrange, "mix", 0);
+    setParameter(overrange, "output", 6);
+    prepare(overrange);
+    auto hotInput = stimulus(2, 4096);
+    for (auto& channel : hotInput)
+        for (auto& sample : channel)
+            sample *= 4.0f;
+    const auto hotOutput = processSamples(overrange, hotInput, { 1, 511, 17 });
+    const auto hotFrames = drainVisualFrames(overrange);
+    checkCapturedFrames(hotFrames, hotInput, hotOutput);
+    bool sawOverrange = false;
+    for (const auto& frame : hotFrames)
+        for (const auto& channel : frame.channels)
+            for (float sample : channel.output)
+                sawOverrange = sawOverrange || std::abs(sample) > 1.0f;
+    require(sawOverrange, "final-output capture preserves samples above full scale without clipping them to image bounds");
+
+    // Draining the display on every block and leaving its bounded FIFO full must
+    // produce identical audio, even when automation crosses irregular buffers.
+    DeepFryAudioProcessor unattended, observed;
+    prepare(unattended);
+    prepare(observed);
     const auto longInput = stimulus(2, 131072);
-    checkFinite(processSamples(processor, longInput));
-    count = 0;
-    while (processor.popVisualFrame(frame))
-        ++count;
-    require(count > 0 && count <= 127, "visual queue remains bounded when the editor is closed");
+    const auto unattendedOutput = processSamples(unattended, longInput, { 17, 0, 511 }, true);
+    std::vector<deepfry::VisualFrame> observedFrames;
+    const auto observedOutput = processSamples(observed, longInput, { 17, 0, 511 }, true, false, &observedFrames);
+    require(unattendedOutput == observedOutput, "a full visualization FIFO never changes or interrupts audio");
+    const auto queuedFrames = drainVisualFrames(unattended);
+    require(!queuedFrames.empty() && queuedFrames.size() <= 127, "visual queue remains bounded when the editor is closed");
+    require(observedFrames.size() > queuedFrames.size(), "an unattended full queue drops visual frames while processing continues");
+    checkCapturedFrames(queuedFrames, longInput, unattendedOutput);
+    checkCapturedFrames(observedFrames, longInput, observedOutput);
 
     auto damaged = stimulus();
-    damaged[0][0] = std::numeric_limits<float>::quiet_NaN();
-    damaged[0][1] = std::numeric_limits<float>::infinity();
-    damaged[1][7] = -std::numeric_limits<float>::infinity();
+    damaged[0][704] = std::numeric_limits<float>::quiet_NaN();
+    damaged[0][705] = std::numeric_limits<float>::infinity();
+    damaged[1][711] = -std::numeric_limits<float>::infinity();
+    prepare(observed);
+    const auto sanitizedOutput = processSamples(observed, damaged, { 17, 511 });
+    checkFinite(sanitizedOutput);
+    checkCapturedFrames(drainVisualFrames(observed), damaged, sanitizedOutput);
+}
+
+void visualizationPublicationAndReset()
+{
+    DeepFryAudioProcessor processor;
     prepare(processor);
-    checkFinite(processSamples(processor, damaged, { 17, 511 }));
+    const auto input = stimulus(2, 832);
+    Audio output(2);
+    int position = 0;
+    for (const int end : { 768, 831, 832 })
+    {
+        Audio section(2);
+        for (std::size_t channel = 0; channel < input.size(); ++channel)
+            section[channel].assign(input[channel].begin() + position, input[channel].begin() + end);
+        const auto rendered = processSamples(processor, section, { 17, 0, 1, 511 });
+        for (std::size_t channel = 0; channel < output.size(); ++channel)
+            output[channel].insert(output[channel].end(), rendered[channel].begin(), rendered[channel].end());
+        if (end < 832)
+        {
+            deepfry::VisualFrame frame;
+            require(!processor.popVisualFrame(frame), "an incomplete final-output tile is never exposed to the editor");
+        }
+        position = end;
+    }
+    const auto completed = drainVisualFrames(processor);
+    require(completed.size() == 1 && completed.front().samplePosition == 704,
+            "first visualization includes source tile 704 through 767 and publishes after output sample 831");
+    checkCapturedFrames(completed, input, output);
+
+    // Re-prepare while half the pending output tile is captured. None of that
+    // previous stereo session may leak into the newly prepared mono frame.
+    prepare(processor);
+    processSamples(processor, stimulus(2, 800));
+    prepare(processor, 1);
+    const auto monoInput = stimulus(1, 832);
+    const auto monoOutput = processSamples(processor, monoInput, { 0, 17, 511 });
+    const auto monoFrames = drainVisualFrames(processor);
+    require(monoFrames.size() == 1 && monoFrames.front().samplePosition == 704,
+            "prepare discards a partial capture and restarts the source sample timeline");
+    require(monoFrames.front().streamGeneration != completed.front().streamGeneration,
+            "prepare identifies a new visual stream even when sample positions repeat");
+    checkCapturedFrames(monoFrames, monoInput, monoOutput);
+    for (float sample : monoFrames.front().channels[1].output)
+        require(sample == 0.0f, "mono visual frames contain no stale output from the previous right channel");
+
+    // At low sample rates every tile is selected, so completing one output
+    // capture and opening the next must work at the same sample boundary.
+    for (double rate : { 3200.0, 44100.0, 96000.0, 192000.0 })
+    {
+        prepare(processor, 2, rate);
+        const auto rateInput = stimulus(2, 8192);
+        std::vector<deepfry::VisualFrame> frames;
+        const auto rateOutput = processSamples(processor, rateInput, { 0, 1, 17, 511 }, true, false, &frames);
+        checkCapturedFrames(frames, rateInput, rateOutput, false, rate);
+        if (rate == 3200.0)
+            require(frames.size() == 127 && frames.front().samplePosition == 0,
+                    "back-to-back capture retains every completed tile at the minimum visual interval");
+    }
 }
 
 Audio musicalDemo()
@@ -446,6 +607,37 @@ void clickEditorButton(juce::AudioProcessorEditor& editor, const char* name)
     juce::MessageManager::getInstance()->runDispatchLoopUntil(50);
 }
 
+bool imagesEqual(const juce::Image& first, const juce::Image& second)
+{
+    if (first.getBounds() != second.getBounds() || first.isValid() != second.isValid())
+        return false;
+    for (int y = 0; y < first.getHeight(); ++y)
+        for (int x = 0; x < first.getWidth(); ++x)
+            if (first.getPixelAt(x, y) != second.getPixelAt(x, y))
+                return false;
+    return true;
+}
+
+void inspectImageTile(juce::AudioProcessorEditor& editor)
+{
+    // Use an actual click inside the image, translated from the editor's design
+    // coordinates, so inspection exercises the same path as a user's mouse.
+    const float scale = std::min(static_cast<float>(editor.getWidth()) / 1120.0f,
+                                 static_cast<float>(editor.getHeight()) / 800.0f);
+    const juce::Point<float> point {
+        (static_cast<float>(editor.getWidth()) - 1120.0f * scale) * 0.5f + 450.0f * scale,
+        (static_cast<float>(editor.getHeight()) - 800.0f * scale) * 0.5f + 210.0f * scale
+    };
+    const auto now = juce::Time::getCurrentTime();
+    const juce::MouseEvent click(juce::Desktop::getInstance().getMainMouseSource(), point,
+                                 juce::ModifierKeys::leftButtonModifier, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+                                 &editor, &editor, now, point, now, 1, false);
+    editor.mouseDown(click);
+    juce::MessageManager::getInstance()->runDispatchLoopUntil(30);
+    auto* freeze = dynamic_cast<juce::Button*>(findEditorControl(editor, "Freeze visualization"));
+    require(freeze != nullptr && freeze->getToggleState(), "clicking an image tile freezes its matching input and processed history for inspection");
+}
+
 void captureEditor(juce::AudioProcessorEditor& editor, const juce::File& screenshotFile)
 {
     const auto snapshot = editor.createComponentSnapshot(editor.getLocalBounds(), true, 1.0f);
@@ -459,6 +651,56 @@ void captureEditor(juce::AudioProcessorEditor& editor, const juce::File& screens
     juce::PNGImageFormat png;
     require(png.writeImageToStream(snapshot, *imageStream), "native editor screenshot is encoded as PNG");
     imageStream->flush();
+}
+
+void visualizationRestartWhileFrozen()
+{
+    DeepFryAudioProcessor processor, reference;
+    for (auto* candidate : { &processor, &reference })
+    {
+        setParameter(*candidate, "mix", 0);
+        setParameter(*candidate, "output", 0);
+    }
+    prepare(processor);
+    std::unique_ptr<juce::AudioProcessorEditor> editor(processor.createEditor());
+    auto* visualEditor = dynamic_cast<DeepFryAudioProcessorEditor*>(editor.get());
+    require(visualEditor != nullptr, "stream restart regression creates the real visualization editor");
+    processSamples(processor, Audio(2, std::vector<float>(4096, -0.5f)));
+    juce::MessageManager::getInstance()->runDispatchLoopUntil(50);
+    const auto beforeRestart = visualEditor->createVisualizationSnapshot();
+    require(beforeRestart.isValid(), "stream restart regression begins with real negative-amplitude image history");
+    clickEditorButton(*editor, "Freeze visualization");
+
+    prepare(processor);
+    prepare(reference);
+    const Audio newStream(2, std::vector<float>(16384, 0.5f));
+    processSamples(processor, newStream);
+    processSamples(reference, newStream);
+    juce::MessageManager::getInstance()->runDispatchLoopUntil(50);
+    require(imagesEqual(beforeRestart, visualEditor->createVisualizationSnapshot()),
+            "frozen image history remains unchanged while a restarted audio stream advances beyond the old sample positions");
+
+    // The reference editor starts with no history after the restart has already
+    // advanced. Its next two tiles are exactly what the resumed editor should
+    // retain, with all previous-generation imagery discarded.
+    const auto discardedReferenceFrames = drainVisualFrames(reference);
+    require(!discardedReferenceFrames.empty() && discardedReferenceFrames.back().samplePosition > 4096,
+            "new stream has overtaken the complete previous timeline before visualization resumes");
+    std::unique_ptr<juce::AudioProcessorEditor> referenceEditor(reference.createEditor());
+    auto* referenceVisualEditor = dynamic_cast<DeepFryAudioProcessorEditor*>(referenceEditor.get());
+    require(referenceVisualEditor != nullptr && !referenceVisualEditor->createVisualizationSnapshot().isValid(),
+            "reference editor starts without any historical tiles");
+    clickEditorButton(*editor, "Freeze visualization");
+    const Audio resumedInput(2, std::vector<float>(1536, 0.5f));
+    require(processSamples(processor, resumedInput) == processSamples(reference, resumedInput),
+            "freezing across stream restart and then resuming never changes the audio");
+    juce::MessageManager::getInstance()->runDispatchLoopUntil(50);
+    const auto resumedSnapshot = visualEditor->createVisualizationSnapshot();
+    const auto referenceSnapshot = referenceVisualEditor->createVisualizationSnapshot();
+    require(resumedSnapshot.isValid() && referenceSnapshot.isValid(), "both editors receive fresh tiles after visualization resumes");
+    require(imagesEqual(resumedSnapshot, referenceSnapshot),
+            "resuming after stream restart discards all old tiles even when the new sample positions exceed the old history");
+    require(!imagesEqual(beforeRestart, resumedSnapshot), "resumed history displays the newly prepared stream");
 }
 
 void editorInteractions(DeepFryAudioProcessor& processor, juce::AudioProcessorEditor& editor)
@@ -503,6 +745,66 @@ void editorInteractions(DeepFryAudioProcessor& processor, juce::AudioProcessorEd
             "audio continues identically while the visualization is frozen");
     clickButton("Freeze visualization");
 
+    auto* visualEditor = dynamic_cast<DeepFryAudioProcessorEditor*>(&editor);
+    require(visualEditor != nullptr, "editor exposes its visualization export without an OS file dialog");
+    processSamples(processor, input);
+    juce::MessageManager::getInstance()->runDispatchLoopUntil(50);
+    const auto savedSnapshot = visualEditor->createVisualizationSnapshot();
+    require(savedSnapshot.isValid(), "live history can be exported as a paired visualization image");
+    auto* saveImage = dynamic_cast<juce::Button*>(findEditorControl(editor, "Save visualization PNG"));
+    require(saveImage != nullptr && saveImage->isEnabled(), "PNG export becomes available after audio supplies image history");
+    const auto retainedPixels = savedSnapshot.createCopy();
+    juce::MemoryOutputStream pngBytes;
+    juce::PNGImageFormat png;
+    require(png.writeImageToStream(savedSnapshot, pngBytes), "visualization snapshot encodes as a PNG");
+    juce::MemoryInputStream pngInput(pngBytes.getData(), pngBytes.getDataSize(), false);
+    const auto decodedSnapshot = png.decodeImage(pngInput);
+    require(imagesEqual(savedSnapshot, decodedSnapshot), "exported visualization survives lossless PNG encoding and decoding");
+
+    // Display controls are local to the editor. Exercise them while repeatedly
+    // rendering the same sound state to catch accidental DSP coupling. A different
+    // input also proves that a previously exported image is an independent copy.
+    auto changedInput = input;
+    for (auto& channel : changedInput)
+        for (auto& sample : channel)
+            sample *= 0.63f;
+    for (const auto* control : { "Show JPEG wet signal", "Toggle visualization palette", "Inspect right channel",
+                                "Show final output", "Inspect left channel", "Toggle visualization palette" })
+    {
+        clickButton(control);
+        juce::MemoryBlock afterDisplayChange;
+        processor.getStateInformation(afterDisplayChange);
+        require(beforeFreeze == afterDisplayChange, "visual view, palette, and channel choices leave saved sound parameters unchanged");
+        prepare(processor);
+        prepare(reference);
+        require(processSamples(processor, changedInput) == processSamples(reference, changedInput),
+                "visual view, palette, and channel choices never alter callback audio");
+        juce::MessageManager::getInstance()->runDispatchLoopUntil(40);
+    }
+    require(imagesEqual(savedSnapshot, retainedPixels), "a saved visualization owns its pixels independently of later display and audio updates");
+    require(!imagesEqual(savedSnapshot, visualEditor->createVisualizationSnapshot()),
+            "later audio updates produce a new visualization without changing the saved image");
+
+    inspectImageTile(editor);
+    juce::MemoryBlock afterInspection;
+    processor.getStateInformation(afterInspection);
+    require(beforeFreeze == afterInspection, "tile inspection leaves saved sound parameters unchanged");
+    prepare(processor);
+    prepare(reference);
+    require(processSamples(processor, input) == processSamples(reference, input), "audio continues identically during tile inspection");
+    clickButton("Freeze visualization");
+
+    // Switching from a selected stereo right channel to mono must fall back to
+    // the mono signal, without leaving an apparently active unavailable channel.
+    clickButton("Inspect right channel");
+    prepare(processor, 1);
+    processSamples(processor, stimulus(1));
+    juce::MessageManager::getInstance()->runDispatchLoopUntil(50);
+    auto* rightChannel = dynamic_cast<juce::Button*>(findEditorControl(editor, "Inspect right channel"));
+    require(rightChannel != nullptr && !rightChannel->isEnabled() && !rightChannel->getToggleState(),
+            "mono history disables the unavailable right-channel view and clears its selection");
+    require(visualEditor->createVisualizationSnapshot().isValid(), "mono history remains available for visualization export");
+
     // Exercise a second visible factory selection to restore the demo setting.
     clickButton("Load Deep fried preset");
     require(processor.getCurrentProgram() == 2, "editor can load the demo preset after interaction checks");
@@ -512,6 +814,7 @@ void editorInteractions(DeepFryAudioProcessor& processor, juce::AudioProcessorEd
 void makeArtifacts(const juce::File& directory)
 {
     require(directory.createDirectory().wasOk(), "artifact directory can be created");
+    visualizationRestartWhileFrozen();
     auto dry = musicalDemo();
     DeepFryAudioProcessor processor;
     prepare(processor);
@@ -524,6 +827,11 @@ void makeArtifacts(const juce::File& directory)
     editor->setVisible(true);
     juce::MessageManager::getInstance()->runDispatchLoopUntil(40);
     captureEditor(*editor, directory.getChildFile("deep-fry-ui-idle.png"));
+    auto* visualEditor = dynamic_cast<DeepFryAudioProcessorEditor*>(editor.get());
+    require(visualEditor != nullptr && !visualEditor->createVisualizationSnapshot().isValid(),
+            "export reports no image until real audio history has arrived");
+    auto* saveImage = dynamic_cast<juce::Button*>(findEditorControl(*editor, "Save visualization PNG"));
+    require(saveImage != nullptr && !saveImage->isEnabled(), "PNG export is disabled before any real audio history exists");
     editorInteractions(processor, *editor);
 
     Audio wet(2, std::vector<float>(dry[0].size() + latency));
@@ -552,6 +860,26 @@ void makeArtifacts(const juce::File& directory)
             // while preserving the complete eight-second audio render below.
             juce::MessageManager::getInstance()->runDispatchLoopUntil(50);
             captureEditor(*editor, directory.getChildFile("deep-fry-ui.png"));
+            clickEditorButton(*editor, "Toggle visualization palette");
+            captureEditor(*editor, directory.getChildFile("deep-fry-ui-gray.png"));
+            clickEditorButton(*editor, "Toggle visualization palette");
+            clickEditorButton(*editor, "Show JPEG wet signal");
+            captureEditor(*editor, directory.getChildFile("deep-fry-ui-wet.png"));
+            clickEditorButton(*editor, "Show final output");
+            clickEditorButton(*editor, "Inspect right channel");
+            captureEditor(*editor, directory.getChildFile("deep-fry-ui-right.png"));
+            clickEditorButton(*editor, "Inspect left channel");
+            inspectImageTile(*editor);
+            captureEditor(*editor, directory.getChildFile("deep-fry-ui-inspect.png"));
+            clickEditorButton(*editor, "Freeze visualization");
+            const auto exportedImage = visualEditor->createVisualizationSnapshot();
+            auto exportStream = directory.getChildFile("deep-fry-visualization.png").createOutputStream();
+            require(exportStream != nullptr && exportStream->openedOk(), "paired visualization artifact can be opened");
+            exportStream->setPosition(0);
+            exportStream->truncate();
+            juce::PNGImageFormat png;
+            require(png.writeImageToStream(exportedImage, *exportStream), "paired visualization artifact saves as PNG");
+            exportStream->flush();
 
             auto* constrainer = editor->getConstrainer();
             require(constrainer != nullptr, "resizable native editor exposes its minimum size");
@@ -589,6 +917,7 @@ int main(int argc, char* argv[])
         presetsAndSilence();
         stateRecall();
         visualizationAndInvalidInput();
+        visualizationPublicationAndReset();
         if (argc == 3 && std::string(argv[1]) == "--artifacts")
             makeArtifacts(juce::File::getCurrentWorkingDirectory().getChildFile(juce::String::fromUTF8(argv[2])));
         else

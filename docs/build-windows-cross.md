@@ -100,11 +100,11 @@ python3 scripts/package-source.py \
   --juce-archive .context/juce-8.0.13.tar.gz --output dist
 .context/package-venv/bin/python scripts/package-windows-cross.py \
   --artifacts build-windows-cross/DeepFry_artefacts/Release \
-  --source-archive dist/Deep-Fry-0.1.1-source.tar.gz
+  --source-archive dist/Deep-Fry-0.2.0-source.tar.gz
 ```
 
 Adjust the source archive filename for a later project version. Outputs are
-`dist/Deep-Fry-0.1.1-Windows-x64.zip`, the complete source archive (including
+`dist/Deep-Fry-0.2.0-Windows-x64.zip`, the complete source archive (including
 pinned JUCE), and their SHA-256 files. The Windows packager checks PE
 architecture, embedded version, imports, VST3 metadata, and source commit,
 then includes licenses and installation instructions. Publish the matching

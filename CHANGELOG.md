@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.2.0 — 2026-09-05
+
+Make the live visualizer useful for comparing, inspecting, and saving the sound's image.
+
+- Default to **Final Out**, showing captured audio after Mix, Output gain, and
+  Bypass, aligned with its original input. Keep **JPEG Wet** for the decoded
+  compression stage before those controls.
+- Capture both stereo channels and add **L / R** inspection, with mono handling.
+- Apply one selectable **Colour / Gray** palette to both images and add a
+  signed-amplitude legend.
+- Click either mosaic to freeze and inspect a matched 8×8 tile. Show its position,
+  age relative to the latest capture, final output peak, and DCT detail.
+- Preserve output samples above full scale in the capture; limit only the picture
+  and highlight tile peaks above 0 dBFS.
+- Export a stable, paired **1080×352 PNG** while audio and the display continue.
+- Allow view, channel, and palette changes on frozen history. Reset live history
+  when processing restarts or the audio configuration changes, including after a freeze.
+- Regenerate Windows version resources when rebuilding after a version change.
+- Document the new visual controls and provide updated macOS universal and
+  Windows x64 preview packages with complete corresponding source.
+
+The audio algorithm, 64-sample latency, sound parameter IDs, presets, and saved-state
+format are unchanged. Visual preferences and captured history belong to the open
+editor and are not saved with the DAW session. Mac bundles remain ad-hoc signed
+and not Apple-notarized; Windows binaries remain unsigned. See
+[validation results](docs/validation.md) for checks and platform limitations.
+
 ## 0.1.1 — 2026-09-05
 
 First public release of Deep Fry.

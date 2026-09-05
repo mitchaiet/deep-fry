@@ -75,10 +75,10 @@ void memeText (juce::Graphics& g, const juce::Path& path, float outline = 6.0f, 
     g.fillPath (path);
 }
 
-juce::Colour pixelColour (float value, bool processed)
+juce::Colour pixelColour (float value, bool colour)
 {
     const auto normalized = juce::jlimit (0.0f, 1.0f, value / 255.0f);
-    if (! processed)
+    if (! colour)
     {
         const auto brightness = static_cast<juce::uint8> (normalized * 255.0f);
         return juce::Colour::fromRGB (brightness, brightness, brightness);
@@ -328,11 +328,42 @@ DeepFryAudioProcessorEditor::DeepFryAudioProcessorEditor (DeepFryAudioProcessor&
     freezeButton.setTooltip ("Freeze the image display. Audio processing continues unchanged.");
     freezeButton.onClick = [this]
     {
-        frozen = freezeButton.getToggleState();
-        freezeButton.setButtonText (frozen ? "UNFREEZE" : "FREEZE IMAGE");
-        repaint();
+        setFrozen (freezeButton.getToggleState());
     };
     addAndMakeVisible (freezeButton);
+
+    for (auto* button : { &wetViewButton, &outputViewButton, &paletteButton,
+                           &leftChannelButton, &rightChannelButton, &saveImageButton })
+    {
+        button->setWantsKeyboardFocus (true);
+        addAndMakeVisible (*button);
+    }
+    wetViewButton.setName ("Show JPEG wet signal");
+    wetViewButton.setTooltip ("Inspect decoded JPEG samples before Mix, Output gain, and Bypass.");
+    outputViewButton.setName ("Show final output");
+    outputViewButton.setTooltip ("Inspect the actual output after Mix, gain, and Bypass, aligned with its original input.");
+    paletteButton.setName ("Toggle visualization palette");
+    paletteButton.setTooltip ("Use the same colour or grayscale mapping in both panels. Colours encode signed amplitude.");
+    leftChannelButton.setName ("Inspect left channel");
+    rightChannelButton.setName ("Inspect right channel");
+    leftChannelButton.setTooltip ("View the left channel, or the mono signal.");
+    rightChannelButton.setTooltip ("View the right channel of a stereo signal.");
+    saveImageButton.setName ("Save visualization PNG");
+    saveImageButton.setTooltip ("Save a paired input/result PNG with the current channel and palette. Audio keeps playing.");
+    saveImageButton.setEnabled (false);
+    const auto refreshView = [this]
+    {
+        updateViewControls();
+        rebuildImages();
+        repaint();
+    };
+    wetViewButton.onClick = [this, refreshView] { showFinalOutput = false; refreshView(); };
+    outputViewButton.onClick = [this, refreshView] { showFinalOutput = true; refreshView(); };
+    paletteButton.onClick = [this, refreshView] { useColour = ! useColour; refreshView(); };
+    leftChannelButton.onClick = [this, refreshView] { selectedChannel = 0; refreshView(); };
+    rightChannelButton.onClick = [this, refreshView] { selectedChannel = 1; refreshView(); };
+    saveImageButton.onClick = [this] { saveSnapshot(); };
+    updateViewControls();
 
     helpButton.setButtonText ("HOW?");
     helpButton.setClickingTogglesState (true);
@@ -359,7 +390,7 @@ DeepFryAudioProcessorEditor::DeepFryAudioProcessorEditor (DeepFryAudioProcessor&
         constrainer->setFixedAspectRatio (designWidth / designHeight);
     setSize (static_cast<int> (designWidth), static_cast<int> (designHeight));
     // Discard queued history from before this editor opened.
-    deepfry::TileFrame stale;
+    deepfry::VisualFrame stale;
     while (effectProcessor.popVisualFrame (stale)) {}
     startTimerHz (30);
 }
@@ -392,7 +423,13 @@ void DeepFryAudioProcessorEditor::resized()
                                                        720.0f, 153.0f, 41.0f }));
     bypassButton.setBounds (scaledBounds ({ 24, 479, 200, 44 }));
     helpButton.setBounds (scaledBounds ({ 236, 479, 92, 44 }));
-    freezeButton.setBounds (scaledBounds ({ 958, 150, 140, 33 }));
+    leftChannelButton.setBounds (scaledBounds ({ 224, 150, 47, 33 }));
+    rightChannelButton.setBounds (scaledBounds ({ 281, 150, 47, 33 }));
+    wetViewButton.setBounds (scaledBounds ({ 360, 150, 132, 33 }));
+    outputViewButton.setBounds (scaledBounds ({ 502, 150, 132, 33 }));
+    paletteButton.setBounds (scaledBounds ({ 646, 150, 108, 33 }));
+    saveImageButton.setBounds (scaledBounds ({ 766, 150, 130, 33 }));
+    freezeButton.setBounds (scaledBounds ({ 908, 150, 188, 33 }));
     licenseLink.setBounds (scaledBounds ({ 394, 508, 80, 24 }));
     sourceLink.setBounds (scaledBounds ({ 490, 508, 80, 24 }));
     for (auto* link : { &licenseLink, &sourceLink })
@@ -442,6 +479,19 @@ void DeepFryAudioProcessorEditor::drawImagePanel (juce::Graphics& g,
     }
     g.setColour (ink);
     g.drawRect (bounds.expanded (1.5f), 3);
+    if (tileCount > 0 && frozen)
+    {
+        const auto index = selectedTile >= 0 ? selectedTile : static_cast<int> (tileCount - 1);
+        const auto cellWidth = bounds.getWidth() / 16.0f;
+        const auto cellHeight = bounds.getHeight() / 8.0f;
+        const juce::Rectangle<float> selected (bounds.getX() + static_cast<float> (index % 16) * cellWidth,
+                                                bounds.getY() + static_cast<float> (index / 16) * cellHeight,
+                                                cellWidth, cellHeight);
+        g.setColour (ink);
+        g.drawRect (selected.reduced (1), 3);
+        g.setColour (white);
+        g.drawRect (selected.reduced (2), 1);
+    }
     if (processed && tileCount == 0)
     {
         const auto hint = juce::Rectangle<float> (368, 30).withCentre (bounds.getCentre());
@@ -478,21 +528,26 @@ void DeepFryAudioProcessorEditor::paint (juce::Graphics& g)
         label (g, "JPEG AUDIO EFFECT", { 828, 97, 248, 23 }, 11.5f, ink, juce::Justification::centred);
     }
 
-    label (g, "01 / ORIGINAL", { 24, 156, 304, 24 }, 13);
-    label (g, "02 / AFTER JPEG", { 360, 156, 249, 24 }, 13);
+    label (g, "01 / INPUT", { 24, 156, 186, 24 }, 13);
     const auto bypassed = bypassButton.getToggleState();
     const auto hasSignal = inputMeter > 0.0001f && ticksSinceFrame < 15;
-    const juce::String status = frozen ? "IMAGE FROZEN" : bypassed ? "BYPASSED"
+    const juce::String status = saveStatusTicks > 0 ? saveStatus : frozen ? "FROZEN" : bypassed ? "BYPASSED"
                                      : ticksSinceFrame >= 15 && tileCount > 0 ? "PLAYBACK STOPPED"
                                      : hasSignal ? "LIVE" : tileCount == 0 ? "WAITING FOR AUDIO" : "INPUT SILENT";
     g.setColour (hasSignal && ! frozen && ! bypassed ? red : muted);
-    g.fillRect (705, 164, 8, 8);
-    label (g, status, { 721, 155, 225, 25 }, 11.5f);
+    g.fillRect (193, 355, 6, 6);
+    label (g, status, { 205, 347, 123, 24 }, 9.5f, ink, juce::Justification::centredRight);
 
     drawImagePanel (g, { 24, 186, 304, 152 }, false);
     drawImagePanel (g, { 360, 186, 736, 368 }, true);
-    label (g, "GRAYSCALE / LEFT OR MONO", { 24, 348, 304, 22 }, 11, muted);
-    label (g, "64 SAMPLES > 8x8 PIXELS > AUDIO", { 24, 533, 308, 21 }, 10.5f, muted);
+    const auto* latest = tileCount > 0 ? historyFrame (tileCount - 1) : nullptr;
+    const auto channelText = latest != nullptr && latest->channelCount == 1 ? "MONO" : selectedChannel == 0 ? "LEFT CHANNEL" : "RIGHT CHANNEL";
+    label (g, channelText, { 24, 348, 160, 22 }, 10.5f, muted);
+    drawTileInspector (g);
+    drawAmplitudeLegend (g, { 24, 535, 304, 8 });
+    label (g, "-1", { 24, 545, 50, 16 }, 9, muted);
+    label (g, "0", { 156, 545, 40, 16 }, 9, muted, juce::Justification::centred);
+    label (g, "+1", { 278, 545, 50, 16 }, 9, muted, juce::Justification::centredRight);
 
     // The export controls form one ruled sheet, rather than independent cards.
     g.setColour (paper);
@@ -524,7 +579,9 @@ void DeepFryAudioProcessorEditor::paint (juce::Graphics& g)
     const auto rateText = sampleRate > 0 ? juce::String (sampleRate / 1000.0, 1) + " kHz" : "DEVICE IDLE";
     const auto latencyText = sampleRate > 0 ? juce::String (1000.0 * effectProcessor.getLatencySamples() / sampleRate, 2) + " ms" : "-- ms";
     label (g, rateText + " / " + latencyText + " LATENCY", { 24, 777, 366, 22 }, 10, paper);
-    label (g, "WET AMPLITUDE / FALSE COLOUR", { 393, 777, 370, 22 }, 10, paper,
+    const auto viewText = showFinalOutput ? "FINAL OUTPUT" : "JPEG WET";
+    label (g, juce::String (viewText) + (useColour ? " / COLOUR" : " / GRAYSCALE") + " / +/-1",
+           { 393, 777, 370, 22 }, 10, paper,
            juce::Justification::centred);
     label (g, tileCount == 0 ? "DCT DETAIL: --" : "DCT DETAIL: " + juce::String (juce::roundToInt (retention * 100.0f)) + "% RETAINED",
            { 783, 777, 313, 22 }, 10, paper, juce::Justification::centredRight);
@@ -541,22 +598,212 @@ void DeepFryAudioProcessorEditor::paint (juce::Graphics& g)
         label (g, "HOW IT WORKS", { 394, 210, 668, 48 }, 39, ink,
                juce::Justification::centredLeft, true);
         const std::array<const char*, 3> steps {
-            "01 / 64 audio samples become an 8x8 grayscale tile.",
+            "01 / 64 samples fill an 8x8 tile, one row at a time.",
             "02 / Fry boosts contrast and edges. JPEG removes detail.",
-            "03 / Pixel depth adds grain. The pixels become audio."
+            "03 / Pixel depth adds steps. The pixels become audio."
         };
         for (size_t i = 0; i < steps.size(); ++i)
             label (g, steps[i], { 394, 272 + static_cast<float> (i) * 35, 668, 31 }, 13);
         g.setColour (ink);
         g.fillRect (394, 387, 668, 2);
-        label (g, "The moving pixels are your actual left / mono signal.", { 394, 400, 668, 27 }, 12.5f);
-        label (g, "Colour is a display palette. Mix blends dry and wet.", { 394, 425, 668, 27 }, 12.5f);
-        label (g, "FREEZE IMAGE holds the picture. The sound keeps going.", { 394, 450, 668, 27 }, 12.5f);
+        label (g, "FINAL OUT includes Mix, gain and Bypass. JPEG WET precedes them.", { 394, 400, 668, 27 }, 11.5f);
+        label (g, "Both panes use one palette. The centre colour means zero.", { 394, 425, 668, 27 }, 11.5f);
+        label (g, "Click a tile to freeze and inspect it. SAVE PNG exports the pair.", { 394, 450, 668, 27 }, 11.5f);
         label (g, "(C) 2026 Mitch Chaiet. AGPLv3. You may redistribute under this license.",
                { 394, 482, 668, 20 }, 10.5f);
         label (g, "NO WARRANTY", { 858, 508, 204, 24 }, 11, muted,
                juce::Justification::centredRight);
     }
+}
+
+const deepfry::VisualFrame* DeepFryAudioProcessorEditor::historyFrame (size_t index) const
+{
+    if (index >= tileCount)
+        return nullptr;
+    return &tileHistory[tileCount == tileHistory.size() ? (nextTile + index) % tileHistory.size() : index];
+}
+
+const deepfry::VisualChannelFrame* DeepFryAudioProcessorEditor::channelFrame (const deepfry::VisualFrame& frame) const
+{
+    if (frame.channelCount <= selectedChannel)
+        return nullptr;
+    return &frame.channels[static_cast<size_t> (selectedChannel)];
+}
+
+float DeepFryAudioProcessorEditor::displayedPixel (const deepfry::VisualChannelFrame& frame, size_t sample) const
+{
+    return showFinalOutput ? 128.0f + juce::jlimit (-1.0f, 1.0f, frame.output[sample]) * 127.0f
+                           : frame.image.after[sample];
+}
+
+void DeepFryAudioProcessorEditor::updateViewControls()
+{
+    wetViewButton.setToggleState (! showFinalOutput, juce::dontSendNotification);
+    outputViewButton.setToggleState (showFinalOutput, juce::dontSendNotification);
+    paletteButton.setToggleState (useColour, juce::dontSendNotification);
+    paletteButton.setButtonText (useColour ? "COLOUR" : "GRAY");
+    leftChannelButton.setToggleState (selectedChannel == 0, juce::dontSendNotification);
+    rightChannelButton.setToggleState (selectedChannel == 1, juce::dontSendNotification);
+    const auto* latest = tileCount > 0 ? historyFrame (tileCount - 1) : nullptr;
+    rightChannelButton.setEnabled (latest == nullptr || latest->channelCount > 1);
+    saveImageButton.setEnabled (tileCount > 0 && ! snapshotDialogOpen);
+}
+
+void DeepFryAudioProcessorEditor::setFrozen (bool shouldFreeze)
+{
+    frozen = shouldFreeze;
+    freezeButton.setToggleState (frozen, juce::dontSendNotification);
+    freezeButton.setButtonText (frozen ? "RESUME LIVE" : "FREEZE IMAGE");
+    if (! frozen)
+        selectedTile = -1;
+    repaint();
+}
+
+void DeepFryAudioProcessorEditor::mouseDown (const juce::MouseEvent& event)
+{
+    if (helpOpen || tileCount == 0)
+        return;
+    const juce::Point<float> point ((event.position.x - contentOffsetX) / contentScale,
+                                    (event.position.y - contentOffsetY) / contentScale);
+    for (const auto bounds : { juce::Rectangle<float> (24, 186, 304, 152),
+                               juce::Rectangle<float> (360, 186, 736, 368) })
+        if (bounds.contains (point))
+        {
+            const auto column = static_cast<int> ((point.x - bounds.getX()) * 16.0f / bounds.getWidth());
+            const auto row = static_cast<int> ((point.y - bounds.getY()) * 8.0f / bounds.getHeight());
+            const auto index = row * 16 + column;
+            if (index >= 0 && static_cast<size_t> (index) < tileCount)
+            {
+                selectedTile = index;
+                const auto* frame = channelFrame (*historyFrame (static_cast<size_t> (index)));
+                retention = frame != nullptr ? frame->image.retained : 0.0f;
+                setFrozen (true);
+            }
+            return;
+        }
+}
+
+void DeepFryAudioProcessorEditor::drawAmplitudeLegend (juce::Graphics& g, juce::Rectangle<float> bounds) const
+{
+    const int columns = juce::jmax (2, static_cast<int> (bounds.getWidth()));
+    const auto width = bounds.getWidth() / static_cast<float> (columns);
+    for (int x = 0; x < columns; ++x)
+    {
+        const auto value = 1.0f + 254.0f * static_cast<float> (x) / static_cast<float> (columns - 1);
+        g.setColour (pixelColour (value, useColour));
+        g.fillRect (bounds.getX() + static_cast<float> (x) * width, bounds.getY(), width + 0.5f, bounds.getHeight());
+    }
+    g.setColour (ink);
+    g.drawRect (bounds, 1);
+}
+
+void DeepFryAudioProcessorEditor::drawTileInspector (juce::Graphics& g)
+{
+    label (g, "INPUT", { 24, 369, 74, 18 }, 9.5f, muted);
+    label (g, showFinalOutput ? "FINAL OUT" : "JPEG WET", { 112, 369, 80, 18 }, 9.5f, muted);
+    const auto index = selectedTile >= 0 ? static_cast<size_t> (selectedTile) : tileCount > 0 ? tileCount - 1 : 0;
+    const auto* frame = historyFrame (index);
+    const auto* channel = frame != nullptr ? channelFrame (*frame) : nullptr;
+    for (int panel = 0; panel < 2; ++panel)
+    {
+        const juce::Rectangle<float> bounds (panel == 0 ? 24.0f : 112.0f, 389, 72, 72);
+        g.setColour (paper.darker (0.1f));
+        g.fillRect (bounds);
+        if (channel != nullptr)
+            for (size_t sample = 0; sample < 64; ++sample)
+            {
+                g.setColour (pixelColour (panel == 0 ? channel->image.before[sample] : displayedPixel (*channel, sample), useColour));
+                g.fillRect (bounds.getX() + static_cast<float> (sample % 8) * 9.0f,
+                            bounds.getY() + static_cast<float> (sample / 8) * 9.0f, 9.0f, 9.0f);
+            }
+        g.setColour (ink);
+        g.drawRect (bounds, 1);
+    }
+    label (g, frozen ? "SELECTED TILE" : "LATEST TILE", { 198, 370, 130, 19 }, 9.5f, muted);
+    label (g, frame != nullptr ? juce::String (static_cast<int> (index + 1)) + " / " + juce::String (static_cast<int> (tileCount)) : "-- / --",
+           { 198, 390, 130, 20 }, 13);
+    const auto* latest = tileCount > 0 ? historyFrame (tileCount - 1) : nullptr;
+    const double age = frame != nullptr && latest != nullptr && latest->samplePosition >= frame->samplePosition && frame->sampleRate > 0
+        ? static_cast<double> (latest->samplePosition - frame->samplePosition) / frame->sampleRate : 0.0;
+    label (g, frame != nullptr ? "-" + juce::String (age, 2) + " s / 64 SMP" : "64 SAMPLES", { 198, 412, 130, 19 }, 9.5f, muted);
+    float peak = 0.0f;
+    if (channel != nullptr)
+        for (const auto sample : channel->output)
+            peak = juce::jmax (peak, std::abs (sample));
+    label (g, channel == nullptr ? "OUT -- dBFS" : peak < 0.000001f ? "OUT -INF dBFS"
+                    : "OUT " + juce::String (juce::Decibels::gainToDecibels (peak), 1) + " dBFS",
+           { 198, 434, 130, 19 }, 9.5f, peak > 1.0f ? red : muted);
+    label (g, "CLICK A TILE TO FREEZE + INSPECT", { 24, 462, 304, 14 }, 9, muted);
+}
+
+juce::Image DeepFryAudioProcessorEditor::createVisualizationSnapshot() const
+{
+    if (tileCount == 0)
+        return {};
+    juce::Image snapshot (juce::Image::RGB, 1080, 352, true);
+    juce::Graphics g (snapshot);
+    g.fillAll (paper);
+    label (g, "DEEP FRY / FRAME CAPTURE", { 20, 6, 700, 29 }, 26, ink,
+           juce::Justification::centredLeft, true);
+    const auto* latest = historyFrame (tileCount - 1);
+    const auto channel = latest->channelCount == 1 ? "MONO" : selectedChannel == 0 ? "LEFT" : "RIGHT";
+    label (g, juce::String (channel) + (useColour ? " / COLOUR" : " / GRAYSCALE"),
+           { 780, 12, 280, 20 }, 11, ink, juce::Justification::centredRight);
+    label (g, "01 / INPUT", { 20, 35, 512, 17 }, 10, muted);
+    label (g, showFinalOutput ? "02 / FINAL OUTPUT" : "02 / JPEG WET", { 548, 35, 512, 17 }, 10, muted);
+    g.setImageResamplingQuality (juce::Graphics::lowResamplingQuality);
+    g.drawImage (beforeImage, juce::Rectangle<float> (20, 54, 512, 256));
+    g.drawImage (afterImage, juce::Rectangle<float> (548, 54, 512, 256));
+    g.setColour (ink);
+    g.drawRect (20, 54, 512, 256, 1);
+    g.drawRect (548, 54, 512, 256, 1);
+    drawAmplitudeLegend (g, { 20, 322, 344, 8 });
+    label (g, "-1", { 20, 332, 50, 16 }, 9, muted);
+    label (g, "0", { 172, 332, 40, 16 }, 9, muted, juce::Justification::centred);
+    label (g, "+1", { 314, 332, 50, 16 }, 9, muted, juce::Justification::centredRight);
+    label (g, juce::String (static_cast<int> (tileCount)) + " TILES / SAMPLED HISTORY / DISPLAY LIMIT +/-1",
+           { 390, 321, 670, 23 }, 10, muted, juce::Justification::centredRight);
+    return snapshot;
+}
+
+void DeepFryAudioProcessorEditor::saveSnapshot()
+{
+    const auto snapshot = createVisualizationSnapshot();
+    if (! snapshot.isValid() || snapshotDialogOpen)
+        return;
+    snapshotDialogOpen = true;
+    updateViewControls();
+    const auto name = "Deep-Fry-" + juce::Time::getCurrentTime().formatted ("%Y%m%d-%H%M%S") + ".png";
+    imageChooser = std::make_unique<juce::FileChooser> ("Save Deep Fry visualization",
+        juce::File::getSpecialLocation (juce::File::userDocumentsDirectory).getChildFile (name), "*.png");
+    const juce::Component::SafePointer<DeepFryAudioProcessorEditor> safeThis (this);
+    imageChooser->launchAsync (juce::FileBrowserComponent::saveMode | juce::FileBrowserComponent::canSelectFiles
+                                 | juce::FileBrowserComponent::warnAboutOverwriting,
+        [safeThis, snapshot] (const juce::FileChooser& chooser)
+        {
+            if (safeThis == nullptr)
+                return;
+            safeThis->snapshotDialogOpen = false;
+            const auto destination = chooser.getResult();
+            if (destination != juce::File())
+            {
+                juce::TemporaryFile temporary (destination);
+                auto stream = temporary.getFile().createOutputStream();
+                bool saved = false;
+                if (stream != nullptr && stream->openedOk())
+                {
+                    saved = juce::PNGImageFormat().writeImageToStream (snapshot, *stream);
+                    stream->flush();
+                    saved = saved && stream->getStatus().wasOk();
+                    stream.reset();
+                    saved = saved && temporary.overwriteTargetFileWithTemporary();
+                }
+                safeThis->saveStatus = saved ? "PNG SAVED" : "SAVE FAILED";
+                safeThis->saveStatusTicks = 150;
+            }
+            safeThis->updateViewControls();
+            safeThis->repaint();
+        });
 }
 
 void DeepFryAudioProcessorEditor::rebuildImages()
@@ -565,27 +812,29 @@ void DeepFryAudioProcessorEditor::rebuildImages()
     afterImage.clear (afterImage.getBounds(), juce::Colour (0xffbdb7a5));
     juce::Image::BitmapData beforePixels (beforeImage, juce::Image::BitmapData::writeOnly);
     juce::Image::BitmapData afterPixels (afterImage, juce::Image::BitmapData::writeOnly);
-
     for (size_t tile = 0; tile < tileCount; ++tile)
     {
-        // Once full, display in chronological order, oldest to newest.
-        const auto historyIndex = tileCount == tileHistory.size() ? (nextTile + tile) % tileHistory.size() : tile;
-        const auto& frame = tileHistory[historyIndex];
+        const auto* frame = channelFrame (*historyFrame (tile));
+        if (frame == nullptr)
+            continue;
         const auto tileX = static_cast<int> (tile % 16) * 8;
         const auto tileY = static_cast<int> (tile / 16) * 8;
         for (size_t sample = 0; sample < 64; ++sample)
         {
             const auto x = tileX + static_cast<int> (sample % 8);
             const auto y = tileY + static_cast<int> (sample / 8);
-            beforePixels.setPixelColour (x, y, pixelColour (frame.before[sample], false));
-            afterPixels.setPixelColour (x, y, pixelColour (frame.after[sample], true));
+            beforePixels.setPixelColour (x, y, pixelColour (frame->image.before[sample], useColour));
+            afterPixels.setPixelColour (x, y, pixelColour (displayedPixel (*frame, sample), useColour));
         }
     }
+    const auto* selected = historyFrame (selectedTile >= 0 ? static_cast<size_t> (selectedTile) : tileCount > 0 ? tileCount - 1 : 0);
+    const auto* channel = selected != nullptr ? channelFrame (*selected) : nullptr;
+    retention = channel != nullptr ? channel->image.retained : 0.0f;
 }
 
 void DeepFryAudioProcessorEditor::timerCallback()
 {
-    deepfry::TileFrame frame;
+    deepfry::VisualFrame frame;
     bool changed = false;
     bool receivedFrame = false;
     while (effectProcessor.popVisualFrame (frame))
@@ -593,24 +842,32 @@ void DeepFryAudioProcessorEditor::timerCallback()
         receivedFrame = true;
         if (! frozen)
         {
+            const auto* previous = tileCount > 0 ? historyFrame (tileCount - 1) : nullptr;
+            if (previous != nullptr && (frame.streamGeneration != previous->streamGeneration
+                || frame.samplePosition <= previous->samplePosition
+                || ! juce::approximatelyEqual (frame.sampleRate, previous->sampleRate) || frame.channelCount != previous->channelCount))
+            {
+                tileCount = nextTile = 0;
+                selectedTile = -1;
+            }
+            if (selectedChannel >= frame.channelCount)
+                selectedChannel = 0;
             tileHistory[nextTile] = frame;
             nextTile = (nextTile + 1) % tileHistory.size();
             tileCount = juce::jmin (tileCount + 1, tileHistory.size());
-            retention = frame.retained;
             changed = true;
         }
     }
-
     if (changed)
         rebuildImages();
-
+    updateViewControls();
+    if (saveStatusTicks > 0)
+        --saveStatusTicks;
     ticksSinceFrame = receivedFrame ? 0 : juce::jmin (ticksSinceFrame + 1, 120);
     const auto audioIsRunning = ticksSinceFrame < 15;
     inputMeter = juce::jmax (audioIsRunning ? effectProcessor.inputLevel.load (std::memory_order_relaxed) : 0.0f,
                              inputMeter * 0.83f);
     outputMeter = juce::jmax (audioIsRunning ? effectProcessor.outputLevel.load (std::memory_order_relaxed) : 0.0f,
                               outputMeter * 0.83f);
-    if (! frozen && tileCount > 0)
-        retention = effectProcessor.coefficientRetention.load (std::memory_order_relaxed);
     repaint();
 }

@@ -6,7 +6,7 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_audio_basics/juce_audio_basics.h>
-#include "JpegCodec.h"
+#include "VisualFrame.h"
 #include <array>
 #include <atomic>
 
@@ -37,7 +37,7 @@ public:
 
     void applyPreset(int index);
     static const char* presetName(int index);
-    bool popVisualFrame(deepfry::TileFrame&) noexcept;
+    bool popVisualFrame(deepfry::VisualFrame&) noexcept;
 
     juce::AudioProcessorValueTreeState parameters;
     std::atomic<float> inputLevel { 0 }, outputLevel { 0 }, coefficientRetention { 0 };
@@ -45,7 +45,7 @@ public:
 private:
     static juce::AudioProcessorValueTreeState::ParameterLayout makeParameters();
     void process(juce::AudioBuffer<float>&, bool forceBypass);
-    void pushVisualFrame(const deepfry::TileFrame&) noexcept;
+    void pushVisualFrame(const deepfry::VisualFrame&) noexcept;
 
     struct Channel
     {
@@ -54,9 +54,14 @@ private:
     };
     std::array<Channel, 2> channels;
     int tilePosition = 0, visualCounter = 0, visualInterval = 12;
+    std::uint64_t inputSamplePosition = 0;
+    std::uint64_t visualStreamGeneration = 0;
+    double visualSampleRate = 48000.0;
+    deepfry::VisualFrame pendingVisualFrame;
+    bool hasPendingVisualFrame = false;
     static constexpr int visualCapacity = 128;
     juce::AbstractFifo visualFifo { visualCapacity };
-    std::array<deepfry::TileFrame, visualCapacity> visualFrames {};
+    std::array<deepfry::VisualFrame, visualCapacity> visualFrames {};
     juce::SmoothedValue<float> qualitySmooth, frySmooth, mixSmooth, outputSmooth, bypassSmooth;
     std::atomic<float>* qualityParam = nullptr;
     std::atomic<float>* fryParam = nullptr;

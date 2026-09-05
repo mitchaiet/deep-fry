@@ -1,10 +1,10 @@
 # Installing Deep Fry on Windows
 
-Download `Deep-Fry-0.1.1-Windows-x64.zip` and its `.sha256` file from the [latest release](https://github.com/mitchaiet/deep-fry/releases/latest). The ZIP includes the **VST3 plug-in** and a **portable standalone EXE** for 64-bit Intel or AMD systems running **Windows 10 version 1607 or later**. The VST3 needs a compatible 64-bit audio host. Audio Unit is available in the [macOS package](installation.md).
+Download `Deep-Fry-0.2.0-Windows-x64.zip` and its `.sha256` file from the [latest release](https://github.com/mitchaiet/deep-fry/releases/latest). The ZIP includes the **VST3 plug-in** and a **portable standalone EXE** for 64-bit Intel or AMD systems running **Windows 10 version 1607 or later**. The VST3 needs a compatible 64-bit audio host. Audio Unit is available in the [macOS package](installation.md). This download remains a preview: native Windows DAW and GUI compatibility are unverified. See [validation results](validation.md) for version-specific checks.
 
 ## Install the VST3
 
-1. Right-click the ZIP and choose **Extract All**. Open the extracted `Deep-Fry-0.1.1-Windows-x64` folder.
+1. Right-click the ZIP and choose **Extract All**. Open the extracted `Deep-Fry-0.2.0-Windows-x64` folder.
 2. Save your work and close your DAW.
 3. Copy the entire `VST3\Deep Fry.vst3` folder into `C:\Program Files\Common Files\VST3`. Create the destination folder if needed. Windows may request administrator permission for this copy.
 4. Reopen your DAW and rescan its plug-ins.
@@ -40,8 +40,8 @@ The Windows executables are **not Authenticode-signed**, so Windows or SmartScre
 Put the ZIP and its `.sha256` file in the same folder. Open PowerShell in that folder and run:
 
 ```powershell
-$expected = ((Get-Content "Deep-Fry-0.1.1-Windows-x64.zip.sha256") -split '\s+')[0]
-$actual = (Get-FileHash "Deep-Fry-0.1.1-Windows-x64.zip" -Algorithm SHA256).Hash
+$expected = ((Get-Content "Deep-Fry-0.2.0-Windows-x64.zip.sha256") -split '\s+')[0]
+$actual = (Get-FileHash "Deep-Fry-0.2.0-Windows-x64.zip" -Algorithm SHA256).Hash
 if ($actual -ne $expected) { throw "Checksum mismatch. Download both files again." }
 "Checksum OK"
 ```
@@ -56,13 +56,13 @@ To restore an older version, close the DAW, move the current bundle aside, and c
 
 ## Offline source build
 
-Install **Visual Studio 2022**, its **Desktop development with C++** workload and a Windows SDK, plus **CMake 3.24+**. Download the shared `Deep-Fry-0.1.1-source.tar.gz` asset from the [release](https://github.com/mitchaiet/deep-fry/releases/tag/v0.1.1). The build uses its included JUCE archive without downloading dependencies.
+Install **Visual Studio 2022**, its **Desktop development with C++** workload and a Windows SDK, plus **CMake 3.24+**. Download the shared `Deep-Fry-0.2.0-source.tar.gz` asset from the [release](https://github.com/mitchaiet/deep-fry/releases/tag/v0.2.0). The build uses its included JUCE archive without downloading dependencies.
 
 From PowerShell in the folder containing the source download:
 
 ```powershell
-cmake -E tar xzf .\Deep-Fry-0.1.1-source.tar.gz
-Set-Location .\Deep-Fry-0.1.1-source
+cmake -E tar xzf .\Deep-Fry-0.2.0-source.tar.gz
+Set-Location .\Deep-Fry-0.2.0-source
 Push-Location .\vendor
 cmake -E tar xzf .\juce-8.0.13.tar.gz
 Pop-Location

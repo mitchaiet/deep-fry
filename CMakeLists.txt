@@ -5,7 +5,7 @@ endif()
 if(CMAKE_HOST_APPLE AND NOT DEFINED CMAKE_OSX_DEPLOYMENT_TARGET)
     set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0" CACHE STRING "Minimum macOS version")
 endif()
-project(DeepFry VERSION 0.1.1 LANGUAGES C CXX)
+project(DeepFry VERSION 0.2.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -116,4 +116,17 @@ if(BUILD_TESTING)
     target_link_libraries(DeepFryVerify PRIVATE DeepFryCodec juce::juce_audio_utils
         juce::juce_recommended_config_flags juce::juce_recommended_warning_flags)
     add_test(NAME plugin_integration COMMAND DeepFryVerify)
+endif()
+
+if(WIN32)
+    # JUCE's RC generation omits this metadata dependency. Regenerate version
+    # resources when project details change in an existing Windows build tree.
+    foreach(resourceTarget DeepFry DeepFryVerify)
+        if(TARGET ${resourceTarget}_rc_lib)
+            get_target_property(resourceDirectory ${resourceTarget} JUCE_GENERATED_SOURCES_DIRECTORY)
+            get_target_property(resourceInfo ${resourceTarget} JUCE_INFO_FILE)
+            add_custom_command(OUTPUT "${resourceDirectory}/${resourceTarget}_resources.rc"
+                APPEND DEPENDS "${resourceInfo}")
+        endif()
+    endforeach()
 endif()

@@ -1,4 +1,69 @@
-# Release validation — 0.1.1, 2026-09-05
+# Release validation
+
+## 0.2.0 — 2026-09-05
+
+This release adds paired input/final-output capture, stereo inspection, a shared
+palette, tile selection, and PNG export. The audio algorithm, parameter IDs,
+presets, state format, and 64-sample latency are unchanged.
+
+| Check | Result |
+| --- | --- |
+| macOS CTest codec and plugin integration suites | Passed |
+| Exact captured output versus processed stereo audio | Passed for Mix, gain, parameter/host bypass, smoothing, automation, and irregular buffers |
+| Capture timing, mono, invalid input, full FIFO, and prepare resets | Passed |
+| Native editor at 1120×800 and 896×640 | Passed |
+| Wet/final view, Colour/Gray, L/R, mono fallback, freeze and tile inspection | Passed |
+| Stable paired 1080×352 snapshot and PNG encode/decode | Passed |
+| Frozen history across a processing restart that overtakes its old timeline | Passed |
+| pluginval 1.0.4, strictness 5, Apple Silicon VST3 | Passed |
+| pluginval 1.0.4, strictness 5, Intel VST3 under Rosetta | Passed |
+| Windows x64 CTest codec and plugin integration suites under Wine 11 | Passed |
+| Windows pluginval 1.0.4, strictness 5, GUI tests skipped | Passed under Wine 11 |
+| Windows incremental version-resource regeneration | Passed for both plugin and verification targets |
+
+The final native artifact run passed **1,368,206 integration checks**. The editor
+tests verify that visualization controls leave audio and saved sound parameters
+unchanged. They also check that exported pixels remain stable
+while new audio arrives and the view changes. Snapshot encoding is tested without
+opening the operating system's Save dialog; that dialog has not been automated.
+The stream-restart regression holds negative-amplitude history, prepares a new
+positive-amplitude stream, advances beyond the old sample positions while frozen,
+and compares the resumed image with a fresh editor receiving only new captures.
+
+Nine native images were inspected: idle, live, compact, grayscale, JPEG wet,
+right channel, selected tile, help, and paired PNG export. The current
+[README screenshot](deep-fry-ui.png) comes from this run. Local screenshots and
+synthetic before/after audio are in `.context/visualizer-020-preview/`.
+
+The Mac VST3, Audio Unit, and standalone bundles contain arm64 and x86_64 slices,
+target macOS 11.0+, and use ad-hoc signatures. They are not Apple-notarized.
+Testing ran on macOS 26.2 using Xcode 26.6 and the unmodified pinned JUCE 8.0.13.
+The packager checks bundle versions, architecture slices, minimum OS versions,
+and final signatures before creating the download.
+
+The Windows VST3 and standalone are unsigned PE32+ AMD64 binaries with version
+0.2.0.0, a static compiler runtime, and only Windows system DLL imports. The VST3
+includes valid `moduleinfo.json` metadata for 0.2.0. They use the same Clang/MSVC
+cross toolchain described below and in [Windows cross builds](build-windows-cross.md).
+
+**Windows remains a preview.** The 0.2.0 Windows checks ran under Wine and skipped
+GUI tests. The earlier full GUI attempt timed out in pluginval; native editor
+rendering also failed inside Wine's DirectWrite implementation. Native Windows
+GUI and DAW compatibility remain unverified. Hosted GitHub Actions previously
+could not start because of an account billing lock; no hosted validation is
+claimed for this release.
+
+The existing installer and source-packaging behavior was validated for 0.1.1 as
+described below. This release does not change the installer. Release manifests
+record the exact source commit and file hashes, and both binary packages link to
+the same complete-source archive. No verification installs into the user's
+plugin folders or closes an open DAW.
+
+Not independently verified for 0.2.0: physical audio hardware, a live Ableton or
+Logic session, Audio Unit host validation, native Windows playback/GUI, older
+macOS versions, Linux plugin builds, or Apple's notarization workflow.
+
+## Previous release: 0.1.1 — 2026-09-05
 
 The macOS Release build contains universal `arm64` and `x86_64` binaries for VST3, Audio Unit, and standalone. The explicit deployment target is **macOS 11.0** for both architectures; runtime checks were performed on **macOS 26.2**. All three bundles pass `codesign --verify --deep --strict` with ad-hoc signatures. VST3 signing runs after its `moduleinfo.json` resource is generated.
 
@@ -19,7 +84,7 @@ The macOS Release build contains universal `arm64` and `x86_64` binaries for VST
 
 Host validation exercised opening/closing the editor while processing, programs, state restoration, automation, and bus layouts. Audio and automation tests ran at 44.1, 48, and 96 kHz with buffers of 64, 128, 256, 512, and 1024 samples. Additional integration tests covered 0-, 1-, and 17-sample buffers, exact dry/bypass timing, 64-sample latency, stereo isolation, malformed state, and visualization/audio consistency.
 
-The screenshot in this directory is rendered from the real native editor while the actual processor handles an original synthetic groove. The generated `.context/preview/demo-dry.wav` and `demo-deep-fried.wav` files are eight-second, stereo, 48 kHz, 16-bit WAVs, aligned after compensating the plugin delay. Neither file contains PCM full-scale clipping; they retain the preset's natural loudness difference.
+The 0.1.1 screenshots were rendered from the real native editor while the actual processor handled an original synthetic groove; the screenshot currently in this directory shows 0.2.0. The generated `.context/preview/demo-dry.wav` and `demo-deep-fried.wav` files are eight-second, stereo, 48 kHz, 16-bit WAVs, aligned after compensating the plugin delay. Neither file contains PCM full-scale clipping; they retain the preset's natural loudness difference.
 
 The Impact interface has visual checks at 1120×800 and 896×640, including idle and help states. Both sizes were inspected for clipping, font rendering, and readable control values. The public release adds copyright, license, warranty, and source information inside the help panel. Its screenshots and regenerated audio are in `.context/public-preview/`. The processor and saved parameter IDs are unchanged. The release VST3 passed pluginval strictness 5 on both architectures; logs are `.context/pluginval-public-arm64.log` and `.context/pluginval-public-x86_64.log`. The native verification run passed 1,244,111 checks.
 

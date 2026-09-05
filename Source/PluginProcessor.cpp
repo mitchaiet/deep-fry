@@ -46,6 +46,10 @@ DeepFryAudioProcessor::DeepFryAudioProcessor()
 void DeepFryAudioProcessor::prepareToPlay(double sampleRate, int)
 {
     tilePosition = visualCounter = 0;
+    inputSamplePosition = 0;
+    ++visualStreamGeneration;
+    pendingVisualFrame = {};
+    hasPendingVisualFrame = false;
     // FIFO is deliberately not reset here: an open editor may be reading it.
     for (auto& channel : channels)
     {
@@ -54,6 +58,7 @@ void DeepFryAudioProcessor::prepareToPlay(double sampleRate, int)
         channel.delayedDry.fill(0);
     }
     const auto rate = sampleRate > 0 ? sampleRate : 48000.0;
+    visualSampleRate = rate;
     visualInterval = std::max(1, static_cast<int>(rate / (64.0 * 60.0)));
     qualitySmooth.reset(rate / 64.0, 0.03);
     frySmooth.reset(rate / 64.0, 0.03);
@@ -124,29 +129,43 @@ void DeepFryAudioProcessor::process(juce::AudioBuffer<float>& buffer, bool force
             const float processed = (dry * (1.0f - mix) + wet * mix) * gain;
             const float result = active <= 0.0f ? dry : dry * (1.0f - active) + processed * active;
             audio[channel][sample] = std::isfinite(result) ? result : 0.0f;
+            if (hasPendingVisualFrame)
+                pendingVisualFrame.channels[static_cast<size_t>(channel)].output[index] = audio[channel][sample];
             peakIn = std::max(peakIn, std::abs(input));
             peakOut = std::max(peakOut, std::abs(audio[channel][sample]));
         }
 
+        ++inputSamplePosition;
         if (++tilePosition == 64)
         {
             tilePosition = 0;
+            // A decoded tile becomes audible during the following 64 samples.
+            // Publish only after capturing those final outputs so all three
+            // views describe the same source tile, even during automation.
+            if (hasPendingVisualFrame)
+            {
+                pushVisualFrame(pendingVisualFrame);
+                hasPendingVisualFrame = false;
+            }
             deepfry::CodecSettings settings { qualitySmooth.getNextValue(), frySmooth.getNextValue(), bits };
             const bool capture = ++visualCounter >= visualInterval;
             if (capture)
+            {
                 visualCounter = 0;
+                pendingVisualFrame = {};
+                pendingVisualFrame.channelCount = channelCount;
+                pendingVisualFrame.sampleRate = visualSampleRate;
+                pendingVisualFrame.streamGeneration = visualStreamGeneration;
+                pendingVisualFrame.samplePosition = inputSamplePosition - 64;
+            }
             for (int channel = 0; channel < channelCount; ++channel)
             {
                 auto& state = channels[static_cast<size_t>(channel)];
-                deepfry::TileFrame frame;
-                state.codec.process(state.incoming, state.decoded, settings, capture && channel == 0 ? &frame : nullptr);
+                auto* frame = capture ? &pendingVisualFrame.channels[static_cast<size_t>(channel)].image : nullptr;
+                state.codec.process(state.incoming, state.decoded, settings, frame);
                 state.delayedDry = state.incoming;
-                if (capture && channel == 0)
-                {
-                    coefficientRetention.store(frame.retained, std::memory_order_relaxed);
-                    pushVisualFrame(frame);
-                }
             }
+            hasPendingVisualFrame = capture;
         }
     }
     const float decay = std::exp(-static_cast<float>(buffer.getNumSamples()) / static_cast<float>(0.18 * getSampleRate()));
@@ -154,18 +173,19 @@ void DeepFryAudioProcessor::process(juce::AudioBuffer<float>& buffer, bool force
     outputLevel.store(std::max(peakOut, outputLevel.load(std::memory_order_relaxed) * decay), std::memory_order_relaxed);
 }
 
-void DeepFryAudioProcessor::pushVisualFrame(const deepfry::TileFrame& frame) noexcept
+void DeepFryAudioProcessor::pushVisualFrame(const deepfry::VisualFrame& frame) noexcept
 {
     int start1, size1, start2, size2;
     visualFifo.prepareToWrite(1, start1, size1, start2, size2);
     if (size1 > 0)
     {
         visualFrames[static_cast<size_t>(start1)] = frame;
+        coefficientRetention.store(frame.channels[0].image.retained, std::memory_order_relaxed);
         visualFifo.finishedWrite(1);
     }
 }
 
-bool DeepFryAudioProcessor::popVisualFrame(deepfry::TileFrame& frame) noexcept
+bool DeepFryAudioProcessor::popVisualFrame(deepfry::VisualFrame& frame) noexcept
 {
     int start1, size1, start2, size2;
     visualFifo.prepareToRead(1, start1, size1, start2, size2);

@@ -2,11 +2,11 @@
 
 For a Windows PC, use the [Windows installation guide](installation-windows.md).
 
-Download the ZIP and its `.sha256` file from the [latest release](https://github.com/mitchaiet/deep-fry/releases/latest). Version 0.1.1 includes universal **Apple Silicon and Intel** builds of the VST3, Audio Unit, and standalone app. It is built for **macOS 11 or later** and tested on macOS 26.2; earlier supported versions have not been runtime-tested. Use a compatible 64-bit host for the plug-in formats.
+Download the ZIP and its `.sha256` file from the [latest release](https://github.com/mitchaiet/deep-fry/releases/latest). Version 0.2.0 includes universal **Apple Silicon and Intel** builds of the VST3, Audio Unit, and standalone app. It targets **macOS 11 or later**; see [validation results](validation.md) for the versions and hosts tested. Use a compatible 64-bit host for the plug-in formats.
 
 ## Install or update
 
-1. Extract the complete `Deep-Fry-0.1.1-macOS-universal.zip` archive. Keep `Install.command` beside the `VST3`, `AU`, and `Standalone` folders.
+1. Extract the complete `Deep-Fry-0.2.0-macOS-universal.zip` archive. Keep `Install.command` beside the `VST3`, `AU`, and `Standalone` folders.
 2. Save your work and close your DAW before replacing an installed copy.
 3. Double-click **Install.command**. It opens in Terminal and installs for your user account without an administrator password.
 4. Wait for the success message, then press Return to close the installer.
@@ -35,7 +35,7 @@ Approval behavior can differ for host-loaded plug-ins and managed Macs; the inst
 Put the ZIP and `.sha256` file in the same folder. Open Terminal in that folder and run:
 
 ```sh
-shasum -a 256 -c Deep-Fry-0.1.1-macOS-universal.zip.sha256
+shasum -a 256 -c Deep-Fry-0.2.0-macOS-universal.zip.sha256
 ```
 
 The result should end in `OK`. If it fails, download both files again before installing. The checksum verifies that the archive matches the published download; it is separate from Apple's signing and notarization checks.
