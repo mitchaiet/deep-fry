@@ -53,9 +53,44 @@ Each tile uses JPEG's standard luminance quantization table and IJG quality scal
 
 Samples map symmetrically around gray 128, with an exact zero level at every pixel depth. Digital silence stays silent. The processed path clips input beyond ±1 during image conversion; dry and bypass preserve finite input. Tile boundaries are intentionally audible, and extreme contrast or sharpening can alias.
 
-The original thumbnail and processed mosaic show recent **left-channel or mono** tiles from the wet processing path, before Mix, Output, and Bypass. The large view uses a display palette; its changing pixels come from the audio processor. The coefficient meter counts retained DCT coefficients, not JPEG file size. The Impact wordmark and printed panels are described in the [visual style notes](docs/visual-style.md).
-
 Latency is **64 samples**: 1.45 ms at 44.1 kHz, or 1.33 ms at 48 kHz. The host receives this latency, and dry, wet, and bypass use the same delay. The audio callback uses fixed storage without file I/O, allocation, or locks. Closing or freezing the editor does not interrupt processing.
+
+## What the visualizer shows
+
+The visual output is a **rolling mosaic of the audio waveform packed into pixels**. Both panels show the same sampled blocks from the **left channel, or the mono signal**, before and after the image-processing stages. Each pixel represents one sample's signed amplitude: its position above or below the waveform's zero line. The picture has no frequency axis or musical-note color coding.
+
+### From samples to pixels
+
+Every 64 consecutive audio samples form an **8×8 tile**. Samples 1–8 fill the first row from left to right, samples 9–16 fill the second, and so on. At 48 kHz, one tile contains about **1.33 ms** of audio. The codec processes each tile independently; the editor assembles selected tiles into the larger picture.
+
+**01 / ORIGINAL** shows the input tile as grayscale, after clipping to ±1 and rounding into pixel values:
+
+| Input sample | Grayscale value | Appearance |
+| --- | --- | --- |
+| −1, negative full scale | 1 | Almost black |
+| 0, the waveform's zero level | 128 | Mid-gray |
+| +1, positive full scale | 255 | White |
+
+The mapping is `128 + round(clamp(sample, -1, 1) × 127)`. A repeating waveform can form bands or stripes as it wraps between rows; irregular sample values produce a more irregular texture.
+
+**02 / AFTER JPEG** shows the corresponding samples after Fry's contrast/sharpening, JPEG quantization and reconstruction, and Pixel Depth reduction. These are the same decoded values used for the wet audio. The editor applies a display-only color palette: negative values run through near-black, purple, and magenta; zero is red-orange; positive values run through orange, yellow, and pale cream. That red-orange is the palette's neutral point, not a clipping warning. The audio processing itself uses grayscale values; changing pixels in the signal preview come from the codec.
+
+### How to read the moving mosaic
+
+Each panel contains up to **128 tiles**, arranged **16 across by 8 down**, making a **128×64-pixel image** enlarged in the UI. Tiles fill from top-left to bottom-right. Once the history is full, the oldest tile appears at top-left and the newest at bottom-right.
+
+The processor sends roughly 60 selected tiles per second to the display, and the editor redraws at about 30 frames per second. At 48 kHz, it captures one tile every 12 processed tiles: **62.5 captures per second**, representing about two seconds of sampled history. Audio between these captures is still processed normally. The mosaic therefore contains snapshots spaced through recent audio, rather than a continuous recording of every sample. Each tile keeps the settings used when it was processed, so changing a control gradually replaces the older history.
+
+### Controls, meters, and silence
+
+- **JPEG Quality, Fry, and Pixel Depth** change newly arriving processed tiles. Lower quality quantizes image detail more coarsely, Fry increases contrast and edge emphasis, and lower Pixel Depth produces fewer amplitude/color levels.
+- **Mix, Output, and Bypass** act after the wet values shown in the preview. At 0% Mix or while bypassed, the picture can still look heavily processed even though the audible signal is dry, as long as the host continues sending audio through the plugin.
+- **IN / OUT** show actual peak levels across the active audio channels, with meter decay. OUT reflects Mix, Output gain, and Bypass. A stereo signal present only on the right can move these meters while the left-channel picture remains flat.
+- **DCT DETAIL** is the percentage of the latest captured tile's 64 quantized DCT coefficients that are nonzero, including its average-value coefficient. It is measured before Pixel Depth reduction and varies with both the signal and compression settings; it does not measure JPEG file size or perceptual fidelity.
+- **FREEZE IMAGE** holds both pictures and the DCT reading while audio and level meters continue. On unfreezing, new captures resume entering the history.
+- **Silence** gradually fills the history with mid-gray in ORIGINAL and red-orange in AFTER JPEG. Before any captured tile arrives, the editor shows a checkerboard. If the host stops sending audio blocks, the last picture stays visible; the playback-status label follows incoming frame activity.
+
+The surrounding paper grain, stamps, and registration marks are static interface artwork. See the [visual style notes](docs/visual-style.md).
 
 ## Build from source
 
