@@ -1,0 +1,64 @@
+name: Build and test
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  codec:
+    name: Codec on Linux
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Build and test the dependency-free codec
+        run: |
+          cmake -S . -B build-codec -DDEEPFRY_BUILD_PLUGIN=OFF -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-codec --parallel 2
+          ctest --test-dir build-codec --output-on-failure
+
+  macos:
+    name: Universal macOS plugin
+    runs-on: macos-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Build and test all formats
+        run: ./scripts/build.sh
+      - name: Verify universal bundles and signatures
+        shell: bash
+        run: |
+          set -euo pipefail
+          for bundle in "VST3/Deep Fry.vst3" "AU/Deep Fry.component" "Standalone/Deep Fry.app"; do
+            path="build/DeepFry_artefacts/Release/$bundle"
+            lipo "$path/Contents/MacOS/Deep Fry" -verify_arch arm64 x86_64
+            codesign --verify --deep --strict "$path"
+          done
+
+  windows:
+    name: Windows x64 plugin and download
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Configure
+        run: cmake -S . -B build -A x64 -DCMAKE_BUILD_TYPE=Release
+      - name: Build VST3, standalone, and tests
+        run: cmake --build build --config Release --parallel 4
+      - name: Test
+        run: ctest --test-dir build -C Release --output-on-failure
+      - name: Package Windows download
+        run: ./scripts/package-windows.ps1 -Artifacts build/DeepFry_artefacts/Release
+      - name: Retain release ZIP and checksum
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: windows-x64-release
+          path: dist/Deep-Fry-*-Windows-x64.zip*
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14

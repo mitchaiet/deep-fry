@@ -1,3 +1,7 @@
+// Copyright (C) 2026 Mitch Chaiet
+// SPDX-License-Identifier: AGPL-3.0-only
+// See LICENSE and COPYRIGHT for terms and warranty disclaimer.
+
 #include "PluginEditor.h"
 
 #include <algorithm>
@@ -337,9 +341,17 @@ DeepFryAudioProcessorEditor::DeepFryAudioProcessorEditor (DeepFryAudioProcessor&
     helpButton.onClick = [this]
     {
         helpOpen = helpButton.getToggleState();
+        licenseLink.setVisible (helpOpen);
+        sourceLink.setVisible (helpOpen);
         repaint();
     };
     addAndMakeVisible (helpButton);
+    for (auto* link : { &licenseLink, &sourceLink })
+    {
+        link->setColour (juce::HyperlinkButton::textColourId, blue);
+        link->setJustificationType (juce::Justification::centredLeft);
+        addChildComponent (*link);
+    }
 
     setResizable (true, true);
     setResizeLimits (896, 640, 1400, 1000);
@@ -381,6 +393,10 @@ void DeepFryAudioProcessorEditor::resized()
     bypassButton.setBounds (scaledBounds ({ 24, 479, 200, 44 }));
     helpButton.setBounds (scaledBounds ({ 236, 479, 92, 44 }));
     freezeButton.setBounds (scaledBounds ({ 958, 150, 140, 33 }));
+    licenseLink.setBounds (scaledBounds ({ 394, 508, 80, 24 }));
+    sourceLink.setBounds (scaledBounds ({ 490, 508, 80, 24 }));
+    for (auto* link : { &licenseLink, &sourceLink })
+        link->setFont (mono (12.0f * contentScale), true);
 }
 
 void DeepFryAudioProcessorEditor::drawMeter (juce::Graphics& g, juce::Rectangle<float> bounds,
@@ -530,12 +546,16 @@ void DeepFryAudioProcessorEditor::paint (juce::Graphics& g)
             "03 / Pixel depth adds grain. The pixels become audio."
         };
         for (size_t i = 0; i < steps.size(); ++i)
-            label (g, steps[i], { 394, 280 + static_cast<float> (i) * 43, 668, 31 }, 13);
+            label (g, steps[i], { 394, 272 + static_cast<float> (i) * 35, 668, 31 }, 13);
         g.setColour (ink);
-        g.fillRect (394, 419, 668, 2);
-        label (g, "The moving pixels are your actual left / mono signal.", { 394, 435, 668, 27 }, 12.5f);
-        label (g, "Colour is a display palette. Mix blends dry and wet.", { 394, 464, 668, 27 }, 12.5f);
-        label (g, "FREEZE IMAGE holds the picture. The sound keeps going.", { 394, 493, 668, 27 }, 12.5f);
+        g.fillRect (394, 387, 668, 2);
+        label (g, "The moving pixels are your actual left / mono signal.", { 394, 400, 668, 27 }, 12.5f);
+        label (g, "Colour is a display palette. Mix blends dry and wet.", { 394, 425, 668, 27 }, 12.5f);
+        label (g, "FREEZE IMAGE holds the picture. The sound keeps going.", { 394, 450, 668, 27 }, 12.5f);
+        label (g, "(C) 2026 Mitch Chaiet. AGPLv3. You may redistribute under this license.",
+               { 394, 482, 668, 20 }, 10.5f);
+        label (g, "NO WARRANTY", { 858, 508, 204, 24 }, 11, muted,
+               juce::Justification::centredRight);
     }
 }
 

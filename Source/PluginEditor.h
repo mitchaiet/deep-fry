@@ -1,3 +1,7 @@
+// Copyright (C) 2026 Mitch Chaiet
+// SPDX-License-Identifier: AGPL-3.0-only
+// See LICENSE and COPYRIGHT for terms and warranty disclaimer.
+
 #pragma once
 
 #include "PluginProcessor.h"
@@ -36,6 +40,8 @@ private:
     juce::TextButton bypassButton { "EFFECT ON" };
     juce::TextButton freezeButton { "FREEZE" };
     juce::TextButton helpButton { "?" };
+    juce::HyperlinkButton licenseLink { "LICENSE", juce::URL ("https://github.com/mitchaiet/deep-fry/blob/master/LICENSE") };
+    juce::HyperlinkButton sourceLink { "SOURCE", juce::URL ("https://github.com/mitchaiet/deep-fry/releases") };
     std::unique_ptr<ButtonAttachment> bypassAttachment;
 
     std::array<deepfry::TileFrame, 128> tileHistory {};

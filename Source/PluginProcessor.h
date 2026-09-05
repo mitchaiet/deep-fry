@@ -1,3 +1,7 @@
+// Copyright (C) 2026 Mitch Chaiet
+// SPDX-License-Identifier: AGPL-3.0-only
+// See LICENSE and COPYRIGHT for terms and warranty disclaimer.
+
 #pragma once
 
 #include <juce_audio_processors/juce_audio_processors.h>

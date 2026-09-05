@@ -1,0 +1,21 @@
+Deep Fry
+Copyright (C) 2026 Mitch Chaiet
+SPDX-License-Identifier: AGPL-3.0-only
+
+Deep Fry's original source code, including version 0.1.0 and subsequent
+releases, is free software: you may redistribute it and/or modify it under
+the terms of the GNU Affero General Public License, version 3, as published
+by the Free Software Foundation.
+
+Deep Fry is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for
+more details. A copy is included in LICENSE.
+
+JUCE is used under its AGPLv3 licensing option. Third-party components
+retain their own copyright notices and applicable licenses; see
+THIRD_PARTY_NOTICES.md and packaging/LICENSES/.
+
+The complete corresponding source for each distributed binary release,
+including the pinned JUCE source and build scripts, is available alongside
+the binaries at https://github.com/mitchaiet/deep-fry/releases.

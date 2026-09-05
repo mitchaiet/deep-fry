@@ -31,9 +31,16 @@ done
     exit 1
 }
 install_prefix="$(cd "$install_prefix" && pwd -P)"
+required_macos="@MIN_MACOS@"
+[[ "$required_macos" =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?$ ]] || {
+    echo "This is an installer template. Run Install.command from the packaged release ZIP." >&2
+    exit 1
+}
 IFS=. read -r os_major os_minor os_patch < <(/usr/bin/sw_vers -productVersion)
-if (( os_major < 26 || (os_major == 26 && ${os_minor:-0} < 2) )); then
-    echo "This build requires macOS 26.2 or later." >&2
+IFS=. read -r required_major required_minor required_patch <<< "$required_macos"
+if (( os_major < required_major || (os_major == required_major && ${os_minor:-0} < required_minor) || \
+      (os_major == required_major && ${os_minor:-0} == required_minor && ${os_patch:-0} < ${required_patch:-0}) )); then
+    echo "This build requires macOS $required_macos or later." >&2
     exit 1
 fi
 

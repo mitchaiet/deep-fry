@@ -2,11 +2,18 @@ cmake_minimum_required(VERSION 3.24)
 if(CMAKE_HOST_APPLE AND NOT DEFINED CMAKE_OSX_ARCHITECTURES)
     set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64" CACHE STRING "macOS plugin architectures")
 endif()
-project(DeepFry VERSION 0.1.0 LANGUAGES C CXX)
+if(CMAKE_HOST_APPLE AND NOT DEFINED CMAKE_OSX_DEPLOYMENT_TARGET)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0" CACHE STRING "Minimum macOS version")
+endif()
+project(DeepFry VERSION 0.1.1 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+if(MSVC)
+    # Keep the Windows download self-contained without a VC runtime installer.
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
 include(CTest)
 
 add_library(DeepFryCodec STATIC Source/JpegCodec.cpp)
@@ -58,14 +65,15 @@ target_include_directories(DeepFry PUBLIC Source)
 target_compile_definitions(DeepFry PUBLIC
     JUCE_WEB_BROWSER=0
     JUCE_USE_CURL=0
+    $<$<PLATFORM_ID:Windows>:JUCE_ASIO=0>
     JUCE_VST3_CAN_REPLACE_VST2=0)
 target_link_libraries(DeepFry PRIVATE DeepFryCodec juce::juce_audio_utils
     PUBLIC juce::juce_recommended_config_flags juce::juce_recommended_warning_flags)
 
 if(APPLE)
-    # JUCE signs the VST3 while generating its manifest. Sign the other local
-    # development bundles too, including both slices of a universal binary.
-    foreach(bundleTarget DeepFry_AU DeepFry_Standalone)
+    # Sign every complete bundle after JUCE's VST3 manifest generation.
+    # Signing before moduleinfo.json is written leaves that resource unsealed.
+    foreach(bundleTarget DeepFry_VST3 DeepFry_AU DeepFry_Standalone)
         add_custom_command(TARGET ${bundleTarget} POST_BUILD
             COMMAND /usr/bin/codesign --force --sign - "$<TARGET_BUNDLE_DIR:${bundleTarget}>"
             VERBATIM)
@@ -75,7 +83,7 @@ endif()
 if(BUILD_TESTING)
     juce_add_console_app(DeepFryVerify PRODUCT_NAME "Deep Fry Verification")
     target_sources(DeepFryVerify PRIVATE Tests/PluginTests.cpp Source/PluginProcessor.cpp Source/PluginEditor.cpp)
-    target_compile_definitions(DeepFryVerify PRIVATE JUCE_MODAL_LOOPS_PERMITTED=1 JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0)
+    target_compile_definitions(DeepFryVerify PRIVATE JUCE_MODAL_LOOPS_PERMITTED=1 JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0 $<$<PLATFORM_ID:Windows>:JUCE_ASIO=0>)
     target_link_libraries(DeepFryVerify PRIVATE DeepFryCodec juce::juce_audio_utils
         juce::juce_recommended_config_flags juce::juce_recommended_warning_flags)
     add_test(NAME plugin_integration COMMAND DeepFryVerify)
