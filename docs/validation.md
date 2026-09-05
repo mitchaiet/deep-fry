@@ -32,12 +32,29 @@ verified file by file; all 4,424 JUCE files match the pinned upstream archive.
 An extracted source archive configured the plugin without downloading JUCE and
 built and tested the codec offline.
 
-Windows x64 release binaries are built with Visual Studio on a Windows GitHub
-Actions runner. The workflow builds the VST3, standalone, and verification
-targets, runs both CTest suites, checks the package, and retains the ZIP and
-checksum. The release links its exact workflow run. Windows standalone audio
-uses WASAPI/DirectSound; the VST3 uses the host's audio driver. The workflow also
-builds the codec on Linux and all plugin formats on macOS. See
+The Windows x64 package was built on macOS with Apple Clang 21.0.0 targeting
+the MSVC ABI, LLD 20.1.7, Microsoft's CRT 14.44.35220 and SDK 10.0.26100.15,
+and the unmodified pinned JUCE source. Both PE32+ binaries carry version
+0.1.1.0 and import only Windows system DLLs; the compiler runtime is static.
+The VST3 bundle includes its generated `moduleinfo.json`. Build wrappers and
+pinned tool downloads are documented in [Windows cross builds](build-windows-cross.md).
+
+Both Windows CTest suites passed under Wine 11.0 on macOS. Windows pluginval
+1.0.4 also passed strictness 5 with `--skip-gui-tests`, covering processing,
+automation, state, programs, and bus layouts. Its full GUI run timed out during
+the Editor test after 30 seconds; that run is not counted as a pass. A separate
+editor-rendering run crashed inside Wine's `dwrite` implementation (DirectWrite).
+The Windows download is a preview with native Windows GUI/DAW validation still
+pending. These are Wine checks, not native Windows validation.
+
+The native Windows GitHub Actions workflow builds the VST3, standalone, and
+verification targets, runs both CTest suites, checks the package, and retains
+the ZIP and checksum. The initial hosted runs were blocked before execution
+because GitHub reported an account billing lock; no hosted Windows test success
+is claimed. Local Windows build and validation details are recorded in the
+release notes. Windows standalone audio uses WASAPI/DirectSound; the VST3 uses
+the host's audio driver. The workflow also defines Linux codec and universal
+macOS jobs. See
 [the build workflow](../.github/workflows/build.yml) and
 [run history](https://github.com/mitchaiet/deep-fry/actions/workflows/build.yml).
 

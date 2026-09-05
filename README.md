@@ -11,13 +11,13 @@ A JPEG compression audio effect. Deep Fry turns short blocks of audio into grays
 | Download | Includes | Requirements |
 | --- | --- | --- |
 | [macOS universal ZIP](https://github.com/mitchaiet/deep-fry/releases/download/v0.1.1/Deep-Fry-0.1.1-macOS-universal.zip) | VST3, Audio Unit, standalone app | macOS 11+, Apple Silicon or Intel |
-| [Windows x64 ZIP](https://github.com/mitchaiet/deep-fry/releases/download/v0.1.1/Deep-Fry-0.1.1-Windows-x64.zip) | VST3, standalone EXE | Windows 10 version 1607+, 64-bit Intel or AMD |
+| [Windows x64 ZIP (preview)](https://github.com/mitchaiet/deep-fry/releases/download/v0.1.1/Deep-Fry-0.1.1-Windows-x64.zip) | VST3, standalone EXE | Windows 10 version 1607+, 64-bit Intel or AMD |
 
 **macOS:** Extract the complete ZIP, save your session and close your DAW, then open `Install.command`. It installs for your user account and backs up existing versions. The binaries are ad-hoc signed and **not Apple-notarized**, so macOS may require explicit approval. [Mac installation, security prompts, and removal](docs/installation.md)
 
 **Windows:** Extract the complete ZIP, close your DAW, and copy the entire `VST3\Deep Fry.vst3` bundle into `C:\Program Files\Common Files\VST3`. Administrator permission may be needed. The standalone EXE runs from its extracted folder. [Windows installation and removal](docs/installation-windows.md)
 
-Reopen your DAW and rescan plug-ins after installing. The Mac build targets macOS 11+ and has been tested on macOS 26.2; earlier supported versions have not been runtime-tested. See [validation results](docs/validation.md) for the tested configurations. Linux binaries are not currently provided.
+Reopen your DAW and rescan plug-ins after installing. The Mac build targets macOS 11+ and has been tested on macOS 26.2; earlier supported versions have not been runtime-tested. Windows audio checks passed under Wine; native Windows DAW and GUI compatibility remain unverified. See [validation results](docs/validation.md) for the tested configurations. Linux binaries are not currently provided.
 
 ### Ableton Live 11
 
@@ -108,6 +108,25 @@ shasum -a 256 -c Deep-Fry-0.1.1-source.tar.gz.sha256
 ```
 
 The packager verifies the JUCE archive's SHA-256 against the CMake pin and checks bundle versions, both architectures, the minimum macOS version, and code signatures. It writes a binary ZIP, complete source archive, and SHA-256 sidecars under `dist/`. The ZIP includes all three formats, installer, license notices, and a release manifest; the source archive includes vendored JUCE and an offline build script. It does not install the bundles. [Installer verification instructions](docs/installation.md#isolated-installer-check) use a separate directory.
+
+## Package a Windows release
+
+After a Windows Release build and successful CTest run, use PowerShell:
+
+```powershell
+./scripts/package-windows.ps1 -Artifacts build/DeepFry_artefacts/Release
+```
+
+The ZIP contains the complete VST3 bundle, portable standalone EXE, installation
+instructions, license notices, and a manifest with architecture, version, DLL
+imports, source commit, and file hashes. A SHA-256 sidecar accompanies it.
+The source tree must be committed and clean. Pass `-SourceArchive` with the
+matching complete source archive to record its checksum in the manifest.
+
+The 0.1.1 Windows download was cross-compiled on macOS with Clang, Microsoft's
+SDK and static C++ runtime, and the unmodified pinned JUCE source. See the
+[Windows cross-build instructions](docs/build-windows-cross.md) for its exact
+toolchain, packaging command, and validation procedure.
 
 ## License
 

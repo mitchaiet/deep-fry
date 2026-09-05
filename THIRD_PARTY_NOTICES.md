@@ -5,10 +5,11 @@ Deep Fry uses JUCE 8.0.13, pinned in `CMakeLists.txt` to commit
 the macOS VST3, Audio Unit, and standalone package and the Windows VST3 and
 standalone package.
 
-The license files were copied from that JUCE source tree. Additional copyright
-and license comments were extracted verbatim, with their original file paths
-and line numbers. [SOURCE-MANIFEST.json](packaging/LICENSES/SOURCE-MANIFEST.json)
-records provenance and SHA-256 checksums. The upstream source is available at
+The JUCE dependency license files were copied from that JUCE source tree.
+Additional copyright and license comments were extracted verbatim, with their
+original file paths and line numbers.
+[SOURCE-MANIFEST.json](packaging/LICENSES/SOURCE-MANIFEST.json) records their
+provenance and SHA-256 checksums. The upstream source is available at
 [the pinned JUCE revision](https://github.com/juce-framework/JUCE/tree/7c9d3783b127263d72bb65fe0a7e2dc8a02a7ac2).
 
 Deep Fry's original source is licensed under **AGPL-3.0-only**, as described in
@@ -64,3 +65,18 @@ plugin build does not enable that flag.
 Paths and links inside verbatim upstream files retain their original JUCE-tree
 context. Use the source manifest or the pinned upstream revision to resolve
 those references.
+
+Windows release builds use the static Microsoft C/C++ runtime (`/MT`). The
+Microsoft C++ Standard Library carries Apache-2.0 WITH LLVM-exception; its
+complete [LICENSE](packaging/LICENSES/Windows-MSVC-STL-LICENSE.txt) and
+[NOTICE](packaging/LICENSES/Windows-MSVC-STL-NOTICE.txt) are included verbatim.
+[Windows-MSVC-SOURCE-MANIFEST.json](packaging/LICENSES/Windows-MSVC-SOURCE-MANIFEST.json)
+records their upstream revision and hashes. The remaining Microsoft CRT and
+Windows SDK components retain Microsoft's terms; see the
+[Visual Studio license directory](https://visualstudio.microsoft.com/license-terms/)
+and [redistribution information](https://learn.microsoft.com/en-us/visualstudio/releases/2022/redistribution).
+The package contains linked release runtime code, without redistributing SDK
+headers, development libraries, tools, or debug runtimes. The optional macOS
+cross-build recipe uses Clang and LLD with these Microsoft libraries. GNU
+windres writes resource data only; no MinGW or GCC runtime is linked by that
+recipe.

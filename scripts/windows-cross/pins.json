@@ -1,0 +1,39 @@
+{
+  "xwin_version": "0.6.5",
+  "rust_version": "1.89.0",
+  "hosts": {
+    "arm64": {
+      "triple": "aarch64-apple-darwin",
+      "xwin_sha256": "21acd1e35d23b72efc8c47cbeda5028989f98089174b8c87074f892b65adbc01",
+      "rust_sha256": "6d2cf6164bef00ff3d2c37ca0a0658ffb7c9c3178882a72d78e35abeba888860"
+    },
+    "x86_64": {
+      "triple": "x86_64-apple-darwin",
+      "xwin_sha256": "ecb2b19b30fa3786749fae600ad60b034b0c1c6a604ecf9f35f682c23a40e54b",
+      "rust_sha256": "04f3acf7ddfb998fa2713226fd8528e6157b9030f9a6ac6678133d82d5c099f9"
+    }
+  },
+  "microsoft": {
+    "channel_manifest_url": "https://download.visualstudio.microsoft.com/download/pr/fa619120-9c0e-47e6-bfe0-3ee96fb671b2/c26f06fe7ef8ee5381d82838bb39db61d0cb01124493eab761cdace9720e0995/VisualStudio.17.Release.chman",
+    "channel_manifest_sha256": "4c81e902fb7fe2acea779b828e6dc548fe0bbb693df50eda0224263c16686bdd",
+    "crt_xwin_selector": "14.44.17.14",
+    "crt_package_version": "14.44.35220",
+    "sdk_xwin_selector": "10.0.26100",
+    "sdk_package_version": "10.0.26100.15",
+    "package_manifest_sha256": "3891c3018a07338b3880cbb28088bb22ef7762eb9206523655b2e3972b9d527e"
+  },
+  "verified_compiler": {
+    "name": "Apple Clang",
+    "version": "21.0.0",
+    "build": "clang-2100.1.1.101",
+    "target": "x86_64-pc-windows-msvc19.33.0",
+    "cmake_expected_id": "Clang",
+    "simulate_id": "MSVC",
+    "frontend_variant": "MSVC"
+  },
+  "verified_linker": {
+    "version": "20.1.7",
+    "revision": "9b1bf4cf041c1c1fe62cf03891ac90431615e780"
+  },
+  "verified_resource_writer": "GNU Binutils 2.46.0.20260210"
+}

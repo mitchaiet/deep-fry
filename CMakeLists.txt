@@ -42,6 +42,14 @@ if(APPLE)
     list(APPEND DEEPFRY_FORMATS AU)
 endif()
 
+set(DEEPFRY_VST3_AUTO_MANIFEST TRUE)
+if(CMAKE_CROSSCOMPILING AND WIN32)
+    if(NOT CMAKE_CROSSCOMPILING_EMULATOR)
+        message(FATAL_ERROR "Windows cross builds require CMAKE_CROSSCOMPILING_EMULATOR (for example, Wine).")
+    endif()
+    set(DEEPFRY_VST3_AUTO_MANIFEST FALSE)
+endif()
+
 juce_add_plugin(DeepFry
     COMPANY_NAME "JPEG Pedal"
     BUNDLE_ID "audio.jpegpedal.deepfry"
@@ -56,6 +64,7 @@ juce_add_plugin(DeepFry
     IS_MIDI_EFFECT FALSE
     EDITOR_WANTS_KEYBOARD_FOCUS FALSE
     COPY_PLUGIN_AFTER_BUILD FALSE
+    VST3_AUTO_MANIFEST ${DEEPFRY_VST3_AUTO_MANIFEST}
     VST3_CATEGORIES Fx Distortion
     MICROPHONE_PERMISSION_ENABLED TRUE
     MICROPHONE_PERMISSION_TEXT "Deep Fry processes live audio from your selected input.")
@@ -69,6 +78,26 @@ target_compile_definitions(DeepFry PUBLIC
     JUCE_VST3_CAN_REPLACE_VST2=0)
 target_link_libraries(DeepFry PRIVATE DeepFryCodec juce::juce_audio_utils
     PUBLIC juce::juce_recommended_config_flags juce::juce_recommended_warning_flags)
+
+if(CMAKE_CROSSCOMPILING AND WIN32)
+    # JUCE's ordinary helper launches a target executable directly. Build that
+    # same upstream helper with our toolchain and run it through the emulator.
+    add_executable(DeepFryCrossVst3ManifestHelper
+        "${JUCE_SOURCE_DIR}/modules/juce_audio_plugin_client/VST3/juce_VST3ManifestHelper.cpp")
+    target_compile_definitions(DeepFryCrossVst3ManifestHelper PRIVATE
+        "$<TARGET_PROPERTY:DeepFry,COMPILE_DEFINITIONS>")
+    target_include_directories(DeepFryCrossVst3ManifestHelper PRIVATE
+        "$<TARGET_PROPERTY:DeepFry,INCLUDE_DIRECTORIES>")
+    add_dependencies(DeepFry_VST3 DeepFryCrossVst3ManifestHelper)
+    get_target_property(_deepfry_vst3_bundle DeepFry_VST3 JUCE_PLUGIN_ARTEFACT_FILE)
+    add_custom_command(TARGET DeepFry_VST3 POST_BUILD
+        COMMAND "${CMAKE_COMMAND}"
+            "-DEMULATOR=${CMAKE_CROSSCOMPILING_EMULATOR}"
+            "-DHELPER_EXE=$<TARGET_FILE:DeepFryCrossVst3ManifestHelper>"
+            "-DOUTPUT_FILE=${_deepfry_vst3_bundle}/Contents/Resources/moduleinfo.json"
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/generate-vst3-manifest.cmake"
+        VERBATIM)
+endif()
 
 if(APPLE)
     # Sign every complete bundle after JUCE's VST3 manifest generation.

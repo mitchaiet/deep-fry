@@ -1,0 +1,68 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: AGPL-3.0-only
+"""MSVC rc arguments -> windres, using the genuine Windows SDK via Clang."""
+import json
+from pathlib import Path
+import shlex
+import subprocess
+import sys
+
+tool_root = Path(__file__).resolve().parent.parent
+args = sys.argv[1:]
+expanded = []
+for arg in args:
+    if arg.startswith('@'):
+        expanded.extend(shlex.split(Path(arg[1:]).read_text(), posix=True))
+    else:
+        expanded.append(arg)
+args = expanded
+input_path = None
+output_path = None
+flags = []
+i = 0
+while i < len(args):
+    arg = args[i]
+    low = arg.lower()
+    if low in ('/?', '/help', '--help'):
+        print('Workspace MSVC resource wrapper: /fo output.res [/I include] [/D define] input.rc')
+        sys.exit(0)
+    if low in ('/nologo', '-nologo', '/r', '-r'):
+        i += 1
+        continue
+    if arg.lower().endswith('.rc') and Path(arg).is_file():
+        if input_path is not None:
+            raise SystemExit('rc: more than one resource input')
+        input_path = arg
+        i += 1
+        continue
+    option = None
+    value = None
+    if low in ('/fo', '-fo', '/i', '-i', '/d', '-d', '/u', '-u', '/c', '-c', '/l', '-l'):
+        option = low[1:]
+        i += 1
+        if i == len(args):
+            raise SystemExit(f'rc: missing value after {arg}')
+        value = args[i]
+    elif low.startswith(('/fo', '-fo')):
+        option, value = 'fo', arg[3:]
+    elif len(arg) > 2 and low[:2] in ('/i', '-i', '/d', '-d', '/u', '-u', '/c', '-c', '/l', '-l'):
+        option, value = low[1], arg[2:]
+    else:
+        raise SystemExit(f'rc: unsupported argument {arg!r}')
+    if option == 'fo':
+        output_path = value
+    else:
+        translated = {'i': '-I', 'd': '-D', 'u': '-U', 'c': '-c', 'l': '-l'}[option]
+        flags.extend((translated, value))
+    i += 1
+
+if input_path is None or output_path is None:
+    raise SystemExit('rc: requires input.rc and /fo output.res')
+output = Path(output_path)
+output.parent.mkdir(parents=True, exist_ok=True)
+command = [
+    json.loads((tool_root / 'wrapper-config.json').read_text())['windres'],
+    '--preprocessor=' + str(tool_root / 'bin/rc-preprocess'),
+    '-J', 'rc', '-O', 'res', '-i', input_path, '-o', str(output), *flags,
+]
+raise SystemExit(subprocess.run(command).returncode)

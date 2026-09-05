@@ -42,7 +42,7 @@ def main():
         parser.error("Commit source changes before packaging a release (or use --allow-dirty for a local check)")
 
     required = ("CMakeLists.txt", "README.md", "LICENSE", "COPYRIGHT", "CHANGELOG.md", "THIRD_PARTY_NOTICES.md", ".gitignore")
-    roots = ("Source", "Tests", "docs", "scripts", "packaging", ".github")
+    roots = ("Source", "Tests", "docs", "scripts", "packaging", "cmake", ".github")
     files = {}
     for relative in required:
         path = project / relative

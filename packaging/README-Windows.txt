@@ -3,13 +3,21 @@ DEEP FRY @VERSION@ FOR WINDOWS X64
 Audio becomes 8 x 8 image tiles, gets JPEG compression artifacts, and becomes
 audio again. The live display shows the image before and after processing.
 
+VALIDATION STATUS
+
+This Windows preview passed codec, plugin integration, and pluginval audio
+checks under Wine 11.0. GUI checks did not complete: pluginval's editor test
+timed out, and separate rendering hit a Wine DirectWrite crash. Native Windows
+GUI, DAW sessions, and physical audio hardware have not been independently
+tested. See the release's validation notes for the full results.
+
 REQUIREMENTS
 
-Windows 10 or 11, 64-bit x64 (Intel or AMD). This package contains an x64 VST3
+Windows 10 version 1607 or later, or Windows 11; 64-bit x64 (Intel or AMD). This package contains an x64 VST3
 audio effect and an x64 standalone application. No Audio Unit is included.
 The VST3 requires a compatible 64-bit host, such as Ableton Live 11 or later.
-The Microsoft C++ runtime is linked statically; no separate Visual C++
-Redistributable installer is required for these binaries.
+The compiler runtime is linked statically; no separate compiler-runtime
+installer is required for these binaries.
 
 The binaries do not have an Authenticode publisher signature. Windows may
 show a SmartScreen or publisher warning. This package does not change Windows

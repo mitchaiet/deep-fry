@@ -7,7 +7,7 @@ First public release of Deep Fry.
 - Release the project under AGPLv3, with full license and dependency notices.
 - Provide universal macOS VST3, Audio Unit, and standalone downloads, plus a
   complete corresponding-source archive with pinned JUCE and offline build scripts.
-- Provide Windows x64 VST3 and standalone downloads, built and tested on Windows.
+- Provide Windows x64 VST3 and standalone downloads with a static compiler runtime.
 - Set the macOS deployment target explicitly to 11.0. The previous preview
   inherited 26.2 from the local build machine. Runtime validation remains on 26.2.
 - Include installation instructions, update backups, checksums, and build metadata.

@@ -1,0 +1,19 @@
+{
+  "component": "Microsoft STL",
+  "release_tag": "vs-2022-17.14",
+  "revision": "1f6e5b16ec02216665624c1e762f3732605cf2b4",
+  "crt_package": "14.44.35220",
+  "files": [
+    {
+      "file": "Windows-MSVC-STL-LICENSE.txt",
+      "source": "https://raw.githubusercontent.com/microsoft/STL/1f6e5b16ec02216665624c1e762f3732605cf2b4/LICENSE.txt",
+      "sha256": "1fc6b6db121d4555d8f661937d7f6013693cd8fd67495d5e5d98c1d18fb83eda"
+    },
+    {
+      "file": "Windows-MSVC-STL-NOTICE.txt",
+      "source": "https://raw.githubusercontent.com/microsoft/STL/1f6e5b16ec02216665624c1e762f3732605cf2b4/NOTICE.txt",
+      "sha256": "11dee60b182033b92dfcce5344093eb05e009e2c0339ce551f5667b3838c8223"
+    }
+  ],
+  "verification": "The installed CRT package vector and yvals_core.h match this upstream revision after CRLF/LF normalization."
+}
