@@ -1,0 +1,5 @@
+/build*/
+/dist/
+/.context/
+.DS_Store
+*.user

@@ -1,0 +1,596 @@
+#include "PluginEditor.h"
+
+#include <algorithm>
+#include <cmath>
+#include <cstdint>
+
+namespace
+{
+constexpr float designWidth = 1120.0f;
+constexpr float designHeight = 800.0f;
+const juce::Colour ink { 0xff16130f };
+const juce::Colour paper { 0xffeee9da };
+const juce::Colour white { 0xfffffff3 };
+const juce::Colour muted { 0xff625d53 };
+const juce::Colour red { 0xffef4029 };
+const juce::Colour yellow { 0xfff5ee36 };
+const juce::Colour blue { 0xff254edb };
+const std::array<float, 6> cellEdges { 24.0f, 256.0f, 488.0f, 678.0f, 868.0f, 1096.0f };
+
+juce::Font mono (float size)
+{
+    return juce::Font (juce::FontOptions (juce::Font::getDefaultMonospacedFontName(), size, juce::Font::plain));
+}
+
+juce::Font impact (float size)
+{
+    // Use the installed face; no proprietary font file is bundled with the plugin.
+    static const juce::String family = []
+    {
+        const auto faces = juce::Font::findAllTypefaceNames();
+        for (const auto* name : { "Impact", "Anton", "Arial Narrow", "Arial Black" })
+            if (faces.contains (name, true))
+                return juce::String (name);
+        return juce::Font::getDefaultSansSerifFontName();
+    }();
+    return juce::Font (juce::FontOptions (family, size, juce::Font::plain));
+}
+
+void label (juce::Graphics& g, const juce::String& text, juce::Rectangle<float> bounds,
+            float size = 12.0f, juce::Colour colour = ink,
+            juce::Justification alignment = juce::Justification::centredLeft,
+            bool headline = false)
+{
+    g.setColour (colour);
+    g.setFont (headline ? impact (size) : mono (size));
+    g.drawFittedText (text, bounds.toNearestInt(), alignment, 1);
+}
+
+juce::Path memePath (const juce::String& text, juce::Rectangle<float> bounds, float size,
+                     juce::Justification alignment = juce::Justification::centred)
+{
+    juce::GlyphArrangement glyphs;
+    glyphs.addFittedText (impact (size), text, bounds.getX(), bounds.getY(),
+                         bounds.getWidth(), bounds.getHeight(), alignment, 1, 0.75f);
+    juce::Path path;
+    glyphs.createPath (path);
+    return path;
+}
+
+void memeText (juce::Graphics& g, const juce::Path& path, float outline = 6.0f, bool misprint = false)
+{
+    g.setColour (ink);
+    g.strokePath (path, juce::PathStrokeType (outline, juce::PathStrokeType::curved,
+                                           juce::PathStrokeType::rounded));
+    if (misprint)
+    {
+        g.setColour (blue);
+        g.fillPath (path, juce::AffineTransform::translation (3.0f, 1.0f));
+    }
+    g.setColour (white);
+    g.fillPath (path);
+}
+
+juce::Colour pixelColour (float value, bool processed)
+{
+    const auto normalized = juce::jlimit (0.0f, 1.0f, value / 255.0f);
+    if (! processed)
+    {
+        const auto brightness = static_cast<juce::uint8> (normalized * 255.0f);
+        return juce::Colour::fromRGB (brightness, brightness, brightness);
+    }
+    // Only the display palette changes. Every pixel still encodes the actual
+    // reconstructed amplitude, with no synthetic visual noise in the audio image.
+    static const std::array<juce::Colour, 7> palette {
+        juce::Colour (0xff100812), juce::Colour (0xff262654),
+        juce::Colour (0xff792156), juce::Colour (0xffed4321),
+        juce::Colour (0xffff8328), juce::Colour (0xfff5df35),
+        juce::Colour (0xfffff5bc)
+    };
+    const auto position = normalized * 6.0f;
+    const auto index = juce::jmin (5, static_cast<int> (position));
+    return palette[static_cast<size_t> (index)].interpolatedWith (
+        palette[static_cast<size_t> (index + 1)], position - static_cast<float> (index));
+}
+}
+
+class DeepFryArtwork final
+{
+public:
+    DeepFryArtwork()
+        : background (juce::Image::RGB, static_cast<int> (designWidth), static_cast<int> (designHeight), false),
+          title (memePath ("DEEP FRY", { 20, 33, 672, 106 }, 108, juce::Justification::centredLeft))
+    {
+        // Slightly stretched wordmark recalls a repeatedly resized meme.
+        title.applyTransform (juce::AffineTransform::scale (1.45f, 1.0f, 20.0f, 33.0f));
+        // Print grain lives in the static artwork, never in the signal preview.
+        // Cache it and the outlined glyphs once, rather than redrawing noise at 30 Hz.
+        {
+            juce::Image::BitmapData pixels (background, juce::Image::BitmapData::writeOnly);
+            std::uint32_t random = 0x4a504547u;
+            for (int y = 0; y < background.getHeight(); ++y)
+                for (int x = 0; x < background.getWidth(); ++x)
+                {
+                    random = random * 1664525u + 1013904223u;
+                    const auto grain = static_cast<int> ((random >> 27) & 7u);
+                    pixels.setPixelColour (x, y, juce::Colour::fromRGB (
+                        static_cast<juce::uint8> (238 - grain),
+                        static_cast<juce::uint8> (233 - grain),
+                        static_cast<juce::uint8> (218 - grain)));
+                }
+        }
+        juce::Graphics g (background);
+        g.setColour (ink);
+        g.fillRect (0, 0, 1120, 28);
+        g.fillRect (0, 776, 1120, 24);
+        g.setColour (red);
+        g.fillRect (0, 28, 1120, 118);
+        for (int y = 28; y < 146; y += 16)
+            for (int x = 0; x < 1120; x += 16)
+            {
+                const auto hash = (x * 37 + y * 59) % 17;
+                g.setColour (hash < 8 ? ink.withAlpha (0.045f) : yellow.withAlpha (0.045f));
+                g.fillRect (x, y, 16, juce::jmin (16, 146 - y));
+            }
+        g.setColour (ink);
+        g.fillRect (0, 144, 1120, 3);
+        // The small registration checker is decorative, separate from live pixels.
+        for (int x = 699; x < 792; x += 12)
+            for (int y = 47; y < 129; y += 12)
+            {
+                g.setColour (((x / 12 + y / 12) % 2) == 0 ? ink : paper);
+                g.fillRect (x, y, 12, 12);
+            }
+    }
+
+    juce::Image background;
+    juce::Path title;
+};
+
+class DeepFryLookAndFeel final : public juce::LookAndFeel_V4
+{
+public:
+    DeepFryLookAndFeel()
+    {
+        setColour (juce::Slider::textBoxTextColourId, ink);
+        setColour (juce::Slider::textBoxBackgroundColourId, white);
+        setColour (juce::Slider::textBoxOutlineColourId, ink);
+        setColour (juce::Slider::textBoxHighlightColourId, yellow);
+        setColour (juce::TooltipWindow::backgroundColourId, yellow);
+        setColour (juce::TooltipWindow::textColourId, ink);
+        setColour (juce::TooltipWindow::outlineColourId, ink);
+    }
+
+    void drawLinearSlider (juce::Graphics& g, int x, int y, int width, int height,
+                           float sliderPosition, float, float,
+                           const juce::Slider::SliderStyle, juce::Slider& slider) override
+    {
+        const auto centreY = static_cast<float> (y) + static_cast<float> (height) * 0.5f;
+        const auto left = static_cast<float> (x);
+        const auto right = static_cast<float> (x + width);
+        const auto position = juce::jlimit (left, right, sliderPosition);
+        const juce::Rectangle<float> track (left, centreY - 6.0f, static_cast<float> (width), 12.0f);
+        g.setColour (white);
+        g.fillRect (track);
+        g.setColour (slider.findColour (juce::Slider::trackColourId));
+        g.fillRect (track.withWidth (position - left));
+        g.setColour (ink);
+        g.drawRect (track, 1.5f);
+        for (int tick = 0; tick <= 8; ++tick)
+        {
+            const auto tickX = left + static_cast<float> (width * tick) / 8.0f;
+            g.drawLine (tickX, centreY + 10.0f, tickX, centreY + (tick % 4 == 0 ? 16.0f : 13.0f), 1.0f);
+        }
+        const juce::Rectangle<float> thumb (position - 7.0f, centreY - 14.0f, 14.0f, 28.0f);
+        g.setColour (ink);
+        g.fillRect (thumb.translated (2, 2));
+        g.setColour (slider.isMouseButtonDown() ? yellow : paper);
+        g.fillRect (thumb);
+        g.setColour (ink);
+        g.drawRect (thumb, 2.0f);
+        g.drawLine (position - 2.0f, centreY - 6.0f, position - 2.0f, centreY + 6.0f, 1.0f);
+        g.drawLine (position + 2.0f, centreY - 6.0f, position + 2.0f, centreY + 6.0f, 1.0f);
+        if (slider.hasKeyboardFocus (true))
+        {
+            g.setColour (blue);
+            g.drawRect (thumb.expanded (3), 1.5f);
+        }
+    }
+
+    juce::Label* createSliderTextBox (juce::Slider& slider) override
+    {
+        auto* box = juce::LookAndFeel_V4::createSliderTextBox (slider);
+        box->setFont (mono (16.0f));
+        box->setJustificationType (juce::Justification::centred);
+        box->setColour (juce::Label::outlineColourId, ink);
+        box->setColour (juce::Label::outlineWhenEditingColourId, blue);
+        box->setColour (juce::TextEditor::textColourId, ink);
+        box->setColour (juce::TextEditor::backgroundColourId, white);
+        return box;
+    }
+
+    void drawButtonBackground (juce::Graphics& g, juce::Button& button,
+                               const juce::Colour&, bool highlighted, bool down) override
+    {
+        auto bounds = button.getLocalBounds().toFloat().reduced (1.5f, 1.5f).withTrimmedRight (3).withTrimmedBottom (3);
+        g.setColour (ink);
+        g.fillRect (bounds.translated (3, 3));
+        if (down)
+            bounds = bounds.translated (2, 2);
+        g.setColour (button.getToggleState() ? yellow : highlighted ? white : paper);
+        g.fillRect (bounds);
+        g.setColour (button.hasKeyboardFocus (true) ? blue : ink);
+        g.drawRect (bounds, 2.0f);
+    }
+
+    void drawButtonText (juce::Graphics& g, juce::TextButton& button, bool, bool down) override
+    {
+        auto bounds = button.getLocalBounds().toFloat().reduced (8, 3).translated (-1.5f, -1.5f);
+        if (down)
+            bounds = bounds.translated (2, 2);
+        label (g, button.getButtonText().toUpperCase(), bounds,
+               button.getHeight() >= 32 ? 19.0f : 16.0f, ink, juce::Justification::centred, true);
+    }
+};
+
+DeepFryAudioProcessorEditor::DeepFryAudioProcessorEditor (DeepFryAudioProcessor& p)
+    : AudioProcessorEditor (&p), effectProcessor (p), lookAndFeel (std::make_unique<DeepFryLookAndFeel>()), artwork (std::make_unique<DeepFryArtwork>())
+{
+    setLookAndFeel (lookAndFeel.get());
+    setOpaque (true);
+    setName ("DEEP FRY audio effect");
+
+    const std::array<const char*, 5> ids { "quality", "fry", "pixelBits", "mix", "output" };
+    const std::array<const char*, 5> names { "JPEG quality", "Fry", "Pixel depth", "Dry wet mix", "Output gain" };
+    const std::array<const char*, 5> descriptions {
+        "Lower quality discards more of each image tile's DCT detail. Double-click to reset.",
+        "Push image contrast and sharpen pixel edges for harder, deep-fried distortion. Double-click to reset.",
+        "The number of bits used for each grayscale pixel. Fewer bits makes the image and audio grainier.",
+        "Blend the original audio with the JPEG-processed signal. 100% is entirely processed.",
+        "Final output level in decibels. Use this to match the level of the original signal."
+    };
+
+    for (size_t index = 0; index < knobs.size(); ++index)
+    {
+        auto& knob = knobs[index];
+        // Attach before creating the value box so it inherits this editor's
+        // look-and-feel rather than caching JUCE's default dark-theme colours.
+        addAndMakeVisible (knob);
+        knob.setSliderStyle (juce::Slider::LinearHorizontal);
+        knob.setTextBoxStyle (juce::Slider::TextBoxBelow, false, 94, 28);
+        knob.setName (names[index]);
+        knob.setTitle (names[index]);
+        knob.setDescription (descriptions[index]);
+        knob.setTooltip (descriptions[index]);
+        knob.setWantsKeyboardFocus (true);
+        knob.setScrollWheelEnabled (false);
+        knob.setColour (juce::Slider::trackColourId, index == 1 ? red : index == 0 ? blue : yellow);
+        knob.setColour (juce::Slider::textBoxTextColourId, ink);
+        knob.setColour (juce::Slider::textBoxBackgroundColourId, white);
+        knob.setColour (juce::Slider::textBoxOutlineColourId, ink);
+        knob.setColour (juce::Slider::textBoxHighlightColourId, yellow);
+        knobAttachments[index] = std::make_unique<SliderAttachment> (effectProcessor.parameters, ids[index], knob);
+        knob.textFromValueFunction = [index] (double value)
+        {
+            if (index == 2)
+                return juce::String (juce::roundToInt (value)) + " bit";
+            if (index == 4)
+                return juce::String (value, 1) + " dB";
+            return juce::String (juce::roundToInt (value)) + " %";
+        };
+        knob.valueFromTextFunction = [] (const juce::String& text)
+        {
+            return text.retainCharacters ("-.0123456789").getDoubleValue();
+        };
+        knob.updateText();
+        knob.onValueChange = [this]
+        {
+            if (! applyingPreset)
+                for (auto& button : presetButtons)
+                    button.setToggleState (false, juce::dontSendNotification);
+        };
+    }
+
+    for (size_t index = 0; index < presetButtons.size(); ++index)
+    {
+        auto& button = presetButtons[index];
+        button.setButtonText (DeepFryAudioProcessor::presetName (static_cast<int> (index)));
+        button.setName ("Load " + button.getButtonText() + " preset");
+        button.setTooltip ("Load the " + button.getButtonText() + " preset. Changes the five sound controls.");
+        button.setWantsKeyboardFocus (true);
+        button.onClick = [this, index]
+        {
+            const juce::ScopedValueSetter<bool> guard (applyingPreset, true);
+            effectProcessor.applyPreset (static_cast<int> (index));
+            for (size_t buttonIndex = 0; buttonIndex < presetButtons.size(); ++buttonIndex)
+                presetButtons[buttonIndex].setToggleState (buttonIndex == index, juce::dontSendNotification);
+        };
+        addAndMakeVisible (button);
+    }
+
+    bypassButton.setClickingTogglesState (true);
+    bypassButton.setName ("Bypass effect");
+    bypassButton.setTooltip ("Bypass the effect while preserving its reported latency.");
+    bypassButton.onStateChange = [this]
+    {
+        bypassButton.setButtonText (bypassButton.getToggleState() ? "BYPASSED" : "EFFECT ON");
+    };
+    addAndMakeVisible (bypassButton);
+    bypassAttachment = std::make_unique<ButtonAttachment> (effectProcessor.parameters, "bypass", bypassButton);
+
+    freezeButton.setButtonText ("FREEZE IMAGE");
+    freezeButton.setClickingTogglesState (true);
+    freezeButton.setName ("Freeze visualization");
+    freezeButton.setTooltip ("Freeze the image display. Audio processing continues unchanged.");
+    freezeButton.onClick = [this]
+    {
+        frozen = freezeButton.getToggleState();
+        freezeButton.setButtonText (frozen ? "UNFREEZE" : "FREEZE IMAGE");
+        repaint();
+    };
+    addAndMakeVisible (freezeButton);
+
+    helpButton.setButtonText ("HOW?");
+    helpButton.setClickingTogglesState (true);
+    helpButton.setName ("Explain JPEG audio processing");
+    helpButton.setTooltip ("Show how audio becomes an image, then becomes audio again.");
+    helpButton.onClick = [this]
+    {
+        helpOpen = helpButton.getToggleState();
+        repaint();
+    };
+    addAndMakeVisible (helpButton);
+
+    setResizable (true, true);
+    setResizeLimits (896, 640, 1400, 1000);
+    if (auto* constrainer = getConstrainer())
+        constrainer->setFixedAspectRatio (designWidth / designHeight);
+    setSize (static_cast<int> (designWidth), static_cast<int> (designHeight));
+    // Discard queued history from before this editor opened.
+    deepfry::TileFrame stale;
+    while (effectProcessor.popVisualFrame (stale)) {}
+    startTimerHz (30);
+}
+
+DeepFryAudioProcessorEditor::~DeepFryAudioProcessorEditor()
+{
+    stopTimer();
+    setLookAndFeel (nullptr);
+}
+
+juce::Rectangle<int> DeepFryAudioProcessorEditor::scaledBounds (juce::Rectangle<float> bounds) const
+{
+    return bounds.transformedBy (juce::AffineTransform::scale (contentScale)
+                                     .translated (contentOffsetX, contentOffsetY)).toNearestInt();
+}
+
+void DeepFryAudioProcessorEditor::resized()
+{
+    const auto availableWidth = static_cast<float> (getWidth());
+    const auto availableHeight = static_cast<float> (getHeight());
+    contentScale = juce::jmin (availableWidth / designWidth, availableHeight / designHeight);
+    contentOffsetX = (availableWidth - designWidth * contentScale) * 0.5f;
+    contentOffsetY = (availableHeight - designHeight * contentScale) * 0.5f;
+
+    for (size_t index = 0; index < knobs.size(); ++index)
+        knobs[index].setBounds (scaledBounds ({ cellEdges[index] + 16.0f, 604.0f,
+                                               cellEdges[index + 1] - cellEdges[index] - 32.0f, 76.0f }));
+    for (size_t index = 0; index < presetButtons.size(); ++index)
+        presetButtons[index].setBounds (scaledBounds ({ 139.0f + static_cast<float> (index) * 165.0f,
+                                                       720.0f, 153.0f, 41.0f }));
+    bypassButton.setBounds (scaledBounds ({ 24, 479, 200, 44 }));
+    helpButton.setBounds (scaledBounds ({ 236, 479, 92, 44 }));
+    freezeButton.setBounds (scaledBounds ({ 958, 150, 140, 33 }));
+}
+
+void DeepFryAudioProcessorEditor::drawMeter (juce::Graphics& g, juce::Rectangle<float> bounds,
+                                            float level, const juce::String& text)
+{
+    label (g, text, bounds.removeFromLeft (32), 11);
+    const auto db = juce::Decibels::gainToDecibels (level, -60.0f);
+    const auto amount = juce::jlimit (0.0f, 1.0f, (db + 60.0f) / 60.0f);
+    const auto segmentWidth = (bounds.getWidth() - 11.0f) / 12.0f;
+    for (int index = 0; index < 12; ++index)
+    {
+        const auto lit = amount > static_cast<float> (index) / 12.0f;
+        const juce::Rectangle<float> segment (bounds.getX() + static_cast<float> (index) * (segmentWidth + 1.0f),
+                                              bounds.getCentreY() - 4, segmentWidth, 8);
+        g.setColour (lit ? (index >= 10 ? red : ink) : muted.withAlpha (0.18f));
+        g.fillRect (segment);
+    }
+}
+
+void DeepFryAudioProcessorEditor::drawImagePanel (juce::Graphics& g,
+                                                 juce::Rectangle<float> bounds, bool processed)
+{
+    g.setColour (ink);
+    g.fillRect (bounds.expanded (3).translated (4, 4));
+    if (tileCount > 0)
+    {
+        g.setImageResamplingQuality (juce::Graphics::lowResamplingQuality);
+        g.drawImage (processed ? afterImage : beforeImage, bounds, juce::RectanglePlacement::stretchToFit);
+    }
+    else
+    {
+        // Empty image-editor checkerboard; real sample pixels only appear once
+        // the processor has published a frame. Silence is not a fake animation.
+        const int columns = processed ? 32 : 16;
+        const float unit = bounds.getWidth() / static_cast<float> (columns);
+        for (int y = 0; y < columns / 2; ++y)
+            for (int x = 0; x < columns; ++x)
+            {
+                g.setColour (((x + y) % 2) == 0 ? juce::Colour (0xffbdb7a5) : juce::Colour (0xffcbc5b5));
+                g.fillRect (bounds.getX() + static_cast<float> (x) * unit,
+                            bounds.getY() + static_cast<float> (y) * unit, unit, unit);
+            }
+    }
+    g.setColour (ink);
+    g.drawRect (bounds.expanded (1.5f), 3);
+    if (processed && tileCount == 0)
+    {
+        const auto hint = juce::Rectangle<float> (368, 30).withCentre (bounds.getCentre());
+        g.setColour (ink);
+        g.fillRect (hint);
+        label (g, "PLAY A CLIP THROUGH DEEP FRY", hint, 12.5f, paper, juce::Justification::centred);
+    }
+    else if (tileCount == 0)
+        label (g, "NO SIGNAL YET", bounds, 12, ink, juce::Justification::centred);
+}
+
+void DeepFryAudioProcessorEditor::paint (juce::Graphics& g)
+{
+    g.fillAll (ink);
+    g.addTransform (juce::AffineTransform::scale (contentScale)
+                        .translated (contentOffsetX, contentOffsetY));
+    g.drawImageAt (artwork->background, 0, 0);
+
+    label (g, "deep_fry_final_FINAL2.jpg", { 24, 1, 610, 25 }, 12, paper);
+    label (g, "JPEG PEDAL / AUDIO DEGRADATION", { 695, 1, 401, 25 }, 11, paper,
+           juce::Justification::centredRight);
+    memeText (g, artwork->title, 9, true);
+    {
+        juce::Graphics::ScopedSaveState stampState (g);
+        g.addTransform (juce::AffineTransform::rotation (-0.048f, 950, 86));
+        const juce::Rectangle<float> stamp (816, 47, 272, 81);
+        g.setColour (ink);
+        g.fillRect (stamp.translated (4, 4));
+        g.setColour (yellow);
+        g.fillRect (stamp);
+        g.setColour (ink);
+        g.drawRect (stamp, 3);
+        label (g, "JPEG ABUSE", { 828, 47, 248, 50 }, 43, ink, juce::Justification::centred, true);
+        label (g, "JPEG AUDIO EFFECT", { 828, 97, 248, 23 }, 11.5f, ink, juce::Justification::centred);
+    }
+
+    label (g, "01 / ORIGINAL", { 24, 156, 304, 24 }, 13);
+    label (g, "02 / AFTER JPEG", { 360, 156, 249, 24 }, 13);
+    const auto bypassed = bypassButton.getToggleState();
+    const auto hasSignal = inputMeter > 0.0001f && ticksSinceFrame < 15;
+    const juce::String status = frozen ? "IMAGE FROZEN" : bypassed ? "BYPASSED"
+                                     : ticksSinceFrame >= 15 && tileCount > 0 ? "PLAYBACK STOPPED"
+                                     : hasSignal ? "LIVE" : tileCount == 0 ? "WAITING FOR AUDIO" : "INPUT SILENT";
+    g.setColour (hasSignal && ! frozen && ! bypassed ? red : muted);
+    g.fillRect (705, 164, 8, 8);
+    label (g, status, { 721, 155, 225, 25 }, 11.5f);
+
+    drawImagePanel (g, { 24, 186, 304, 152 }, false);
+    drawImagePanel (g, { 360, 186, 736, 368 }, true);
+    label (g, "GRAYSCALE / LEFT OR MONO", { 24, 348, 304, 22 }, 11, muted);
+    label (g, "64 SAMPLES > 8x8 PIXELS > AUDIO", { 24, 533, 308, 21 }, 10.5f, muted);
+
+    // The export controls form one ruled sheet, rather than independent cards.
+    g.setColour (paper);
+    g.fillRect (24, 572, 1072, 132);
+    g.setColour (ink);
+    g.drawRect (24, 572, 1072, 132, 2);
+    const std::array<const char*, 5> names { "JPEG QUALITY", "FRY", "PIXEL DEPTH", "MIX", "OUTPUT" };
+    const std::array<const char*, 5> hints { "IMAGE DETAIL", "CONTRAST + SHARPEN", "PIXEL RESOLUTION", "DRY / WET", "OUTPUT GAIN" };
+    for (size_t index = 0; index < names.size(); ++index)
+    {
+        const auto x = cellEdges[index];
+        const auto width = cellEdges[index + 1] - x;
+        if (index > 0)
+        {
+            g.setColour (ink);
+            g.fillRect (x, 572.0f, 2.0f, 132.0f);
+        }
+        label (g, names[index], { x + 12, 577, width - 24, 29 }, 25, ink,
+               juce::Justification::centredLeft, true);
+        label (g, hints[index], { x + 8, 684, width - 16, 15 }, 9.5f, muted,
+               juce::Justification::centred);
+    }
+
+    label (g, "PRESETS", { 24, 720, 106, 37 }, 24, ink, juce::Justification::centredLeft, true);
+    drawMeter (g, { 818, 722, 278, 17 }, inputMeter, "IN");
+    drawMeter (g, { 818, 743, 278, 17 }, outputMeter, "OUT");
+
+    const auto sampleRate = effectProcessor.getSampleRate();
+    const auto rateText = sampleRate > 0 ? juce::String (sampleRate / 1000.0, 1) + " kHz" : "DEVICE IDLE";
+    const auto latencyText = sampleRate > 0 ? juce::String (1000.0 * effectProcessor.getLatencySamples() / sampleRate, 2) + " ms" : "-- ms";
+    label (g, rateText + " / " + latencyText + " LATENCY", { 24, 777, 366, 22 }, 10, paper);
+    label (g, "WET AMPLITUDE / FALSE COLOUR", { 393, 777, 370, 22 }, 10, paper,
+           juce::Justification::centred);
+    label (g, tileCount == 0 ? "DCT DETAIL: --" : "DCT DETAIL: " + juce::String (juce::roundToInt (retention * 100.0f)) + "% RETAINED",
+           { 783, 777, 313, 22 }, 10, paper, juce::Justification::centredRight);
+
+    if (helpOpen)
+    {
+        const juce::Rectangle<float> sheet (373, 198, 710, 343);
+        g.setColour (ink);
+        g.fillRect (sheet.translated (5, 5));
+        g.setColour (paper);
+        g.fillRect (sheet);
+        g.setColour (ink);
+        g.drawRect (sheet, 3);
+        label (g, "HOW IT WORKS", { 394, 210, 668, 48 }, 39, ink,
+               juce::Justification::centredLeft, true);
+        const std::array<const char*, 3> steps {
+            "01 / 64 audio samples become an 8x8 grayscale tile.",
+            "02 / Fry boosts contrast and edges. JPEG removes detail.",
+            "03 / Pixel depth adds grain. The pixels become audio."
+        };
+        for (size_t i = 0; i < steps.size(); ++i)
+            label (g, steps[i], { 394, 280 + static_cast<float> (i) * 43, 668, 31 }, 13);
+        g.setColour (ink);
+        g.fillRect (394, 419, 668, 2);
+        label (g, "The moving pixels are your actual left / mono signal.", { 394, 435, 668, 27 }, 12.5f);
+        label (g, "Colour is a display palette. Mix blends dry and wet.", { 394, 464, 668, 27 }, 12.5f);
+        label (g, "FREEZE IMAGE holds the picture. The sound keeps going.", { 394, 493, 668, 27 }, 12.5f);
+    }
+}
+
+void DeepFryAudioProcessorEditor::rebuildImages()
+{
+    beforeImage.clear (beforeImage.getBounds(), juce::Colour (0xffbdb7a5));
+    afterImage.clear (afterImage.getBounds(), juce::Colour (0xffbdb7a5));
+    juce::Image::BitmapData beforePixels (beforeImage, juce::Image::BitmapData::writeOnly);
+    juce::Image::BitmapData afterPixels (afterImage, juce::Image::BitmapData::writeOnly);
+
+    for (size_t tile = 0; tile < tileCount; ++tile)
+    {
+        // Once full, display in chronological order, oldest to newest.
+        const auto historyIndex = tileCount == tileHistory.size() ? (nextTile + tile) % tileHistory.size() : tile;
+        const auto& frame = tileHistory[historyIndex];
+        const auto tileX = static_cast<int> (tile % 16) * 8;
+        const auto tileY = static_cast<int> (tile / 16) * 8;
+        for (size_t sample = 0; sample < 64; ++sample)
+        {
+            const auto x = tileX + static_cast<int> (sample % 8);
+            const auto y = tileY + static_cast<int> (sample / 8);
+            beforePixels.setPixelColour (x, y, pixelColour (frame.before[sample], false));
+            afterPixels.setPixelColour (x, y, pixelColour (frame.after[sample], true));
+        }
+    }
+}
+
+void DeepFryAudioProcessorEditor::timerCallback()
+{
+    deepfry::TileFrame frame;
+    bool changed = false;
+    bool receivedFrame = false;
+    while (effectProcessor.popVisualFrame (frame))
+    {
+        receivedFrame = true;
+        if (! frozen)
+        {
+            tileHistory[nextTile] = frame;
+            nextTile = (nextTile + 1) % tileHistory.size();
+            tileCount = juce::jmin (tileCount + 1, tileHistory.size());
+            retention = frame.retained;
+            changed = true;
+        }
+    }
+
+    if (changed)
+        rebuildImages();
+
+    ticksSinceFrame = receivedFrame ? 0 : juce::jmin (ticksSinceFrame + 1, 120);
+    const auto audioIsRunning = ticksSinceFrame < 15;
+    inputMeter = juce::jmax (audioIsRunning ? effectProcessor.inputLevel.load (std::memory_order_relaxed) : 0.0f,
+                             inputMeter * 0.83f);
+    outputMeter = juce::jmax (audioIsRunning ? effectProcessor.outputLevel.load (std::memory_order_relaxed) : 0.0f,
+                              outputMeter * 0.83f);
+    if (! frozen && tileCount > 0)
+        retention = effectProcessor.coefficientRetention.load (std::memory_order_relaxed);
+    repaint();
+}

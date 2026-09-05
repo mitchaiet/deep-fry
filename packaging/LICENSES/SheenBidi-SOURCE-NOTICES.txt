@@ -1,0 +1,190 @@
+Verbatim source notices from JUCE 8.0.13, commit 7c9d3783b127263d72bb65fe0a7e2dc8a02a7ac2.
+
+Source labels below identify the original files; the quoted comment blocks are unchanged.
+
+
+SOURCE(S):
+  modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBAlgorithm.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBCodepointSequence.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBRun.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/SBAlgorithm.c:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/SBAlgorithm.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/SBBase.c:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/SBBase.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/SBCodepointSequence.c:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/SBCodepointSequence.h:1-15
+
+/*
+ * Copyright (C) 2016-2025 Muhammad Tayyab Akram
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+SOURCE(S):
+  modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBBase.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBConfig.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBLine.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBMirrorLocator.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBParagraph.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SheenBidi.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/BidiChain.c:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/BidiChain.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/BracketQueue.c:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/BracketQueue.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/IsolatingRun.c:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/RunQueue.c:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/RunQueue.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/SBLine.c:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/SBLine.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/SBLog.c:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/SBLog.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/SBMirrorLocator.c:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/SBMirrorLocator.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/SBParagraph.c:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/SBParagraph.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/SheenBidi.c:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/StatusStack.c:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/StatusStack.h:1-15
+
+/*
+ * Copyright (C) 2014-2025 Muhammad Tayyab Akram
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+SOURCE(S):
+  modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBBidiType.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBCodepoint.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBGeneralCategory.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBScript.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBScriptLocator.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/SBScriptLocator.c:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/SBScriptLocator.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/ScriptStack.c:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/ScriptStack.h:1-15
+
+/*
+ * Copyright (C) 2018-2025 Muhammad Tayyab Akram
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+SOURCE(S):
+  modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBVersion.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/Object.c:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/Object.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/SBCodepoint.c:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/SBCodepoint.h:1-15
+
+/*
+ * Copyright (C) 2025 Muhammad Tayyab Akram
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+SOURCE(S):
+  modules/juce_graphics/unicode/sheenbidi/Source/BracketType.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/LevelRun.c:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/LevelRun.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/RunExtrema.h:1-15
+  modules/juce_graphics/unicode/sheenbidi/Source/RunKind.h:1-15
+
+/*
+ * Copyright (C) 2014-2019 Muhammad Tayyab Akram
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+SOURCE(S):
+  modules/juce_graphics/unicode/sheenbidi/Source/IsolatingRun.h:1-15
+
+/*
+ * Copyright (C) 2014-2022 Muhammad Tayyab Akram
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+SOURCE(S):
+  modules/juce_graphics/unicode/sheenbidi/Source/SBAssert.h:1-15
+
+/*
+ * Copyright (C) 2014 Muhammad Tayyab Akram
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */

@@ -1,0 +1,1414 @@
+Verbatim source notices from JUCE 8.0.13, commit 7c9d3783b127263d72bb65fe0a7e2dc8a02a7ac2.
+
+Source labels below identify the original files; the quoted comment blocks are unchanged.
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/bitwise.c:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE Ogg CONTAINER SOURCE CODE.              *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2014             *
+ * by the Xiph.Org Foundation http://www.xiph.org/                  *
+ *                                                                  *
+ ********************************************************************
+
+  function: packing variable sized words into an octet stream
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/codec.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2001             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+
+ ********************************************************************
+
+ function: libvorbis codec headers
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/crctable.h:1-11
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE Ogg CONTAINER SOURCE CODE.              *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2018             *
+ * by the Xiph.Org Foundation http://www.xiph.org/                  *
+ *                                                                  *
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/framing.c:1-20
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE Ogg CONTAINER SOURCE CODE.              *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2018             *
+ * by the Xiph.Org Foundation http://www.xiph.org/                  *
+ *                                                                  *
+ ********************************************************************
+
+ function: code raw packets into framed OggSquish stream and
+           decode Ogg streams back into raw packets
+
+ note: The CRC code is directly derived from public domain code by
+ Ross Williams (ross@guest.adelaide.edu.au).  See docs/framing.html
+ for details.
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/analysis.c:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2007             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: single-block PCM analysis mode dispatch
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/backends.h:1-16
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: libvorbis backend and mapping structures; needed for
+           static mode headers
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/bitrate.c:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: bitrate tracking and management
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/bitrate.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2007             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: bitrate tracking and management
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/block.c:1-18
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2015             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: PCM data vector blocking, windowing and dis/reassembly
+
+ Handle windowing, overlap-add, etc of the PCM vectors.  This is made
+ more amusing by Vorbis' current two allowed block sizes.
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/books/coupled/res_books_51.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2010             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+ *
+ * function: static codebooks for 5.1 surround
+ *
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/books/coupled/res_books_stereo.h:1-15
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/books/floor/floor_books.h:1-15
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/books/uncoupled/res_books_uncoupled.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2007             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: static codebooks autogenerated by huff/huffbuld
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/codebook.c:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2015             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: basic codebook pack/unpack/code/decode operations
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/codebook.h:1-15
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/sharedbook.c:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2015             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: basic shared codebook operations
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/codec_internal.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: libvorbis codec headers
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/envelope.c:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: PCM data envelope analysis
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/envelope.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: PCM data envelope analysis and manipulation
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/floor0.c:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2015             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: floor backend 0 implementation
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/floor1.c:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2015             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: floor backend 1 implementation
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/highlevel.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: highlevel encoder setup struct separated out for vorbisenc clarity
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/info.c:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2015             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: maintain the info structure, info <-> header packets
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/lookup.c:1-15
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/lookup.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+  function: lookup based functions
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/lookup_data.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2007             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+  function: lookup data; generated by lookups.pl; edit there
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/lpc.c:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+  function: LPC low level routines
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/lpc.c:17-21
+
+/* Some of these routines (autocorrelator, LPC coefficient estimator)
+   are derived from code written by Jutta Degener and Carsten Bormann;
+   thus we include their copyright below.  The entirety of this file
+   is freely redistributable on the condition that both of these
+   copyright notices are preserved without modification.  */
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/lpc.c:23-23
+
+/* Preserved Copyright: *********************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/lpc.c:25-43
+
+/* Copyright 1992, 1993, 1994 by Jutta Degener and Carsten Bormann,
+Technische Universita"t Berlin
+
+Any use of this software is permitted provided that this notice is not
+removed and that neither the authors nor the Technische Universita"t
+Berlin are deemed to have made any representations as to the
+suitability of this software for any purpose nor are held responsible
+for any defects of this software. THERE IS ABSOLUTELY NO WARRANTY FOR
+THIS SOFTWARE.
+
+As a matter of courtesy, the authors request to be informed about uses
+this software has found, about bugs in this software, and about any
+improvements that may be of general interest.
+
+Berlin, 28.11.1994
+Jutta Degener
+Carsten Bormann
+
+*********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/lpc.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2007             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+  function: LPC low level routines
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/lsp.c:1-23
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+  function: LSP (also called LSF) conversion routines
+
+  The LSP generation code is taken (with minimal modification and a
+  few bugfixes) from "On the Computation of the LSP Frequencies" by
+  Joseph Rothweiler (see http://www.rothweiler.us for contact info).
+
+  The paper is available at:
+
+  https://web.archive.org/web/20110810174000/http://home.myfairpoint.net/vzenxj75/myown1/joe/lsf/index.html
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/lsp.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+  function: LSP (also called LSF) conversion routines
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/mapping0.c:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2010             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: channel mapping 0 implementation
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/masking.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: masking curve data for psychoacoustics
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/mdct.c:1-31
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: normalized modified discrete cosine transform
+           power of two length transform only [64 <= n ]
+
+ Original algorithm adapted long ago from _The use of multirate filter
+ banks for coding of high quality digital audio_, by T. Sporer,
+ K. Brandenburg and B. Edler, collection of the European Signal
+ Processing Conference (EUSIPCO), Amsterdam, June 1992, Vol.1, pp
+ 211-214
+
+ The below code implements an algorithm that no longer looks much like
+ that presented in the paper, but the basic structure remains if you
+ dig deep enough to see it.
+
+ This module DOES NOT INCLUDE code to generate/apply the window
+ function.  Everybody has their own weird favorite including me... I
+ happen to like the properties of y=sin(.5PI*sin^2(x)), but others may
+ vehemently disagree.
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/mdct.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: modified discrete cosine transform prototypes
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/misc.c:1-11
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2007             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/misc.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2015             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: miscellaneous prototypes
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/floor_all.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: key floor settings
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/psych_11.h:1-15
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/setup_11.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: 11kHz settings
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/psych_16.h:1-15
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/setup_16.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: 16kHz settings
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/psych_44.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: key psychoacoustic settings for 44.1/48kHz
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/psych_8.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: 8kHz psychoacoustic settings
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/residue_16.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * This FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: toplevel residue templates 16/22kHz
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/residue_44.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: toplevel residue templates for 32/44.1/48kHz
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/residue_44p51.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2010             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: toplevel residue templates for 32/44.1/48kHz uncoupled
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/residue_44u.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2007             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: toplevel residue templates for 32/44.1/48kHz uncoupled
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/residue_8.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2007             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: toplevel residue templates 8/11kHz
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/setup_22.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: 22kHz settings
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/setup_32.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: toplevel settings for 32kHz
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/setup_44.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: toplevel settings for 44.1/48kHz
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/setup_44p51.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2010             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: toplevel settings for 44.1/48kHz 5.1 surround modes
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/setup_44u.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: toplevel settings for 44.1/48kHz uncoupled modes
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/setup_8.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: 8kHz settings
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/setup_X.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: catch-all toplevel settings for q modes only
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/os.h:3-17
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2015             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: #ifdef jail to whip a few platforms into the UNIX ideal.
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/psy.c:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2010             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: psychoacoustics not including preecho
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/psy.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: random psychoacoustics (not including preecho)
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/registry.c:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: registry for time, floor, res backends and channel mappings
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/registry.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2007             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: registry for time, floor, res backends and channel mappings
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/res0.c:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2010             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: residue backend 0, 1 and 2 implementation
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/scales.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: linear scale -> dB, Bark and Mel scales
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/smallft.c:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: *unnormalized* fft transform
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/smallft.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2007             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: fft transform
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/synthesis.c:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2015             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: single-block PCM synthesis
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/vorbisenc.c:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2015             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: simple programmatic interface for encoder mode setup
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/vorbisfile.c:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2015             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: stdio-based convenience library for opening/seeking/decoding
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/window.c:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2009             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: window functions
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/window.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2007             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: window functions
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/ogg.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2007             *
+ * by the Xiph.Org Foundation http://www.xiph.org/                  *
+ *                                                                  *
+ ********************************************************************
+
+ function: toplevel libogg include
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/os_types.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2002             *
+ * by the Xiph.Org Foundation http://www.xiph.org/                  *
+ *                                                                  *
+ ********************************************************************
+
+ function: Define a consistent set of types on each platform.
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/vorbisenc.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2001             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: vorbis encode-engine setup
+
+ ********************************************************************/
+
+
+SOURCE(S):
+  modules/juce_audio_formats/codecs/oggvorbis/vorbisfile.h:1-15
+
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2007             *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
+ *                                                                  *
+ ********************************************************************
+
+ function: stdio-based convenience library for opening/seeking/decoding
+
+ ********************************************************************/

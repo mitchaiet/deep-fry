@@ -1,0 +1,246 @@
+Verbatim source notices from JUCE 8.0.13, commit 7c9d3783b127263d72bb65fe0a7e2dc8a02a7ac2.
+
+Source labels below identify the original files; the quoted comment blocks are unchanged.
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUBase.cpp:1-4
+
+/*!
+	@file		AudioUnitSDK/AUBase.cpp
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUBase.h:1-4
+
+/*!
+	@file		AudioUnitSDK/AUBase.h
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUBuffer.cpp:1-4
+
+/*!
+	@file		AudioUnitSDK/AUBuffer.cpp
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUBuffer.h:1-4
+
+/*!
+	@file		AudioUnitSDK/AUBuffer.h
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUBufferAllocator.cpp:1-4
+
+/*!
+	@file		AudioUnitSDK/AUBufferAllocator.cpp
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUEffectBase.cpp:1-4
+
+/*!
+	@file		AudioUnitSDK/AUEffectBase.cpp
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUEffectBase.h:1-4
+
+/*!
+	@file		AudioUnitSDK/AUEffectBase.h
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUInputElement.cpp:1-4
+
+/*!
+	@file		AudioUnitSDK/AUInputElement.cpp
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUInputElement.h:1-4
+
+/*!
+	@file		AudioUnitSDK/AUInputElement.h
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUMIDIBase.cpp:1-4
+
+/*!
+	@file		AudioUnitSDK/AUMIDIBase.cpp
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUMIDIBase.h:1-4
+
+/*!
+	@file		AudioUnitSDK/AUMIDIBase.h
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUMIDIEffectBase.cpp:1-4
+
+/*!
+	@file		AudioUnitSDK/AUMIDIEffectBase.cpp
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUMIDIEffectBase.h:1-4
+
+/*!
+	@file		AudioUnitSDK/AUMIDIEffectBase.h
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUMIDIUtility.h:1-4
+
+/*!
+	@file		AudioUnitSDK/AUMIDIUtility.h
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUOutputElement.cpp:1-4
+
+/*!
+	@file		AudioUnitSDK/AUOutputElement.cpp
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUOutputElement.h:1-4
+
+/*!
+	@file		AudioUnitSDK/AUOutputElement.h
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUPlugInDispatch.cpp:1-4
+
+/*!
+	@file		AudioUnitSDK/AUPlugInDispatch.cpp
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUPlugInDispatch.h:1-4
+
+/*!
+	@file		AudioUnitSDK/AUPlugInDispatch.h
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUScopeElement.cpp:1-4
+
+/*!
+	@file		AudioUnitSDK/AUScopeElement.cpp
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUScopeElement.h:1-4
+
+/*!
+	@file		AudioUnitSDK/AUScopeElement.h
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUSilentTimeout.h:1-4
+
+/*!
+	@file		AudioUnitSDK/AUSilentTimeout.h
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUUtility.h:1-4
+
+/*!
+	@file		AudioUnitSDK/AUUtility.h
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/AudioUnitSDK.h:1-4
+
+/*!
+	@file		AudioUnitSDK/AudioUnitSDK.h
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/ComponentBase.cpp:1-4
+
+/*!
+	@file		AudioUnitSDK/ComponentBase.cpp
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/ComponentBase.h:1-4
+
+/*!
+	@file		AudioUnitSDK/ComponentBase.h
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/MusicDeviceBase.cpp:1-4
+
+/*!
+	@file		AudioUnitSDK/MusicDeviceBase.cpp
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/
+
+
+SOURCE(S):
+  modules/juce_audio_plugin_client/AU/AudioUnitSDK/MusicDeviceBase.h:1-4
+
+/*!
+	@file		AudioUnitSDK/MusicDeviceBase.h
+	@copyright	© 2000-2021 Apple Inc. All rights reserved.
+*/

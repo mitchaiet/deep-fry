@@ -1,0 +1,3419 @@
+{
+  "juce_version": "8.0.13",
+  "juce_commit": "7c9d3783b127263d72bb65fe0a7e2dc8a02a7ac2",
+  "files": [
+    {
+      "file": "JUCE-LICENSE.md",
+      "mode": "verbatim copy",
+      "source": "LICENSE.md",
+      "sha256": "2633539bb26d244f0966fbc4df59400ea99bdf575fa96291851c1c3ff3456146"
+    },
+    {
+      "file": "VST3-LICENSE.txt",
+      "mode": "verbatim copy",
+      "source": "modules/juce_audio_processors_headless/format_types/VST3_SDK/LICENSE.txt",
+      "sha256": "d6115b263faa1cdf8c7372d70889c833dde1cec95252e7ee93e4f7d599ec96ca"
+    },
+    {
+      "file": "AudioUnitSDK-LICENSE.txt",
+      "mode": "verbatim copy",
+      "source": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/LICENSE.txt",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "file": "FLAC-LICENSE.txt",
+      "mode": "verbatim copy",
+      "source": "modules/juce_audio_formats/codecs/flac/Flac Licence.txt",
+      "sha256": "123926094aa97c30e346c23a12a453b7063c56e6c414e342dd5ae0fea13bd77d"
+    },
+    {
+      "file": "Ogg-Vorbis-LICENSE.txt",
+      "mode": "verbatim copy",
+      "source": "modules/juce_audio_formats/codecs/oggvorbis/Ogg Vorbis Licence.txt",
+      "sha256": "62d5ce5c59484dc99e462ec8f815bfc76f64a2e4759500c14beaf3772a7d1181"
+    },
+    {
+      "file": "Vorbis-COPYING.txt",
+      "mode": "verbatim copy",
+      "source": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/COPYING",
+      "sha256": "ec1815db59fcd302846df949d7424876cb2e2dc5ed1606c5fb0b36787b1cf43a"
+    },
+    {
+      "file": "IJG-JPEG-README.txt",
+      "mode": "verbatim copy",
+      "source": "modules/juce_graphics/image_formats/jpglib/README",
+      "sha256": "8802105e93b079f950844e412daab05156b5ef30acc6cbd0a59a287e6cd6cb7d"
+    },
+    {
+      "file": "PNG-LICENSE.txt",
+      "mode": "verbatim copy",
+      "source": "modules/juce_graphics/image_formats/pnglib/LICENSE",
+      "sha256": "bf5e22b9dce8464064ae17a48ea1133c3369ac9e1d80ef9e320e5219aa14ea9b"
+    },
+    {
+      "file": "zlib-LICENSE.txt",
+      "mode": "verbatim copy",
+      "source": "modules/juce_core/zip/zlib/LICENSE",
+      "sha256": "8545e90fe8d2bc6b8b8e9f4caecd2d9215727dbd1c153c7adeedfbaaea51f38b"
+    },
+    {
+      "file": "HarfBuzz-COPYING.txt",
+      "mode": "verbatim copy",
+      "source": "modules/juce_graphics/fonts/harfbuzz/COPYING",
+      "sha256": "ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64"
+    },
+    {
+      "file": "SheenBidi-LICENSE.txt",
+      "mode": "verbatim copy",
+      "source": "modules/juce_graphics/unicode/sheenbidi/LICENSE",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "file": "HarfBuzz-SOURCE-NOTICES.txt",
+      "mode": "verbatim comment excerpts with source labels",
+      "sha256": "4b8027a0b6557e48704c60b0511a12273862a8b8267b5ded2221e358b598efae",
+      "excerpts": [
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/OT/Color/CBDT/CBDT.hh",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "ea5e48e67c7e51cda9f430c6d99fd0318b853f5806b7efc039cec29aff7e0cf6"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/OT/Color/COLR/COLR.hh",
+              "start_line": 1,
+              "end_line": 26
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/OT/Color/sbix/sbix.hh",
+              "start_line": 1,
+              "end_line": 26
+            }
+          ],
+          "sha256": "ecb2ae4c4d70b97824886abe0e3034ed41cf83a6862356cab700a61f90ea7fa1"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/OT/Color/COLR/colrv1-closure.hh",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "f9a9ab49c3ed856d73378a331215c9d39526e233c04923d29a72230166dd2948"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/OT/Color/CPAL/CPAL.hh",
+              "start_line": 1,
+              "end_line": 26
+            }
+          ],
+          "sha256": "07ff5fd99478d635a9199da0f43f639d9ec50f5a2bbdf7aa10e8ec051e6a16a1"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/OT/Color/svg/svg.hh",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-aat-layout-ankr-table.hh",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-aat-layout-bsln-table.hh",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-aat-layout-feat-table.hh",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-aat-layout-just-table.hh",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-aat-layout.h",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-aat-ltag-table.hh",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-aat.h",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-gasp-table.hh",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-metrics.h",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-metrics.hh",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-stat-table.hh",
+              "start_line": 1,
+              "end_line": 23
+            }
+          ],
+          "sha256": "68dcfa35edb6d38e0ec6dcf2a2d8fd1c8e7b234f7bf742c932bb87ab47cb85f2"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/OT/Layout/Common/Coverage.hh",
+              "start_line": 1,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/OT/Layout/Common/CoverageFormat1.hh",
+              "start_line": 1,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/OT/Layout/Common/CoverageFormat2.hh",
+              "start_line": 1,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/OT/Layout/Common/RangeRecord.hh",
+              "start_line": 1,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/OT/Layout/types.hh",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "ca4d44891abfa3338ed2a2be3ef7a6577ec5ef54892dfec4cd85bf9757476edc"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/OT/Layout/GDEF/GDEF.hh",
+              "start_line": 1,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-layout-gdef-table.hh",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "b988eacbc053b165f01b069148b25da170f5bb373832de9e027b873afbd99fa8"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/OT/name/name.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-hhea-table.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-maxp-table.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-name-table.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shape-fallback.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shape-normalize.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shaper-indic-machine.hh",
+              "start_line": 3,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shaper-indic.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shaper-khmer-machine.hh",
+              "start_line": 3,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shaper-khmer.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shaper-myanmar-machine.hh",
+              "start_line": 3,
+              "end_line": 27
+            }
+          ],
+          "sha256": "bb5cd066d777fcf974a299c1e6ff77b1f42e95691e0eb0d7dc1188e499566485"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/failing-alloc.c",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-draw.hh",
+              "start_line": 1,
+              "end_line": 23
+            }
+          ],
+          "sha256": "63f29a903a08320c848a36599428de39683c225242f0845c537a79bd745db928"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-aat-layout-common.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-aat-layout-morx-table.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-aat-layout.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-debug.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-kern.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-kern-table.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-post-macroman.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-var-avar-table.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-var-fvar-table.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-var-hvar-table.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-var-mvar-table.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-var.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-string-array.hh",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "d6d5e22fb923f8c38af0802e851e3c13619360cafe10e2a22584986112c5a68f"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-aat-layout-kerx-table.hh",
+              "start_line": 1,
+              "end_line": 26
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-aat-layout-trak-table.hh",
+              "start_line": 1,
+              "end_line": 26
+            }
+          ],
+          "sha256": "fbbbc4f0f3517f2ef78f553aebac290fba5040896758e7de49819af22a4e74ca"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-aat-layout-opbd-table.hh",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-gdi.cc",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-gdi.h",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-meta-table.hh",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-meta.cc",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-meta.h",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-style.cc",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-style.h",
+              "start_line": 1,
+              "end_line": 23
+            }
+          ],
+          "sha256": "2f649c94f0689ff5bf10ccbe8ab11a1b932a7ec25123b4afde055731c75a04e6"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-aat-layout.cc",
+              "start_line": 1,
+              "end_line": 26
+            }
+          ],
+          "sha256": "05b40337a4399cda7d1fef0cec66ff781a929c6122111180cf08d777be4ceb6f"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-aat-map.cc",
+              "start_line": 1,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-map.cc",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "9aba2412bc79482d065b5f41a58252998a07272de4decee4256e03076404a846"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-aat-map.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-array.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-map.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-map.h",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-map.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-meta.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-null.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-deprecated.h",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-face.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-name-language-static.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-name-language.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-name.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shaper-vowel-constraints.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-static.cc",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "61734324d65a49d7a23ba47e8001e6f0d65ebc03dcb85d3321ada169f6d1ea96"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-algs.hh",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "d36ff61ec681c297fa25b12a06536bfc2f672cae87808a8e0c27deeebe30ef4e"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-algs.hh",
+              "start_line": 261,
+              "end_line": 284
+            }
+          ],
+          "sha256": "b173bbb34367afe4afa68310da83f299c3f7d87cf558467bfc8e3193113be496"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-atomic.hh",
+              "start_line": 1,
+              "end_line": 30
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-mutex.hh",
+              "start_line": 1,
+              "end_line": 30
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-object.hh",
+              "start_line": 1,
+              "end_line": 30
+            }
+          ],
+          "sha256": "69239bf24fdbe156d164ee877c3482401d9b33c0bd8c181d3a11544a68eea66b"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-bimap.hh",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "69ac3d8c5f315d6ea6e9b0f7dbdfe3d90bf96256a3a02057759607f5c5079a7a"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-bit-page.hh",
+              "start_line": 1,
+              "end_line": 26
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-bit-set-invertible.hh",
+              "start_line": 1,
+              "end_line": 26
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-bit-set.hh",
+              "start_line": 1,
+              "end_line": 26
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-set.hh",
+              "start_line": 1,
+              "end_line": 26
+            }
+          ],
+          "sha256": "390b15a047ac65d1d4b41c225ab5fb292bb7624c59124319e841efe487526f3e"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-blob.cc",
+              "start_line": 1,
+              "end_line": 26
+            }
+          ],
+          "sha256": "56f76b1843cd29b26bdc14ba33e938625be82ddaeb1f8f3fd03da886ff11cc25"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-blob.h",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-face.h",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-font.h",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot.h",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb.h",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "f639be76a1fe603cf922bae61c897e98b9bc05769153be1b201cf2f5e3ccd0ed"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-blob.hh",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "7e27d7fdf6d042448ff5442bdea1ce8c0c27a1800325d0e37d62a126ce8422ca"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-buffer-deserialize-json.hh",
+              "start_line": 3,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-buffer-deserialize-text-glyphs.hh",
+              "start_line": 3,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-buffer-deserialize-text-unicode.hh",
+              "start_line": 3,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-deprecated.h",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-layout-jstf-table.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shaper-hangul.cc",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "5adc65bdcacdd3278a94713a3b821cd57a9bd15ff59da04fc7fe20cbf238bb80"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-buffer-serialize.cc",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "7ac7f4288a4fdb402f2a783d7f1098f151e1818de315355b0801c4f8076e523b"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-buffer-verify.cc",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "7baa90c49e32db6a370651a6ab2e131574c9de6f668f1f1fa76adf37701dd414"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-buffer.cc",
+              "start_line": 1,
+              "end_line": 28
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-buffer.hh",
+              "start_line": 1,
+              "end_line": 28
+            }
+          ],
+          "sha256": "76d8104af9de7bb1f47cd1893333f59ee38a98ed3fb3b4f9b1d316038aff2067"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-buffer.h",
+              "start_line": 1,
+              "end_line": 28
+            }
+          ],
+          "sha256": "80d1be0397277c8cde071b51af9efca00a497e58d8a789ac42ab8e6a24462aef"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-cache.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shape-fallback.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shape-normalize.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shaper-arabic-fallback.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shaper-indic.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-set-digest.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-set.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-set.h",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-shape-plan.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-shape-plan.h",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-shaper-impl.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-shaper-list.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-shaper.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-shaper.hh",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "4de281e4e31f1db73b010450b932717de870df7000bfb1ea0ab1b53d5dbda0ab"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-cff-interp-common.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-cff-interp-cs-common.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-cff-interp-dict-common.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-cff1-interp-cs.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-cff2-interp-cs.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-cff-common.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-cff1-table.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-cff1-table.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-cff2-table.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-cff2-table.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-vorg-table.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-subset-cff-common.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-subset-cff-common.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-subset-cff1.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-subset-cff2.cc",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "9291ef99d1a98a24fef8fe110add05163187abcceeb0a94638539dad02eb84ca"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-common.cc",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "49891dc94bab49ab1b8e51b43371dc5c8aba94d30fb48dc5211812f2042e8b01"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-common.h",
+              "start_line": 1,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb.hh",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "e5a971e2d0bc82700ab3c71aa42b25343fbfedefa7409aee43f46fb8edb24afe"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-config.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-pool.hh",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "bcfddc7cdd9aab6f7b41781c9080b4d32c259e2268893218f4014abfd5296230"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-coretext-font.cc",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "902ad9364e3ac5f70c0e4dbc9c05758f971e6ce0a7fc83e5c98c8739a85a09dc"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-coretext-shape.cc",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "29cef416d16b570c4511fb7db104199233452ae40128694c7e89f98bba7996bb"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-coretext.h",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "049cc6c4c243a93eccff03d2e934b107bef4105866b1fb1d8eac6c3dbade5274"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-cplusplus.hh",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-geometry.hh",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-paint-extents.cc",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-paint-extents.hh",
+              "start_line": 1,
+              "end_line": 23
+            }
+          ],
+          "sha256": "e1b162fc1bc67381f60d1f025d86f5afb5496eccc13b29a912a46c44ed4d585b"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-directwrite.cc",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-directwrite.h",
+              "start_line": 1,
+              "end_line": 23
+            }
+          ],
+          "sha256": "3e728a79380f8c21f7d89cdf5d39a4607bfbf081e7c863658511ea7a02da557d"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-dispatch.hh",
+              "start_line": 1,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-machinery.hh",
+              "start_line": 1,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-sanitize.hh",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "05457541835a23e06e57ff15c70b95ab6970480cc3975c17e4971468ed746cf5"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-draw.cc",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-draw.h",
+              "start_line": 1,
+              "end_line": 23
+            }
+          ],
+          "sha256": "89de0252fea48d48d4941afb4940e8da3168337ad34ab9b424b98ad4c5078d8f"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-face-builder.cc",
+              "start_line": 1,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-face.cc",
+              "start_line": 1,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-font.cc",
+              "start_line": 1,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-shape.cc",
+              "start_line": 1,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-shape.h",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "bd47cdadfa61bd826448602809a8cc3ef31c95bde3fce94a6cc861ec6f76a088"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-face.hh",
+              "start_line": 1,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-font.hh",
+              "start_line": 1,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-glib.cc",
+              "start_line": 1,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-glib.h",
+              "start_line": 1,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-icu.h",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "6905bfe102c72e2f8eda7fc83497b20cc6072b0493d99a0d864dd4fc156a0daa"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-fallback-shape.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-gobject-structs.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-uniscribe.h",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-version.h",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-wasm-shape.cc",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "efc4f4cb5fc24e4e314ee6f86605474d88341138eb7a96f8e1cf57f48b1b4b61"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ft-colr.hh",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-limits.hh",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-multimap.hh",
+              "start_line": 1,
+              "end_line": 23
+            }
+          ],
+          "sha256": "e6888a8e4b3176177d38b28e7f357c1612ca4aac82f8ee539003cb18b9df3a54"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ft.cc",
+              "start_line": 1,
+              "end_line": 28
+            }
+          ],
+          "sha256": "c1c4b78cb5faa027644907ac4cc27d0bed52e9af7b429bf5445b5da1e86e2892"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ft.h",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "c3ffdbaaa6a7d8b6693519b7f7dcaffb0d78b0165b5f3d8b91ce1615c77342bb"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-gobject-structs.h",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-gobject.h",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "fea162e98d8597d143a99848bce82e14d8bfba41ea4a1ff61a3800041b082e46"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-graphite2.cc",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "a640f92cfe27551b3ff7baa42a124f23faadb87d988733df07d4e52a592cd3b7"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-graphite2.h",
+              "start_line": 1,
+              "end_line": 24
+            }
+          ],
+          "sha256": "5b65a3cbd8c46296c36369a3010586c2c1364e24c22a6130d416e5011806efda"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-icu.cc",
+              "start_line": 1,
+              "end_line": 28
+            }
+          ],
+          "sha256": "43b4d9c26a26d9abdfc10a9536ddbb9ded951c833cf3fa736856c984cbf5bcbb"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-iter.hh",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "f6a9b1d5d5517551058594523c2459399c2189ef271d2582958532d2bc0ef2b3"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ms-feature-ranges.hh",
+              "start_line": 1,
+              "end_line": 26
+            }
+          ],
+          "sha256": "9939a3a35b9f17bba260f08e45e82d902db955fcbc25e3e46d6a0999749d6d12"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-number-parser.hh",
+              "start_line": 3,
+              "end_line": 26
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-number.cc",
+              "start_line": 1,
+              "end_line": 24
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-number.hh",
+              "start_line": 1,
+              "end_line": 24
+            }
+          ],
+          "sha256": "b6ae9a6f99b81ba24bedd7459831dca02660cb2d0577aa368aa8b91d2daa577b"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-open-file.hh",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "450f9e2c6d823c94667b22bc81e120b39aeca50e92f1554445b7eeaa9b1a797a"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-open-type.hh",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "750cd1302daff977d1140949abfc3f028fb1674ea706bc8756edbcfee422a23c"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-cff1-std-str.hh",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "2464a89f93be9c0fab9c36bc3f755cb422826815fda0584a70362ecc4b2067e4"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-cmap-table.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shaper-arabic-win1256.hh",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "c05fd5fe6450249235948f2906bfaf17c7d878fcf4440cac2ee3bfd737447f3b"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-color.cc",
+              "start_line": 1,
+              "end_line": 26
+            }
+          ],
+          "sha256": "ee4f7154ed08820a92fc1f43bb032930974228d9cfc888c6323918a90dfa4485"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-color.h",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "73bbd16ab4e6f95f838a6fd474866d24f0fe77af448094b875e41a5b097a8b65"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-face-table-list.hh",
+              "start_line": 1,
+              "end_line": 29
+            }
+          ],
+          "sha256": "1b586c78a6139d8f58ed85fe9572637ada83e293261c70025ac043f3bd470fb4"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-face.hh",
+              "start_line": 1,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-layout.hh",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "18ee28be4ab54b7d12b6bef463fc8ff5cda9a351e0ce0bcd183b7bc9798aae01"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-font.cc",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "fe4c1c7d870f5844751291a199fb45d999fa11d515aa705e4bf77becb52bc16f"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-font.h",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "7b62693509ac29930c26e006245d8b566a41e69a060e89a5b7c9bb104c3871f1"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-glyf-table.hh",
+              "start_line": 1,
+              "end_line": 28
+            }
+          ],
+          "sha256": "bfa808489a2c6760a054a71a161cc51fd0fb02e9e86debf34b53c0c6294dd7cb"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-hdmx-table.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-os2-unicode-ranges.hh",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "001843555be4da284e814aaab65eb1bc617a7843a04faa27e9d8447ff944b141"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-head-table.hh",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "6422b5684677ea7cc7640c72198085cda3538c558c2a7b114532d882199b695d"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-hmtx-table.hh",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "4a7da01a4d8503cfc3fb3f1d52606f33e1575e0af03c19e60ca27b40beab9c4c"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-layout-base-table.hh",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "381f6c43f42eb459dc78d465f3e214e4006c6b5551b1355742cf09307c8f6f51"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-layout-common.hh",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "3dc7fc6a20f2334d2cc91ab91c64a97ce251ff0d1342072668c989af7f91bd83"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-layout-gpos-table.hh",
+              "start_line": 1,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-layout-gsub-table.hh",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "e29c89461d35f46238ceb47c7ad54e072d7e91807632d2e00a472ea8accbbdfe"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-layout-gsubgpos.hh",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "082e51b503dabcf4c0c960872ec411a3c88bfe615a61e5c6cae3a3f815eec64a"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-layout.cc",
+              "start_line": 1,
+              "end_line": 29
+            }
+          ],
+          "sha256": "a9b7cf1136340e6004475de132604bcfaa2ca6b3075288fb75a40d116b40b944"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-layout.h",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "6b6d78bef5636b0fa846a913c7ec95c95e767ace44d888fb5e66908299b73533"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-map.hh",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "0527dd873127569351a8844ebbbc3789db6ca962d6082af4f1d93cce74f79c01"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-math-table.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-math.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-math.h",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "d52f88dd5132918b56d04e19b320a15ee7ddc124fd1ec1c6afedafdb6f7a37e5"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-metrics.cc",
+              "start_line": 1,
+              "end_line": 23
+            }
+          ],
+          "sha256": "10751859a96ec1cd68e5623e2e2e053e79e639f5070b4fb0d93b37837ac61809"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-name.h",
+              "start_line": 1,
+              "end_line": 23
+            }
+          ],
+          "sha256": "5c23734000b5562d51a3f6dc95f9c58a002690b3fed6da2a519b87b1646b3df6"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-name.h",
+              "start_line": 36,
+              "end_line": 73
+            }
+          ],
+          "sha256": "1f2a0ab310ca8156c9f62a0103954341c92d5aca017c02d7753171b3ebffd549"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-os2-table.hh",
+              "start_line": 1,
+              "end_line": 26
+            }
+          ],
+          "sha256": "c11df71f1e8cb4c73a53673d2e1baa9e914e9a3ffeb22be956930001f8a212de"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-post-table-v2subset.hh",
+              "start_line": 1,
+              "end_line": 24
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-var-common.hh",
+              "start_line": 1,
+              "end_line": 24
+            }
+          ],
+          "sha256": "76981f4e90ed1376586cc8823aea629714290835bc6502beae731bb3e2ef22c1"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-post-table.hh",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "d764352b67c59dfa50798ab720ee2187668d6a425adcc15e8add32f65d4c68c2"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shape.cc",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "d1596b8b4bf4e96981b26a68f315e5b02a1937d17ef8dd0291fdaf29fad9a4ec"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shape.h",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "16160aca3fbcaa709205f71b6fd4e1e286659a2f3b422e469fa5d4fec046b468"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shape.hh",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "49e33a8a4323380df4ac794f10fa3c88950526012eff79ebbb08e7dd777afc6b"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shaper-arabic.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shaper-default.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shaper-hebrew.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shaper-thai.cc",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "14e468ee783b5bc97680ae833c80d5f278e46687ce17a31f64e346bdb36271f1"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shaper-arabic.hh",
+              "start_line": 1,
+              "end_line": 27
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shaper-use-machine.hh",
+              "start_line": 3,
+              "end_line": 29
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shaper-use.cc",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "e809090de81a2eddde35300d51778a238a08fc310181fd2a793ca71fa8978cb5"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shaper-myanmar.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-uniscribe.cc",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "6023605fdd606b30430a840ba57cc2257446932ee0640e895574aff2784d36c9"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shaper-syllabic.cc",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shaper-syllabic.hh",
+              "start_line": 1,
+              "end_line": 23
+            }
+          ],
+          "sha256": "8f3d103b2b0c6304be48b786f6a3473352633b379c757df716df9def6ecee2ce"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-shaper.hh",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "03c9cca60956d0564d6bde161434b4c584905d93b3fb3f5439f93c096c83a2d6"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-tag.cc",
+              "start_line": 1,
+              "end_line": 27
+            }
+          ],
+          "sha256": "97246141b2ea93d5c5b2f89e333dc3c6e042b5e897ed840572c64ff3987aef0e"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-var-cvar-table.hh",
+              "start_line": 1,
+              "end_line": 24
+            }
+          ],
+          "sha256": "e5708f19fd8ee6da9d9c5f50c5da51e902ec729b04f4a626e592f4a85a96a1c0"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-var-gvar-table.hh",
+              "start_line": 1,
+              "end_line": 26
+            }
+          ],
+          "sha256": "2ba6bd708d9074b4f3680dbf4fdf5308f1fce1e35b8d8a9a73315be6255afcd3"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-var-varc-table.hh",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "b2fcd634665f62bca21811d18ff8a746e5552ebc4186668e0f7c98e5b7b60b92"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ot-var.h",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "c5618cdc1c9ce5c6d613350c0b1cfaf289a5aa9bf6188ce63c78b58fbfde07f9"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-outline.cc",
+              "start_line": 1,
+              "end_line": 26
+            }
+          ],
+          "sha256": "82a761f0bd0ebc20f8ae18108381b3332627372be1a67d8544ba692977ccad5b"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-outline.hh",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-subset-instancer-solver.cc",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-subset-instancer-solver.hh",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-wasm-api-blob.hh",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-wasm-api-buffer.hh",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-wasm-api-common.hh",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-wasm-api-face.hh",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-wasm-api-font.hh",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-wasm-api-list.hh",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-wasm-api-shape.hh",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-wasm-api.cc",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-wasm-api.h",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-wasm-api.hh",
+              "start_line": 1,
+              "end_line": 23
+            }
+          ],
+          "sha256": "e60b040ea173f519db3155fd0088799464962c5594fdab832fbb7a8d5c8a74d1"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-paint.cc",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-paint.h",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-paint.hh",
+              "start_line": 1,
+              "end_line": 23
+            }
+          ],
+          "sha256": "d3845b2e06ffa05e0cd078b95c7b91b83ea98e8a17c7f6a9fc765bc09d2ee718"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-priority-queue.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-repacker.hh",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "db68bc76eec38106ba61f9aaaa7d9991b97e78df6cd3ebe8a0e305c4a4439f58"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-serialize.hh",
+              "start_line": 1,
+              "end_line": 29
+            }
+          ],
+          "sha256": "ef9aa32f64291a12f0222757c7eb905687f52c81b2306ee54eef8f6516d5ff00"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-shape-plan.hh",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "f8ad01ec4e72e3fc563ae6321e7d2d58f07cd7b925a249efc3ee8be7aa8b7484"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-subset-accelerator.hh",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "aa1e468f1a1343d9f0f8ef3bdd393d0118066288ede7e8d40ad432f1ad9bed20"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-subset-input.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-subset.cc",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "e1082e75cc24d07a406563d3d4efd4323badcc6be30837f90e8a22c58705fa6a"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-subset-input.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-subset-plan.cc",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-subset-plan.hh",
+              "start_line": 1,
+              "end_line": 25
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-subset.hh",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "3392fabc3f8ac84076413e79969518604d72d2da683af295f1d096a371f58725"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-subset-instancer-iup.cc",
+              "start_line": 1,
+              "end_line": 23
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-subset-instancer-iup.hh",
+              "start_line": 1,
+              "end_line": 23
+            }
+          ],
+          "sha256": "0b8525c9a4267c2e20cc46af5d39c1ab573d4fc0f2f0a703fcc2a4ae576819f5"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-subset-plan-member-list.hh",
+              "start_line": 1,
+              "end_line": 26
+            }
+          ],
+          "sha256": "e361179e3ff834b36fb10d5b81c1c572c275a2290fbbd392c1651ca2734b04a2"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-subset-repacker.cc",
+              "start_line": 1,
+              "end_line": 24
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-subset-repacker.h",
+              "start_line": 1,
+              "end_line": 24
+            }
+          ],
+          "sha256": "2db46304a2ef5fda4bca361a2ff2c9527e534be7071fdaa9fa6ae1dd2028eef3"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-subset.h",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "753da9f4d6675d01b6e2cb0a53d4542a21ad7a2c6bbbd56a5916c6527cb14904"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-ucd.cc",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "cb9e465e174d27af52932354c6b1d02fea66afb7b54533d95b95082b98e18549"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-unicode-emoji-table.hh",
+              "start_line": 2,
+              "end_line": 19
+            }
+          ],
+          "sha256": "e22c4dead4c547d4eb200ce695dc2aa446e0b2f49785cfc1906181d359249ed5"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-unicode.cc",
+              "start_line": 1,
+              "end_line": 29
+            },
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-unicode.hh",
+              "start_line": 1,
+              "end_line": 29
+            }
+          ],
+          "sha256": "6f939f34115b42a1ef2b38f8ac4f006bf47c397c98642f8f494242716590a32f"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-unicode.h",
+              "start_line": 1,
+              "end_line": 29
+            }
+          ],
+          "sha256": "84cecb63ff39bd484e99259b782011ba92bbe58706b6e987b54bfa3a8af5f51f"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-utf.hh",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "97944fd9053a52d8a5905f281ea61a85aafff4dc970e6f06212999de29321500"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/fonts/harfbuzz/hb-vector.hh",
+              "start_line": 1,
+              "end_line": 25
+            }
+          ],
+          "sha256": "200af5166e89c0496325e6cbc86b2aac7ac0b857902574e19bed339fde6b05d2"
+        }
+      ]
+    },
+    {
+      "file": "SheenBidi-SOURCE-NOTICES.txt",
+      "mode": "verbatim comment excerpts with source labels",
+      "sha256": "5f3123b5bd19258e0d880f2679e9a48e251a437f0abfcc555432596521409fdb",
+      "excerpts": [
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBAlgorithm.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBCodepointSequence.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBRun.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/SBAlgorithm.c",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/SBAlgorithm.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/SBBase.c",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/SBBase.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/SBCodepointSequence.c",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/SBCodepointSequence.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "8087605f76d3d01a59b906477f140557bc73f8b3e9a328786977dca0ee238259"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBBase.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBConfig.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBLine.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBMirrorLocator.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBParagraph.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SheenBidi.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/BidiChain.c",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/BidiChain.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/BracketQueue.c",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/BracketQueue.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/IsolatingRun.c",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/RunQueue.c",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/RunQueue.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/SBLine.c",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/SBLine.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/SBLog.c",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/SBLog.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/SBMirrorLocator.c",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/SBMirrorLocator.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/SBParagraph.c",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/SBParagraph.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/SheenBidi.c",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/StatusStack.c",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/StatusStack.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "f30104d711e47a01f8a33311572856932993d20d6142bbcf37f90bc7cd45209f"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBBidiType.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBCodepoint.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBGeneralCategory.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBScript.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBScriptLocator.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/SBScriptLocator.c",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/SBScriptLocator.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/ScriptStack.c",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/ScriptStack.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "5c903e319e01ecaa41a367ac6fb69f4c7e945dc8a80cfdc1e25d5a8df6f6728e"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Headers/SheenBidi/SBVersion.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/Object.c",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/Object.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/SBCodepoint.c",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/SBCodepoint.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "b69abf204e6b17d40556f30974310155dc120033646d8c88aa4e482000a6297c"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/BracketType.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/LevelRun.c",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/LevelRun.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/RunExtrema.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/RunKind.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "d962c3ae399cece16dcb993ef6e88909f3d04cd152be73b86435737ceb6c23ee"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/IsolatingRun.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "5420178f6f374350457cf8e46ded607ce5c030441e75334579da34999a3484f6"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_graphics/unicode/sheenbidi/Source/SBAssert.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "058f2b8ec811b32866c4a978bfe64da56f356a81f56e728b9d0c8c348adfecfc"
+        }
+      ]
+    },
+    {
+      "file": "AudioUnitSDK-COPYRIGHT-NOTICES.txt",
+      "mode": "verbatim comment excerpts with source labels",
+      "sha256": "b3318d3f8c75479e4585a07d0686706fbd3832645bf785483a837403d7fb6dcf",
+      "excerpts": [
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUBase.cpp",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "8883ba4d7716055b1d304b19e6728fb57a607ad6532e13a1e321579276b4b3da"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUBase.h",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "53366b1ee626188af6b39cf6ff013e996d40895d7435d6f25e56c12da7ab4e89"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUBuffer.cpp",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "58a507fcfc562861050aa35e0741987db6f2d14b6f884905a23adaf2a0de956e"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUBuffer.h",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "5409039a3b185661cc9a655bda060a34a725ab7a26bf38f81811fdcdd2099cef"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUBufferAllocator.cpp",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "9e0996d1de2eca463647d7d9c33e5a7ab82d3c451c4ba33a4477070ed75d133f"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUEffectBase.cpp",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "3377b0054e791cbc876b903bff50eaf89c7b5f2cbc9b49e543b6f15d902518af"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUEffectBase.h",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "6abbafd8ac0bc60299777bb87a120ae6f1cdc7766b36b64af7c8824072fe57ee"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUInputElement.cpp",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "ed7223f3e490fc807bbb08b188a664f7919d1949c3b3a29964a4db6665cb69ab"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUInputElement.h",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "2fcfa5e855e0a2d00e7c4f33d12e78417a90733c6cc07308682f06c0a1dda026"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUMIDIBase.cpp",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "4cf5df197301d802f31542054aff341bdd30a36f300ae80bfab3cda7b9362446"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUMIDIBase.h",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "dd52c19a72049349c1212c062d528d3cb8a52b8cf919741e4ce572283b98ab81"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUMIDIEffectBase.cpp",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "38f0a94a974ff73c93432ce5075e80d505f99a48893a9d62ba6c0c5d1806003c"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUMIDIEffectBase.h",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "6940119dae2fdd65c62047f7b2c8e904d9de026757c7cf3b6725f623a0e31820"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUMIDIUtility.h",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "b8d50f1b2eb110bfbd8ab3836dd676152c18bc73de02ebf3208bcb880da65ba3"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUOutputElement.cpp",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "0679b22f4715015d745889c68befb9d5b2f85244e0377a867b657dbff7a0b189"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUOutputElement.h",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "85889b1e87a46ffea2f568cec41702408fe3cbab015f13c23e1188a9420dae2c"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUPlugInDispatch.cpp",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "7256bf9f8ece5464cf2cc1b1592a0269c1ab91d13a31d5efb8cf672f264fcd29"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUPlugInDispatch.h",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "d6c4a75197d8144b2742a7b4838e6a8e2399a85e826161c8f232145267c8685d"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUScopeElement.cpp",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "94377105032e708a61c68cee765245b28f73ba1fcedabda630e9cdf21ff68a3f"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUScopeElement.h",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "9190d3a957faf9b6cc1c28e5b62e2d23822cdbe29a5cf2b1f7f78a83fa11cf76"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUSilentTimeout.h",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "b782b8bc0b78e9e376631bf01506110eae14dc6b90a3c590a9b985bdb8d07f69"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/AUUtility.h",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "06f83da51d3ba9e35c3c83aae8d4f3e9a039d7f78d4d56c0294a249ded81c83a"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/AudioUnitSDK.h",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "1cb8f444a1e13dbd735c81286d815ec4e49d31417b0299a7b62d127ff3b85446"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/ComponentBase.cpp",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "226dd38d46945a7d03fde98b11eb4719053a86f14f8f7dd97f82dfedebe4e7e3"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/ComponentBase.h",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "8949cb6a1765d832e2770fb6808259eb64a04d75abe80e6bfaf478661fbad35d"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/MusicDeviceBase.cpp",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "0a02363444877ed41e26538aae8fe87df130c1087ce7dc70c491c24656d66ff5"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_plugin_client/AU/AudioUnitSDK/MusicDeviceBase.h",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "dc3f861394f6c9e49e80a918fd99d5749744a3300eb777e46329be42db5313f7"
+        }
+      ]
+    },
+    {
+      "file": "Ogg-Vorbis-SOURCE-NOTICES.txt",
+      "mode": "verbatim comment excerpts with source labels",
+      "sha256": "d3cd04829498727d32d8999a83fbebd8f05beac52cb32bfea1eadacb3011d6a4",
+      "excerpts": [
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/bitwise.c",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "a4485d247a8abfcffd937950d71fa2b90e4d5b54aea6d18dafd845ed6ded676f"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/codec.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "f33d700397799dd0cceea326124c4a7454e29d438ab2fd1804cd82d30b3a60b5"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/crctable.h",
+              "start_line": 1,
+              "end_line": 11
+            }
+          ],
+          "sha256": "160e342165db976b746563282035a0b29dca27f224e6cccd982f96f0e64dcae2"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/framing.c",
+              "start_line": 1,
+              "end_line": 20
+            }
+          ],
+          "sha256": "1f4a11c5440efad22d163a6c0657121bddac230b8d3dbf20322e4c5c9e8f75c1"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/analysis.c",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "42906f305d08516f20cfc9d85f674686ad9b8ad83a36cc07aeba14bc9da2bca2"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/backends.h",
+              "start_line": 1,
+              "end_line": 16
+            }
+          ],
+          "sha256": "07a1dea438a850a7da258d2b6c1d18ea031421b83d3e2dac3778efcd3c7eb669"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/bitrate.c",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "c142af59560da13a0876ddf4a4af740a973a3073b06ebeb20ac2a2e650670857"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/bitrate.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "792a664f444b52919c6188459655a3151b1e0e32c58befc39a7e9c42b5a145a6"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/block.c",
+              "start_line": 1,
+              "end_line": 18
+            }
+          ],
+          "sha256": "5225f2dd2275abafcda8000a07e556d7aeb7e27b538bc910bbe852e42dfd8a46"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/books/coupled/res_books_51.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "8f7778da9396aeaa6e76db03b70c44bb9e5ed58065d0cec8363cdf83e94db7a3"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/books/coupled/res_books_stereo.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/books/floor/floor_books.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/books/uncoupled/res_books_uncoupled.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "8ddb2076c585b6c5c85487f21f06f725209ade6959f083e8085205b9e23aea62"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/codebook.c",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "95e785593be807f3a8de51af15184af9b4009842d1bfb02eca029de7a7066c9f"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/codebook.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/sharedbook.c",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "3677148d44a3241e9e1d31d3914aed9948a221ab5f936346ac9fa843ed4ca8ce"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/codec_internal.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "e4f9336e875105ee09b1390725e95714878f42ad426ca337845766989e6184f9"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/envelope.c",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "ee493bf933d1d0fc463be27e481e02a94a857acaf49f9bbfdb41a492ed46f3e0"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/envelope.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "da56a4e0d146e828f2732e300cac6abc12a8c05aec1856c670a7bf182c452c91"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/floor0.c",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "452d6b04c42879c3e105587cd9ef6a0a19a4927dbfb75798845e532f13160aea"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/floor1.c",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "4b4dc20348156ebffec634bf87eb3a5feeb525385f5dbbf1f038dc7577e97d6b"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/highlevel.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "069bc52698b141a7e9bad2f21495141d61aa176f0caf05172b5f615b6cdb2519"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/info.c",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "c58046ae5f8cee4b6464011c9f6780a3d5f92c837f973c8b9847e3dd26bcb0cb"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/lookup.c",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/lookup.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "dbb31b766c7b53bfc0731869167510532a75822044845746a6a76c5a8b2850b0"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/lookup_data.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "30e361e63e13ddc670084a05a092181c52dd2e2e220e6d2aa519a972d7685708"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/lpc.c",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "933c5ecd52574e50fc406864453359cefff5bb86b2afa8c216b6347c28440663"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/lpc.c",
+              "start_line": 17,
+              "end_line": 21
+            }
+          ],
+          "sha256": "5b4850c53c3a1d5459f521be485a89114a19615859a933c3b83f59a611478849"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/lpc.c",
+              "start_line": 23,
+              "end_line": 23
+            }
+          ],
+          "sha256": "058d321d40f3d18a38b0db02b286a1f3a8067b05aba6f98f0aa8b5fdeca37f28"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/lpc.c",
+              "start_line": 25,
+              "end_line": 43
+            }
+          ],
+          "sha256": "c9441666db988c573742c9a42f0a9970cf73728495fc7d6284c6f849c5212bbb"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/lpc.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "7d2f9204b97ce9a198d4162f829d061413bc544b3b04106bcaeb8c6a604c57fe"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/lsp.c",
+              "start_line": 1,
+              "end_line": 23
+            }
+          ],
+          "sha256": "7b9b11e21562eab0ec6fe591a4c25df2ca0cc10ec30a8b278f8ef050cd471a81"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/lsp.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "15f170a6b573c5b717778ec9fcae1cfc5a90b2fa15cee1dff85e249083814ba8"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/mapping0.c",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "4f8b1707252ab322b772e81e9c8cfe9aa0dc602fc33610f019778ca05123e1b6"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/masking.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "7c0193558991785f32667e8a88cd033ba3af604686f1748a8b491ee9cd5dae5f"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/mdct.c",
+              "start_line": 1,
+              "end_line": 31
+            }
+          ],
+          "sha256": "ffac572aa82449d99736c35503c3face4bd6f6876169e0254667b0f0a535c52e"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/mdct.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "7f5ba078311ba711c8dc7ccc11ec82aef4c12859ad779eef8c624e610da5a5e5"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/misc.c",
+              "start_line": 1,
+              "end_line": 11
+            }
+          ],
+          "sha256": "36a1b36082481d525ea16d1a87d0c7f59233ef2d97f6c6a2545087342b55c6f9"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/misc.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "c0d4228f15732d92f8910801a90f2ee34edf667019b11271037dbde2673bb97a"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/floor_all.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "cf7b4d50061280df18fa9c509c8ece5174e44f0b7d142078e3f9d881b8d07a84"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/psych_11.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/setup_11.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "6f7b0cb73c23760d004633f7f6860155ec648bf82ecc667a14f88eb0ecc3cb99"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/psych_16.h",
+              "start_line": 1,
+              "end_line": 15
+            },
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/setup_16.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "bba0651b21cacd713774312f11a443433e3fc7ae7dc2d157573e3e904f409ca6"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/psych_44.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "67360152bacd80b906f7d91bde12ec8fd7b8dd4f46c4024fc1160812720324d3"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/psych_8.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "b9292a7a0abe7002eb137c6b810cc2fbc3cb345bfbb4801763c36009be32cc43"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/residue_16.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "a7ad1fee8a9b6d161779f6c1130aed85dc5620dfc274f9106c6af09da9035f1e"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/residue_44.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "b7db292363d3b8cdc84098fc18f74bb31605768c2efacc912205eb0a3085db9d"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/residue_44p51.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "46c57cd842de8d0922b88be5d611e78023fe12d16fb212b8692ffabb9c162c43"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/residue_44u.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "8030f62e4420b4b003bde1eff391fbe622515e59dc4030e3089d12e2c6c68382"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/residue_8.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "5352fa7416339c5e55f53fb7349865d692209ed0b4b8c5981adb4ad848b0add2"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/setup_22.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "b64a3f552f1ecd56f4b9d2c92474f875e2b33ff153950170f3b133ab8e11f80f"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/setup_32.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "f6a9a151ec0f9f4df0b7e6856c06b6920b14edf49724d60a6ec1a2d413918a79"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/setup_44.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "8e3601c9adbe71a9b5404f6fac9a6fdbd6832b57f419e9db6deb7bac2ae3afcb"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/setup_44p51.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "b43b38721c0acaf948a8ec79543212ec6d462559e3d8a42f05926933b31a609e"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/setup_44u.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "17e62d3c1c41d83236f0d230f8e644bb271e5b74d6d2a7a3e28e043db81fa29a"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/setup_8.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "0ccb2fea168c061502866a896c499c8f117b0c104ea4cd6f47eff02231762685"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/modes/setup_X.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "56b0e123480b12fa1b9d9ae33133fb7c91ade3c6ac622150dfc87c9b7aca2266"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/os.h",
+              "start_line": 3,
+              "end_line": 17
+            }
+          ],
+          "sha256": "71d0ed17847d8ee7a0c50ffdfeca1932063599caeac5826aaa88504e82e68c09"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/psy.c",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "13442498a252fc8a016eb9933595e4a1fc830c6fd207889ad8f079b3da051efb"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/psy.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "9f62cd800e8ee878f0211146db020cdf1fedae3605fb66fa2ea713b35eeb06e8"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/registry.c",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "a95659c7e634781dc3868419414491a3217f0b3f508ffc92edfaf5ff1340d714"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/registry.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "985a41a78d268b4f4951c144053a9cc60b0b7e7639719c1887e003bd8ac32ab6"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/res0.c",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "5aae15bf7fe17e818f3d4381da8d2673deb9d221d7a4871cfb48ab6332cc457f"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/scales.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "877b97810ef068774d36e1c9eeb7355e5796d3c1eaed69bc0efb5ef658b62142"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/smallft.c",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "9deeb4fbe8c359255995c150a94eb38807671949f9280512991c1df91d9baef3"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/smallft.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "5ca646ae57995537d5b1e4414cc000eabb055a45f847667c0bf193becd80c691"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/synthesis.c",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "8394732bd7beec76616af84ee591fbaeb51e7754ba4f49e53906f744caa0309d"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/vorbisenc.c",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "1071229b9d8fe884eedebb0af1ec0c18c922ddb6ea441c3829061e771b2f80bf"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/vorbisfile.c",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "932a9e1152f8044bb32135af19fc2f94f84bf0e93868e6936784d6e720ebc5da"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/window.c",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "93311e071025eaa6c164c46a5a4d928d54dc0da604b0e815fae2a23ee672851e"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.7/lib/window.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "7b7814c14d08b01517a625e1c9ac1fc4b9acb53c8a68affdadee7158738aa7db"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/ogg.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "360d86e101869daebda6f91f27c69cdde6461591b9e187f468398a1d9cc42558"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/os_types.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "0b2307a5e774dd406136f876f24d42099d2dcd54b53bbce32e580a6a71a404a5"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/vorbisenc.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "6796b131b4547d10cfd314f5739d1ec1355289a975cdffe9f4daa437396e2e73"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_formats/codecs/oggvorbis/vorbisfile.h",
+              "start_line": 1,
+              "end_line": 15
+            }
+          ],
+          "sha256": "568a29e31a2d8686ef764ba3b83fc94d9549be54319120e4e998a0aced536fda"
+        }
+      ]
+    },
+    {
+      "file": "JUCE-MODULE-NOTICE.txt",
+      "mode": "verbatim comment excerpts with source labels",
+      "sha256": "eaf4559b77877e0655397c1f806035eba5230bde70c76a7a495752bdd1a48fd3",
+      "excerpts": [
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_utils/juce_audio_utils.h",
+              "start_line": 1,
+              "end_line": 33
+            }
+          ],
+          "sha256": "b4879f9eb091d142aefd0ca6471e9d784a2e0bcf306be70906e12fa3d00cdaed"
+        }
+      ]
+    },
+    {
+      "file": "VST3-ADDITIONAL-NOTICES.txt",
+      "mode": "verbatim comment excerpts with source labels",
+      "sha256": "203a0842af1c8eca44babe1d344322a29857d3355383d518d0fcd625e601ee02",
+      "excerpts": [
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_processors_headless/format_types/VST3_SDK/public.sdk/source/vst/hosting/module_mac.mm",
+              "start_line": 1,
+              "end_line": 35
+            }
+          ],
+          "sha256": "5d6e690ebeda545489ac1299acda06f49cbb3634b32aa3a4898192ec831dffb0"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_processors_headless/format_types/VST3_SDK/public.sdk/source/vst/moduleinfo/json.h",
+              "start_line": 1,
+              "end_line": 4
+            }
+          ],
+          "sha256": "e22f8ade1eb3edd12df81ad3bc848c59b03bb05485a7b8aa2a944b62be48be4a"
+        },
+        {
+          "sources": [
+            {
+              "path": "modules/juce_audio_processors_headless/format_types/VST3_SDK/public.sdk/source/vst/moduleinfo/json.h",
+              "start_line": 6,
+              "end_line": 31
+            }
+          ],
+          "sha256": "3aaec1cd7d7291d905591025f297f298aafc433d1604cce4a02254029c3fc87a"
+        }
+      ]
+    }
+  ]
+}
