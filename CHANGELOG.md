@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.3.0 — 2026-09-06
+
+See both stereo channels and save their visual output as a real JPEG.
+
+- Default to **Stereo**, showing separate labeled L/R lanes in both input and
+  result images. Each lane contains the latest 64 captured 8×8 audio tiles.
+- Keep **L / R** views for inspecting one channel at full width with up to 128
+  tiles. Mono audio fills the image and disables R.
+- Inspect matching input/result tiles from either stereo lane by clicking them.
+- Replace PNG export with **Save JPEG**: a genuine `.jpg` / `.jpeg` file at
+  92% encoding quality, preserving the selected stereo layout, view, and palette.
+  Export compression affects only the picture, independently of the sound controls.
+- Change the header to **JPEG YOUR MUSIC** and remove its subtitle.
+- Refine interface controls and typography with bundled IBM Plex Sans and IBM
+  Plex Mono, retaining Impact for the meme-style branding. Include the fonts'
+  SIL Open Font License and source provenance in the release.
+
+Audio processing remains independently stereo, with the same 64-sample latency,
+sound parameters, presets, and saved-state format. Visual settings affect the
+open editor only. See [0.3.0 validation](docs/validation-v0.3.0.md) for checks and
+platform limitations.
+
 ## 0.2.1 — 2026-09-06
 
 Make effect state and image-only controls clear at a glance.

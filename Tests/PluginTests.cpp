@@ -4,6 +4,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "VisualizationExport.h"
 
 #include <juce_audio_utils/juce_audio_utils.h>
 #include <algorithm>
@@ -644,15 +645,96 @@ bool imagesEqual(const juce::Image& first, const juce::Image& second)
     return true;
 }
 
-void inspectImageTile(juce::AudioProcessorEditor& editor)
+void requireJpegRoundTrip(const juce::File& file, const juce::Image& original, double maximumMeanError)
+{
+    juce::MemoryBlock bytes;
+    require(file.loadFileAsData(bytes) && bytes.getSize() > 4, "JPEG export writes nonempty image data");
+    const auto* data = static_cast<const unsigned char*>(bytes.getData());
+    require(data[0] == 0xff && data[1] == 0xd8
+                && data[bytes.getSize() - 2] == 0xff && data[bytes.getSize() - 1] == 0xd9,
+            "JPEG export contains JPEG start and end markers, rather than renamed PNG data");
+    juce::JPEGImageFormat jpeg;
+    juce::MemoryInputStream input(bytes.getData(), bytes.getSize(), false);
+    const auto decoded = jpeg.decodeImage(input);
+    require(decoded.isValid() && decoded.getBounds() == original.getBounds(),
+            "saved JPEG decodes at the original snapshot dimensions");
+    double error = 0.0;
+    for (int y = 0; y < original.getHeight(); ++y)
+        for (int x = 0; x < original.getWidth(); ++x)
+        {
+            const auto expected = original.getPixelAt(x, y);
+            const auto actual = decoded.getPixelAt(x, y);
+            error += std::abs(static_cast<int>(expected.getRed()) - static_cast<int>(actual.getRed()));
+            error += std::abs(static_cast<int>(expected.getGreen()) - static_cast<int>(actual.getGreen()));
+            error += std::abs(static_cast<int>(expected.getBlue()) - static_cast<int>(actual.getBlue()));
+        }
+    const double samples = static_cast<double>(original.getWidth()) * original.getHeight() * 3.0;
+    require(error / samples < maximumMeanError, "lossy JPEG export preserves the source image within a bounded mean color error");
+}
+
+void jpegExportFiles()
+{
+    juce::TemporaryFile workspace;
+    const auto directory = workspace.getFile();
+    require(directory.createDirectory().wasOk(), "JPEG export tests create an isolated temporary directory");
+    require(deepfry::jpegDestination({}) == juce::File(), "cancelling the chooser keeps an empty JPEG destination");
+    for (const char* name : { "image.jpg", "image.jpeg", "image.JPG", "image.JpEg" })
+    {
+        const auto file = directory.getChildFile(name);
+        require(deepfry::jpegDestination(file) == file, "JPEG filename normalization preserves supported extension case and spelling");
+    }
+    for (const char* name : { "image", "image.png", "image.gif" })
+        require(deepfry::jpegDestination(directory.getChildFile(name)) == directory.getChildFile("image.jpg"),
+                "JPEG filenames receive the final .jpg extension before overwrite confirmation");
+
+    juce::Image gradient(juce::Image::RGB, 192, 96, true);
+    for (int y = 0; y < gradient.getHeight(); ++y)
+        for (int x = 0; x < gradient.getWidth(); ++x)
+            gradient.setPixelAt(x, y, juce::Colour(static_cast<juce::uint8>(x * 255 / 191),
+                                                  static_cast<juce::uint8>(y * 255 / 95),
+                                                  static_cast<juce::uint8>((x + y) * 255 / 286)));
+    const auto destination = directory.getChildFile("image.jpg");
+    const juce::String sentinel("Existing image must survive a failed export.");
+    require(destination.replaceWithText(sentinel), "JPEG preservation test creates an existing destination");
+    require(!deepfry::writeVisualizationJpeg({}, destination), "JPEG export rejects an invalid image");
+    require(destination.loadFileAsString() == sentinel, "an invalid image cannot truncate an existing destination");
+    const juce::Image oversized(juce::Image::RGB, 65501, 1, true);
+    require(!deepfry::writeVisualizationJpeg(oversized, destination)
+                && destination.loadFileAsString() == sentinel,
+            "an unsupported JPEG image size leaves the existing destination intact");
+    require(!deepfry::writeVisualizationJpeg(gradient, {}), "JPEG export rejects a cancelled destination");
+    require(!deepfry::writeVisualizationJpeg(gradient, destination.getChildFile("nested.jpg"))
+                && destination.loadFileAsString() == sentinel,
+            "JPEG export cannot replace an existing file used as a parent directory");
+    const auto occupiedDirectory = directory.getChildFile("folder.jpg");
+    require(occupiedDirectory.createDirectory().wasOk(), "JPEG destination collision test creates a directory");
+    const auto marker = occupiedDirectory.getChildFile("keep.txt");
+    require(marker.replaceWithText(sentinel), "JPEG destination collision test stores an existing child");
+    require(!deepfry::writeVisualizationJpeg(gradient, occupiedDirectory) && marker.loadFileAsString() == sentinel,
+            "JPEG export never replaces a directory or its contents");
+    require(deepfry::writeVisualizationJpeg(gradient, destination), "JPEG export safely replaces an approved existing file");
+    requireJpegRoundTrip(destination, gradient, 8.0);
+
+    const auto exactDestination = directory.getChildFile("approved.custom");
+    const auto differentDestination = deepfry::jpegDestination(exactDestination);
+    require(differentDestination.replaceWithText(sentinel), "exact-path regression creates the unapproved normalized destination");
+    require(deepfry::writeVisualizationJpeg(gradient, exactDestination), "JPEG writer writes exactly the approved destination");
+    requireJpegRoundTrip(exactDestination, gradient, 8.0);
+    require(differentDestination.loadFileAsString() == sentinel,
+            "JPEG writer never silently normalizes a path and overwrites a different file");
+    require(directory.findChildFiles(juce::File::findFilesAndDirectories, false).size() == 4,
+            "JPEG export removes temporary files after successful and rejected writes");
+}
+
+void inspectImageTile(juce::AudioProcessorEditor& editor, float designX = 450.0f, float designY = 210.0f)
 {
     // Use an actual click inside the image, translated from the editor's design
     // coordinates, so inspection exercises the same path as a user's mouse.
     const float scale = std::min(static_cast<float>(editor.getWidth()) / 1120.0f,
                                  static_cast<float>(editor.getHeight()) / 800.0f);
     const juce::Point<float> point {
-        (static_cast<float>(editor.getWidth()) - 1120.0f * scale) * 0.5f + 450.0f * scale,
-        (static_cast<float>(editor.getHeight()) - 800.0f * scale) * 0.5f + 210.0f * scale
+        (static_cast<float>(editor.getWidth()) - 1120.0f * scale) * 0.5f + designX * scale,
+        (static_cast<float>(editor.getHeight()) - 800.0f * scale) * 0.5f + designY * scale
     };
     const auto now = juce::Time::getCurrentTime();
     const juce::MouseEvent click(juce::Desktop::getInstance().getMainMouseSource(), point,
@@ -759,6 +841,102 @@ void visualizationRestartWhileFrozen()
     require(!imagesEqual(beforeRestart, resumedSnapshot), "resumed history displays the newly prepared stream");
 }
 
+void stereoVisualization()
+{
+    DeepFryAudioProcessor processor;
+    setParameter(processor, "mix", 0);
+    setParameter(processor, "output", 0);
+    prepare(processor);
+    std::unique_ptr<juce::AudioProcessorEditor> editor(processor.createEditor());
+    auto* visualEditor = dynamic_cast<DeepFryAudioProcessorEditor*>(editor.get());
+    require(visualEditor != nullptr, "stereo visualization test creates the real editor");
+    auto* stereoButton = dynamic_cast<juce::Button*>(findEditorControl(*editor, "Show stereo channels"));
+    require(stereoButton != nullptr, "stereo visualization exposes an accessible combined-channel view");
+
+    // Eighty distinct captures exceed the stereo view's 64 tiles per channel.
+    // Constant samples within each tile make the expected lane and time mapping
+    // unambiguous while retaining different left and right audio throughout.
+    constexpr int capturedTileCount = 80;
+    constexpr int samplesPerCapture = 768;
+    Audio input(2, std::vector<float>(capturedTileCount * samplesPerCapture + latency));
+    for (std::size_t i = 0; i < input.front().size(); ++i)
+    {
+        const float tile = static_cast<float>(i / samplesPerCapture);
+        input[0][i] = -0.8f + 0.006f * tile;
+        input[1][i] = 0.15f + 0.007f * tile;
+    }
+    processSamples(processor, input);
+    juce::MessageManager::getInstance()->runDispatchLoopUntil(50);
+    require(stereoButton->getToggleState(), "stereo input initially displays both channels together");
+    const auto stereo = visualEditor->createVisualizationSnapshot();
+    require(stereo.isValid() && stereo.getWidth() == 1080 && stereo.getHeight() == 352,
+            "stereo visualization retains the paired export dimensions");
+
+    const auto tilePixel = [](const juce::Image& snapshot, bool processed, int tile,
+                              int columns, int lane, int sample)
+    {
+        const int imageX = lane * 64 + (tile % columns) * 8 + sample % 8;
+        const int imageY = (tile / columns) * 8 + sample / 8;
+        return snapshot.getPixelAt((processed ? 548 : 20) + imageX * 4 + 2, 54 + imageY * 4 + 2);
+    };
+    require(tilePixel(stereo, false, 0, 8, 0, 0) != tilePixel(stereo, false, 0, 8, 1, 0),
+            "stereo input shows distinct left and right amplitudes simultaneously");
+    require(tilePixel(stereo, true, 0, 8, 0, 0) != tilePixel(stereo, true, 0, 8, 1, 0),
+            "stereo output shows distinct left and right amplitudes simultaneously");
+
+    clickEditorButton(*editor, "Inspect left channel");
+    require(!stereoButton->getToggleState(), "choosing the left channel changes from stereo to a full-width solo view");
+    const auto left = visualEditor->createVisualizationSnapshot();
+    clickEditorButton(*editor, "Inspect right channel");
+    require(!stereoButton->getToggleState(), "choosing the right channel keeps a full-width solo view");
+    const auto right = visualEditor->createVisualizationSnapshot();
+    for (const bool processed : { false, true })
+        for (int tile = 0; tile < 64; ++tile)
+            for (int sample = 0; sample < 64; ++sample)
+            {
+                require(tilePixel(stereo, processed, tile, 8, 0, sample)
+                            == tilePixel(left, processed, capturedTileCount - 64 + tile, 16, 0, sample),
+                        "stereo left lane contains the latest 64 source-aligned tiles from the full left history");
+                require(tilePixel(stereo, processed, tile, 8, 1, sample)
+                            == tilePixel(right, processed, capturedTileCount - 64 + tile, 16, 0, sample),
+                        "stereo right lane contains the latest 64 source-aligned tiles from the full right history");
+            }
+
+    clickEditorButton(*editor, "Show stereo channels");
+    // Right lane, row 2, column 3: stereo tile 19, chronological tile 35.
+    // This distinguishes both lane selection and the hidden-history offset.
+    inspectImageTile(*editor, 889.0f, 301.0f);
+    const auto inspected = editor->createComponentSnapshot(editor->getLocalBounds(), true, 1.0f);
+    require(inspected.getPixelAt(28, 393) == tilePixel(stereo, false, 19, 8, 1, 0),
+            "clicking a right-lane tile freezes the matching right input in the tile inspector");
+    require(inspected.getPixelAt(116, 393) == tilePixel(stereo, true, 19, 8, 1, 0),
+            "clicking a right-lane tile freezes the matching right output in the tile inspector");
+    require(inspected.getPixelAt(28, 393) != tilePixel(stereo, false, 63, 8, 1, 0),
+            "right-lane inspection selects the clicked historical tile rather than the latest tile");
+    clickEditorButton(*editor, "Freeze visualization");
+
+    prepare(processor, 1);
+    processSamples(processor, Audio(1, std::vector<float>(8197, 0.3f)));
+    juce::MessageManager::getInstance()->runDispatchLoopUntil(50);
+    auto* rightButton = dynamic_cast<juce::Button*>(findEditorControl(*editor, "Inspect right channel"));
+    require(rightButton != nullptr && !rightButton->isEnabled() && !rightButton->getToggleState(),
+            "mono input disables and deselects the unavailable right channel");
+    const auto mono = visualEditor->createVisualizationSnapshot();
+    require(mono.isValid() && tilePixel(mono, false, 8, 16, 0, 0) == tilePixel(mono, false, 0, 16, 0, 0),
+            "mono input uses the full image width instead of reserving a second stereo lane");
+    require(tilePixel(mono, true, 8, 16, 0, 0) == tilePixel(mono, true, 0, 16, 0, 0),
+            "mono output uses the full image width without duplicating an unavailable channel");
+    prepare(processor);
+    processSamples(processor, input);
+    juce::MessageManager::getInstance()->runDispatchLoopUntil(50);
+    require(stereoButton->getToggleState() && rightButton->isEnabled(),
+            "the stereo view preference returns when a mono host stream becomes stereo again");
+    const auto resumed = visualEditor->createVisualizationSnapshot();
+    require(tilePixel(resumed, false, 0, 8, 0, 0) == tilePixel(stereo, false, 0, 8, 0, 0)
+                && tilePixel(resumed, false, 0, 8, 1, 0) == tilePixel(stereo, false, 0, 8, 1, 0),
+            "stereo resumes with correctly aligned new left and right histories after mono");
+}
+
 void editorInteractions(DeepFryAudioProcessor& processor, juce::AudioProcessorEditor& editor)
 {
     const auto clickButton = [&editor](const char* name)
@@ -832,15 +1010,13 @@ void editorInteractions(DeepFryAudioProcessor& processor, juce::AudioProcessorEd
     juce::MessageManager::getInstance()->runDispatchLoopUntil(50);
     const auto savedSnapshot = visualEditor->createVisualizationSnapshot();
     require(savedSnapshot.isValid(), "live history can be exported as a paired visualization image");
-    auto* saveImage = dynamic_cast<juce::Button*>(findEditorControl(editor, "Save visualization PNG"));
-    require(saveImage != nullptr && saveImage->isEnabled(), "PNG export becomes available after audio supplies image history");
+    auto* saveImage = dynamic_cast<juce::Button*>(findEditorControl(editor, "Save visualization JPEG"));
+    require(saveImage != nullptr && saveImage->isEnabled(), "JPEG export becomes available after audio supplies image history");
     const auto retainedPixels = savedSnapshot.createCopy();
-    juce::MemoryOutputStream pngBytes;
-    juce::PNGImageFormat png;
-    require(png.writeImageToStream(savedSnapshot, pngBytes), "visualization snapshot encodes as a PNG");
-    juce::MemoryInputStream pngInput(pngBytes.getData(), pngBytes.getDataSize(), false);
-    const auto decodedSnapshot = png.decodeImage(pngInput);
-    require(imagesEqual(savedSnapshot, decodedSnapshot), "exported visualization survives lossless PNG encoding and decoding");
+    juce::TemporaryFile exportedSnapshot(".jpg");
+    require(deepfry::writeVisualizationJpeg(savedSnapshot, exportedSnapshot.getFile()),
+            "the actual visualization snapshot saves through the JPEG export helper");
+    requireJpegRoundTrip(exportedSnapshot.getFile(), savedSnapshot, 20.0);
 
     // Display controls are local to the editor. Exercise them while repeatedly
     // rendering the same sound state to catch accidental DSP coupling. A different
@@ -852,7 +1028,8 @@ void editorInteractions(DeepFryAudioProcessor& processor, juce::AudioProcessorEd
     struct DisplayAction { const char* name; int itemId; };
     for (const auto& control : { DisplayAction { "Image view", 2 }, { "Image palette", 2 },
                                 { "Inspect right channel", 0 }, { "Image view", 1 },
-                                { "Inspect left channel", 0 }, { "Image palette", 1 } })
+                                { "Inspect left channel", 0 }, { "Image palette", 1 },
+                                { "Show stereo channels", 0 } })
     {
         if (control.itemId == 0)
             clickButton(control.name);
@@ -901,6 +1078,7 @@ void makeArtifacts(const juce::File& directory)
 {
     require(directory.createDirectory().wasOk(), "artifact directory can be created");
     visualizationRestartWhileFrozen();
+    stereoVisualization();
     auto dry = musicalDemo();
     DeepFryAudioProcessor processor;
     prepare(processor);
@@ -916,8 +1094,8 @@ void makeArtifacts(const juce::File& directory)
     auto* visualEditor = dynamic_cast<DeepFryAudioProcessorEditor*>(editor.get());
     require(visualEditor != nullptr && !visualEditor->createVisualizationSnapshot().isValid(),
             "export reports no image until real audio history has arrived");
-    auto* saveImage = dynamic_cast<juce::Button*>(findEditorControl(*editor, "Save visualization PNG"));
-    require(saveImage != nullptr && !saveImage->isEnabled(), "PNG export is disabled before any real audio history exists");
+    auto* saveImage = dynamic_cast<juce::Button*>(findEditorControl(*editor, "Save visualization JPEG"));
+    require(saveImage != nullptr && !saveImage->isEnabled(), "JPEG export is disabled before any real audio history exists");
     editorInteractions(processor, *editor);
 
     Audio wet(2, std::vector<float>(dry[0].size() + latency));
@@ -945,6 +1123,7 @@ void makeArtifacts(const juce::File& directory)
             // Capture the real live image history during the musical passage,
             // while preserving the complete eight-second audio render below.
             juce::MessageManager::getInstance()->runDispatchLoopUntil(50);
+            clickEditorButton(*editor, "Show stereo channels");
             captureEditor(*editor, directory.getChildFile("deep-fry-ui.png"));
             captureChoiceMenu(*editor, "Image view", directory.getChildFile("deep-fry-ui-view-menu.png"));
             captureChoiceMenu(*editor, "Image palette", directory.getChildFile("deep-fry-ui-palette-menu.png"));
@@ -957,17 +1136,15 @@ void makeArtifacts(const juce::File& directory)
             clickEditorButton(*editor, "Inspect right channel");
             captureEditor(*editor, directory.getChildFile("deep-fry-ui-right.png"));
             clickEditorButton(*editor, "Inspect left channel");
-            inspectImageTile(*editor);
+            captureEditor(*editor, directory.getChildFile("deep-fry-ui-left.png"));
+            clickEditorButton(*editor, "Show stereo channels");
+            inspectImageTile(*editor, 889.0f, 301.0f);
             captureEditor(*editor, directory.getChildFile("deep-fry-ui-inspect.png"));
             clickEditorButton(*editor, "Freeze visualization");
             const auto exportedImage = visualEditor->createVisualizationSnapshot();
-            auto exportStream = directory.getChildFile("deep-fry-visualization.png").createOutputStream();
-            require(exportStream != nullptr && exportStream->openedOk(), "paired visualization artifact can be opened");
-            exportStream->setPosition(0);
-            exportStream->truncate();
-            juce::PNGImageFormat png;
-            require(png.writeImageToStream(exportedImage, *exportStream), "paired visualization artifact saves as PNG");
-            exportStream->flush();
+            const auto exportFile = directory.getChildFile("deep-fry-visualization.jpg");
+            require(deepfry::writeVisualizationJpeg(exportedImage, exportFile), "paired visualization artifact saves as a genuine JPEG");
+            requireJpegRoundTrip(exportFile, exportedImage, 20.0);
 
             auto* constrainer = editor->getConstrainer();
             require(constrainer != nullptr, "resizable native editor exposes its minimum size");
@@ -1015,6 +1192,7 @@ int main(int argc, char* argv[])
         stateRecall();
         visualizationAndInvalidInput();
         visualizationPublicationAndReset();
+        jpegExportFiles();
         if (argc == 3 && std::string(argv[1]) == "--artifacts")
             makeArtifacts(juce::File::getCurrentWorkingDirectory().getChildFile(juce::String::fromUTF8(argv[2])));
         else

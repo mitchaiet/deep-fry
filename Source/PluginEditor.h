@@ -32,6 +32,9 @@ private:
     void updateViewControls();
     void setFrozen (bool);
     void saveSnapshot();
+    bool stereoViewActive() const;
+    size_t firstVisibleTile() const;
+    juce::Point<int> tileOrigin (size_t chronologicalIndex, int channel) const;
     const deepfry::VisualFrame* historyFrame (size_t chronologicalIndex) const;
     const deepfry::VisualChannelFrame* channelFrame (const deepfry::VisualFrame&) const;
     float displayedPixel (const deepfry::VisualChannelFrame&, size_t sample) const;
@@ -52,10 +55,12 @@ private:
     juce::TextButton helpButton { "?" };
     juce::ComboBox viewSelector;
     juce::ComboBox paletteSelector;
+    juce::TextButton stereoButton { "Stereo" };
     juce::TextButton leftChannelButton { "L" };
     juce::TextButton rightChannelButton { "R" };
-    juce::TextButton saveImageButton { "SAVE PNG" };
+    juce::TextButton saveImageButton { "Save JPEG" };
     std::unique_ptr<juce::FileChooser> imageChooser;
+    juce::ScopedMessageBox overwriteConfirmation;
     juce::HyperlinkButton licenseLink { "LICENSE", juce::URL ("https://github.com/mitchaiet/deep-fry/blob/master/LICENSE") };
     juce::HyperlinkButton sourceLink { "SOURCE", juce::URL ("https://github.com/mitchaiet/deep-fry/releases") };
     std::unique_ptr<juce::ParameterAttachment> bypassAttachment;
@@ -70,6 +75,7 @@ private:
     bool applyingPreset = false;
     bool showFinalOutput = true;
     bool useColour = true;
+    bool showStereo = true;
     bool snapshotDialogOpen = false;
     int selectedChannel = 0;
     int selectedTile = -1;

@@ -5,7 +5,7 @@ endif()
 if(CMAKE_HOST_APPLE AND NOT DEFINED CMAKE_OSX_DEPLOYMENT_TARGET)
     set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0" CACHE STRING "Minimum macOS version")
 endif()
-project(DeepFry VERSION 0.2.1 LANGUAGES C CXX)
+project(DeepFry VERSION 0.3.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -36,6 +36,10 @@ FetchContent_Declare(JUCE
     URL_HASH SHA256=488c4f6e2c121316d60801842dba87c44e5dbad4e661cb49bf806b49a38b6a5e
     DOWNLOAD_EXTRACT_TIMESTAMP FALSE)
 FetchContent_MakeAvailable(JUCE)
+
+juce_add_binary_data(DeepFryFonts HEADER_NAME DeepFryFonts.h NAMESPACE DeepFryFonts
+    SOURCES Assets/Fonts/IBMPlexSans-Regular.ttf Assets/Fonts/IBMPlexSans-SemiBold.ttf
+            Assets/Fonts/IBMPlexMono-Regular.ttf)
 
 set(DEEPFRY_FORMATS VST3 Standalone)
 if(APPLE)
@@ -76,7 +80,7 @@ target_compile_definitions(DeepFry PUBLIC
     JUCE_USE_CURL=0
     $<$<PLATFORM_ID:Windows>:JUCE_ASIO=0>
     JUCE_VST3_CAN_REPLACE_VST2=0)
-target_link_libraries(DeepFry PRIVATE DeepFryCodec juce::juce_audio_utils
+target_link_libraries(DeepFry PRIVATE DeepFryCodec DeepFryFonts juce::juce_audio_utils
     PUBLIC juce::juce_recommended_config_flags juce::juce_recommended_warning_flags)
 
 if(CMAKE_CROSSCOMPILING AND WIN32)
@@ -113,7 +117,7 @@ if(BUILD_TESTING)
     juce_add_console_app(DeepFryVerify PRODUCT_NAME "Deep Fry Verification")
     target_sources(DeepFryVerify PRIVATE Tests/PluginTests.cpp Source/PluginProcessor.cpp Source/PluginEditor.cpp)
     target_compile_definitions(DeepFryVerify PRIVATE JUCE_MODAL_LOOPS_PERMITTED=1 JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0 $<$<PLATFORM_ID:Windows>:JUCE_ASIO=0>)
-    target_link_libraries(DeepFryVerify PRIVATE DeepFryCodec juce::juce_audio_utils
+    target_link_libraries(DeepFryVerify PRIVATE DeepFryCodec DeepFryFonts juce::juce_audio_utils
         juce::juce_recommended_config_flags juce::juce_recommended_warning_flags)
     add_test(NAME plugin_integration COMMAND DeepFryVerify)
 endif()

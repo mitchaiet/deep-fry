@@ -1,15 +1,17 @@
 DEEP FRY @VERSION@ FOR MACOS
 
+JPEG YOUR MUSIC
+
 Audio becomes 8 x 8 image tiles, gets JPEG compression artifacts, and becomes
-audio again. The live display shows the image before and after processing.
+audio again. The live display shows matching input/output images with left and
+right channels side by side by default. Save JPEG exports a real JPEG picture.
 
 REQUIREMENTS
 
 This binary release targets macOS @MIN_MACOS@ or later. All three formats include
 both Apple Silicon (arm64) and Intel (x86_64) code. The VST3 and Audio Unit
 require a compatible 64-bit audio host; a standalone application is included.
-Release verification was performed on macOS 26.2; older supported OS versions
-have not been tested on physical machines.
+See the release's validation notes for the tested operating systems and hosts.
 
 The bundles are locally ad-hoc signed, not Developer ID signed or notarized by
 Apple. macOS or your host may block downloaded plug-ins or the installer.
@@ -51,6 +53,9 @@ FIRST PLAY
 
 Start at a low monitoring volume. Lower JPEG Quality for more compression
 damage, increase Fry for stronger distortion, and use Mix to blend dry audio.
+Effect ON / OFF controls the sound. View, Palette, and Stereo / L / R change
+only the image. Save JPEG captures the selected image layout at 92% JPEG
+encoding quality; it does not change the sound or the JPEG Quality control.
 
 MANUAL INSTALLATION / REMOVAL
 
@@ -73,6 +78,7 @@ COMPLETE SOURCE AND CHECKSUMS
 
 Download Deep-Fry-@VERSION@-source.tar.gz from the same release for the complete
 corresponding source, including the pinned JUCE archive and build scripts.
+Bundled IBM Plex fonts and their SIL Open Font License are included as well.
 Extract it and run ./scripts/build-offline.sh to build without downloading JUCE.
 Xcode Command Line Tools and CMake 3.24 or newer must already be installed.
 GitHub's automatic source archives contain the project but not vendored JUCE.

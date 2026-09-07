@@ -29,6 +29,7 @@ applicable licenses.
 | zlib | [Upstream license](packaging/LICENSES/zlib-LICENSE.txt) |
 | HarfBuzz | [COPYING](packaging/LICENSES/HarfBuzz-COPYING.txt), [source notices](packaging/LICENSES/HarfBuzz-SOURCE-NOTICES.txt), including the additional MIT and ISC notices and Unicode emoji-data attribution |
 | SheenBidi | [Apache License 2.0](packaging/LICENSES/SheenBidi-LICENSE.txt), [source copyright and licensing notices](packaging/LICENSES/SheenBidi-SOURCE-NOTICES.txt) |
+| IBM Plex Sans and IBM Plex Mono | [SIL Open Font License 1.1 and IBM copyright notice](packaging/LICENSES/IBM-Plex-OFL.txt) |
 
 This software is based in part on the work of the Independent JPEG Group.
 
@@ -57,8 +58,18 @@ source archive also contains these unused modules and SDKs with their original
 upstream licenses intact; their presence in the source archive does not mean
 they are included in the plugin binaries.
 
-The interface looks up installed fonts by name. Impact and the fallback font
-files are not embedded or redistributed. JUCE's Karla font test data is guarded
+The interface embeds the unmodified IBM Plex Sans Regular, IBM Plex Sans
+SemiBold, and IBM Plex Mono Regular fonts under the SIL Open Font License 1.1.
+They come from the official IBM/plex repository at immutable commit
+[`bf260093582f04622aacc1e9f9ca604d7ccd0c42`](https://github.com/IBM/plex/tree/bf260093582f04622aacc1e9f9ca604d7ccd0c42).
+The upstream license identifies Copyright © 2017 IBM Corp. and the Reserved
+Font Name Plex. Each font retains its embedded upstream copyright notices.
+Exact upstream file paths and SHA-256 checksums accompany the fonts in
+`Assets/Fonts/README.md` in the corresponding-source archive. The fonts retain
+their OFL license within the AGPL-licensed application.
+
+Impact and its system-font fallbacks are looked up by name; their files are not
+embedded or redistributed. JUCE's Karla font test data is guarded
 by `JUCE_UNIT_TESTS` in `modules/juce_graphics/juce_graphics.cpp`; this project's
 plugin build does not enable that flag.
 

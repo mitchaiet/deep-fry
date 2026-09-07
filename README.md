@@ -4,20 +4,20 @@ A JPEG compression audio effect. Deep Fry turns short blocks of audio into grays
 
 ![Deep Fry processing audio: input and final-output mosaics, tile inspectors, and effect controls](docs/deep-fry-ui.png)
 
-**[Download the latest release](https://github.com/mitchaiet/deep-fry/releases/latest)** · [v0.2.1 release notes](https://github.com/mitchaiet/deep-fry/releases/tag/v0.2.1) · [Report an issue](https://github.com/mitchaiet/deep-fry/issues)
+**[Download the latest release](https://github.com/mitchaiet/deep-fry/releases/latest)** · [v0.3.0 release notes](https://github.com/mitchaiet/deep-fry/releases/tag/v0.3.0) · [Report an issue](https://github.com/mitchaiet/deep-fry/issues)
 
 ## Install
 
 | Download | Includes | Requirements |
 | --- | --- | --- |
-| [macOS universal ZIP](https://github.com/mitchaiet/deep-fry/releases/download/v0.2.1/Deep-Fry-0.2.1-macOS-universal.zip) | VST3, Audio Unit, standalone app | macOS 11+, Apple Silicon or Intel |
-| [Windows x64 ZIP (preview)](https://github.com/mitchaiet/deep-fry/releases/download/v0.2.1/Deep-Fry-0.2.1-Windows-x64.zip) | VST3, standalone EXE | Windows 10 version 1607+, 64-bit Intel or AMD |
+| [macOS universal ZIP](https://github.com/mitchaiet/deep-fry/releases/download/v0.3.0/Deep-Fry-0.3.0-macOS-universal.zip) | VST3, Audio Unit, standalone app | macOS 11+, Apple Silicon or Intel |
+| [Windows x64 ZIP (preview)](https://github.com/mitchaiet/deep-fry/releases/download/v0.3.0/Deep-Fry-0.3.0-Windows-x64.zip) | VST3, standalone EXE | Windows 10 version 1607+, 64-bit Intel or AMD |
 
 **macOS:** Extract the complete ZIP, save your session and close your DAW, then open `Install.command`. It installs for your user account and backs up existing versions. The binaries are ad-hoc signed and **not Apple-notarized**, so macOS may require explicit approval. [Mac installation, security prompts, and removal](docs/installation.md)
 
 **Windows:** Extract the complete ZIP, close your DAW, and copy the entire `VST3\Deep Fry.vst3` bundle into `C:\Program Files\Common Files\VST3`. Administrator permission may be needed. The standalone EXE runs from its extracted folder. [Windows installation and removal](docs/installation-windows.md)
 
-Reopen your DAW and rescan plug-ins after installing. The Mac build targets macOS 11+. The Windows download is a preview; native Windows DAW and GUI compatibility remain unverified. See [validation results](docs/validation.md) for version-specific checks and tested configurations. Linux binaries are not currently provided.
+Reopen your DAW and rescan plug-ins after installing. The Mac build targets macOS 11+. The Windows download is a preview; native Windows DAW and GUI compatibility remain unverified. See [validation results](docs/validation-v0.3.0.md) for version-specific checks and tested configurations. Linux binaries are not currently provided.
 
 ### Ableton Live 11
 
@@ -41,9 +41,9 @@ In the standalone app, open the audio settings to select your interface and inpu
 | **Effect ON / OFF** | ON applies the effect with the current Mix and Output settings. OFF returns the latency-aligned original at its original level. The selected state stays visible; the host automation parameter remains named Bypass. |
 | **View** | Chooses what the large image shows: **Output (what you hear)**, the default, or **JPEG only (before mix)**. This menu does not change audio. |
 | **Palette** | Applies **Colour** or **Grayscale** to both images. Colour is the default. This menu does not change audio. |
-| **L / R** | Chooses the displayed audio channel. R is disabled for captured mono audio. |
+| **Stereo / L / R** | Stereo, the default, shows left and right side by side. L or R expands one channel to the full image. Mono uses the full width and disables R. |
 | **Freeze Image / Resume Live** | Holds or resumes the image history; audio keeps processing. Clicking a tile also freezes it for inspection. |
-| **Save PNG** | Exports a paired input/result image with the selected channel, view, and palette. |
+| **Save JPEG** | Exports a real `.jpg` / `.jpeg` file with paired input/result images and the selected channels, view, and palette. |
 
 Four presets—**Clean-ish**, **Meme**, **Deep fried**, and **Lost cause**—set the five sound controls. Sound parameters support host automation and are saved with the DAW session. Mono and stereo are supported; stereo channels are processed independently.
 
@@ -55,7 +55,7 @@ Four presets—**Clean-ish**, **Meme**, **Deep fried**, and **Lost cause**—set
   → pixel reduction → 64 audio samples → mix / output
 ```
 
-Each tile uses JPEG's standard luminance quantization table and IJG quality scaling. The processor runs the lossy image operations in memory. It does not write `.jpg` files: the file container and entropy coding do not change decoded pixels. This is an audio-oriented implementation, rather than a byte-identical libjpeg round trip.
+Each tile uses JPEG's standard luminance quantization table and IJG quality scaling. The audio processor runs the lossy image operations in memory, without writing image files: the file container and entropy coding do not change decoded pixels. This is an audio-oriented implementation, rather than a byte-identical libjpeg round trip. **Save JPEG** separately encodes the displayed visualization as a real JPEG file.
 
 Samples map symmetrically around gray 128, with an exact zero level at every pixel depth. Digital silence stays silent. The processed path clips input beyond ±1 during image conversion; dry and bypass preserve finite input. Tile boundaries are intentionally audible, and extreme contrast or sharpening can alias.
 
@@ -63,20 +63,20 @@ Latency is **64 samples**: 1.45 ms at 44.1 kHz, or 1.33 ms at 48 kHz. The host r
 
 ## What the visualizer shows
 
-The visual output is a **rolling mosaic of the audio waveform packed into pixels**. Both panels show matching sampled blocks from the selected **left, right, or mono channel**. Each pixel represents one sample's signed amplitude: its position above or below the waveform's zero line. The picture has no frequency axis or musical-note color coding.
+The visual output is a **rolling mosaic of the audio waveform packed into pixels**. By default, both panels show matching sampled blocks from **left and right channels side by side**, with each channel labeled. You can also expand one channel to fill each panel. Each pixel represents one sample's signed amplitude: its position above or below the waveform's zero line. The picture has no frequency axis or musical-note color coding.
 
 ### From samples to pixels
 
 Every 64 consecutive audio samples form an **8×8 tile**. Samples 1–8 fill the first row from left to right, samples 9–16 fill the second, and so on. At 48 kHz, one tile contains about **1.33 ms** of audio. The codec processes each tile independently; the editor assembles selected tiles into the larger picture.
 
-**01 / INPUT** shows the input tile after clipping to ±1 and rounding into pixel values. The mapping is `128 + round(clamp(sample, -1, 1) × 127)`. A repeating waveform can form bands or stripes as it wraps between rows; irregular sample values produce a more irregular texture.
+**Input** shows the input tile after clipping to ±1 and rounding into pixel values. The mapping is `128 + round(clamp(sample, -1, 1) × 127)`. A repeating waveform can form bands or stripes as it wraps between rows; irregular sample values produce a more irregular texture.
 
 The **View** menu selects the signal shown in the large panel:
 
 - **Output (what you hear)**, the default, shows the actual samples sent back to the host **after Mix, Output gain, and the Effect ON/OFF selection**, including their smoothing. The processor pairs them with the input tile that produced them, accounting for its 64-sample latency. At 0% Mix, Output still changes the dry signal's level; Effect OFF returns the delayed original at its original level.
 - **JPEG only (before mix)** shows the decoded samples after Fry's contrast/sharpening, JPEG quantization and reconstruction, and Pixel Depth reduction, before Mix, Output, and the Effect ON/OFF selection. This view can remain heavily distorted while the audible output is dry or the effect is OFF. Choosing it does not change what you hear.
 
-Inspectors label these choices **OUTPUT** and **JPEG ONLY**; PNG exports also include the explanatory text. The footer reminder, **View + Palette: Image Only**, makes clear that these choices do not change the sound.
+Inspectors label these choices **Output tile** and **JPEG tile**; JPEG exports also identify the selected view. The footer reminder, **View + Palette: Image Only**, makes clear that these choices do not change the sound.
 
 The final-output capture preserves the actual floating-point samples, including values beyond ±1. The picture limits them to ±1 for display, using `128 + clamp(sample, -1, 1) × 127`. The selected tile's output peak can reveal levels above that display range. INPUT has already been rounded to integer pixels, so its image is an 8-bit representation of the original waveform.
 
@@ -92,21 +92,23 @@ The **Palette** menu switches both panels between **Colour** and **Grayscale** s
 
 Between those points, negative values run through purple and magenta; positive values run through orange and yellow. The red-orange center is the palette's zero point, not a clipping warning. The amplitude legend below the inspectors marks −1, 0, and +1. Changing the palette changes only the display.
 
-Use **L / R** to inspect either stereo channel. Mono audio uses L and disables R. Both channels are captured together, so changing the channel or view also works on frozen history.
+Use **Stereo** to see both channels together, or **L / R** to inspect one channel at full width. Mono audio fills the image and disables R. Both stereo channels are captured together, so changing the channel display or view also works on frozen history. Stereo audio processing is unchanged; the default display now makes both channels visible.
 
 ### How to read and inspect the mosaic
 
-Each panel contains up to **128 tiles**, arranged **16 across by 8 down**, making a **128×64-pixel image** enlarged in the UI. Tiles fill from top-left to bottom-right. Once the history is full, the oldest tile appears at top-left and the newest at bottom-right.
+In **Stereo**, each panel contains two separate channel lanes. Each lane shows the latest **64 captured tiles** in an **8×8 tile grid**: a 64×64-pixel image per channel, with L on the left and R on the right. In **L**, **R**, or mono, one channel fills the panel with up to **128 tiles** arranged **16 across by 8 down**. Each mode produces a 128×64-pixel mosaic enlarged in the UI. Within each lane, tiles run from oldest at top-left to newest at bottom-right once it is full; partly filled lanes grow in that same order.
 
-The processor sends roughly 60 selected tiles per second to the display, and the editor redraws at about 30 frames per second. At 48 kHz, it captures one tile every 12 processed tiles: **62.5 captures per second**, representing about two seconds of sampled history. Audio between these captures is still processed normally. The mosaic contains snapshots spaced through recent audio, rather than a continuous recording of every sample. A frame is published after its corresponding final output has completed; this adds no audio latency.
+The processor sends roughly 60 selected tiles per second per channel to the display, and the editor redraws at about 30 frames per second. At 48 kHz, it captures one tile every 12 processed tiles: **62.5 captures per second**, representing about **one second per channel in Stereo** or **two seconds in a single-channel view**. Audio between these captures is still processed normally. The mosaic contains snapshots spaced through recent audio, rather than a continuous recording of every sample. A frame is published after its corresponding final output has completed; this adds no audio latency.
 
-**Click a tile in either panel** to freeze the history and outline the matching tile in both images. Two enlarged 8×8 inspectors show its input and selected result. The readout gives its position in the displayed history, its age relative to the newest captured tile, and its **final output peak in dBFS**. That peak always measures final output, even when viewing JPEG only, and turns red above 0 dBFS. While live, the inspectors follow the latest tile.
+**Click a tile in either panel** to freeze the history and outline the matching tile in both images. In Stereo, clicking selects the tile in its L or R lane. Two enlarged 8×8 inspectors show that channel's input and selected result. The readout identifies the channel and tile, its age relative to the newest captured tile, and its **final output peak in dBFS**. That peak always measures final output, even when viewing JPEG only, and turns red above 0 dBFS. While live, the inspectors follow the latest tile of the inspected channel.
 
 **FREEZE IMAGE** holds the captured history while audio and level meters continue. View, palette, and channel controls can still redraw that held data. **RESUME LIVE** resumes adding new captures and clears the tile selection; audio arriving while frozen is not replayed into the display. The live history resets when processing is prepared again, incoming capture positions restart, or the sample rate or channel count changes. If that happens while frozen, the held picture stays visible until new captures arrive after Resume Live.
 
 ### Save a visual snapshot
 
-**SAVE PNG** exports a **1080×352** image containing the input and selected result at equal size, with channel, view, palette, tile count, and an amplitude legend. It captures the picture when the button is pressed, so audio and the live display can continue while you choose a filename. It is available after the first captured tile and also works while frozen. The export contains the image pair rather than audio or animation; it does not change the sound or Freeze setting.
+**SAVE JPEG** exports a genuine **1080×352 JPEG** (`.jpg` or `.jpeg`) containing the input and selected result at equal size, with the current Stereo/L/R selection, view, palette, tile count, and an amplitude legend. Stereo exports retain the separate labeled L/R lanes. The file uses **92% JPEG encoding quality**, independently of the **JPEG Quality** sound control: export compression affects the saved picture only.
+
+The export captures the picture when the button is pressed, so audio and the live display can continue while you choose a filename. It is available after the first captured tile and also works while frozen. The file contains the image pair, without audio or animation, and does not change the sound or Freeze setting. [View an exported JPEG](docs/deep-fry-visualization.jpg).
 
 ### Controls, meters, and silence
 
@@ -139,7 +141,7 @@ ctest --test-dir build -C Release --output-on-failure
 
 Products are in `build/DeepFry_artefacts/Release/`. Follow the platform installation guide to copy the VST3 into your host's plug-in folder. On macOS, `./scripts/install-macos.sh` copies the VST3 and Audio Unit for your user account; it does not install the standalone app or create the release installer's backups.
 
-For an **offline build**, download `Deep-Fry-0.2.1-source.tar.gz` from the [release](https://github.com/mitchaiet/deep-fry/releases/tag/v0.2.1). This shared source archive includes Deep Fry, the pinned JUCE source archive, license notices, and a source manifest. You still need your platform's compiler/SDK and CMake. On macOS, extract it and run `./scripts/build-offline.sh` from the extracted directory. See the [Windows offline build instructions](docs/installation-windows.md#offline-source-build) for Windows. GitHub's automatic “Source code” archives do not contain the vendored JUCE archive.
+For an **offline build**, download `Deep-Fry-0.3.0-source.tar.gz` from the [release](https://github.com/mitchaiet/deep-fry/releases/tag/v0.3.0). This shared source archive includes Deep Fry, the pinned JUCE source archive, license notices, and a source manifest. You still need your platform's compiler/SDK and CMake. On macOS, extract it and run `./scripts/build-offline.sh` from the extracted directory. See the [Windows offline build instructions](docs/installation-windows.md#offline-source-build) for Windows. GitHub's automatic “Source code” archives do not contain the vendored JUCE archive.
 
 To build and test only the dependency-free codec:
 
@@ -149,7 +151,7 @@ cmake --build build-codec --config Release
 ctest --test-dir build-codec -C Release --output-on-failure
 ```
 
-Integration tests cover processing timing, channel isolation, host buffer sizes, automation, saved state, and the live display. `DeepFryVerify --artifacts <directory>` also generates synthetic before/after audio and native editor screenshots. See [validation results and reproduction commands](docs/validation.md) for tested configurations and remaining limitations.
+Integration tests cover processing timing, channel isolation, host buffer sizes, automation, saved state, and the live display. `DeepFryVerify --artifacts <directory>` also generates synthetic before/after audio and native editor screenshots. See [validation results and reproduction commands](docs/validation-v0.3.0.md) for tested configurations and remaining limitations.
 
 ## Package a macOS release
 
@@ -164,8 +166,8 @@ curl --fail --location \
   --output .context/juce-8.0.13.tar.gz
 ./scripts/package-macos.sh --juce-archive .context/juce-8.0.13.tar.gz
 cd dist
-shasum -a 256 -c Deep-Fry-0.2.1-macOS-universal.zip.sha256
-shasum -a 256 -c Deep-Fry-0.2.1-source.tar.gz.sha256
+shasum -a 256 -c Deep-Fry-0.3.0-macOS-universal.zip.sha256
+shasum -a 256 -c Deep-Fry-0.3.0-source.tar.gz.sha256
 ```
 
 The packager verifies the JUCE archive's SHA-256 against the CMake pin and checks bundle versions, both architectures, the minimum macOS version, and code signatures. It writes a binary ZIP, complete source archive, and SHA-256 sidecars under `dist/`. The ZIP includes all three formats, installer, license notices, and a release manifest; the source archive includes vendored JUCE and an offline build script. It does not install the bundles. [Installer verification instructions](docs/installation.md#isolated-installer-check) use a separate directory.
@@ -193,4 +195,4 @@ toolchain, packaging command, and validation procedure.
 
 Deep Fry is licensed under the **GNU Affero General Public License v3.0 only**. See [LICENSE](LICENSE) and [COPYRIGHT](COPYRIGHT).
 
-Dependency licenses and source provenance are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Deep Fry uses [JUCE](https://github.com/juce-framework/JUCE/tree/8.0.13); the JPEG quality scaling reference is [libjpeg-turbo's parameter implementation](https://github.com/libjpeg-turbo/libjpeg-turbo/blob/main/src/jcparam.c). Impact is used when available as a system font and is not bundled.
+Dependency licenses and source provenance are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Deep Fry uses [JUCE](https://github.com/juce-framework/JUCE/tree/8.0.13); the JPEG quality scaling reference is [libjpeg-turbo's parameter implementation](https://github.com/libjpeg-turbo/libjpeg-turbo/blob/main/src/jcparam.c). The interface bundles IBM Plex Sans Regular/SemiBold and IBM Plex Mono Regular under the [SIL Open Font License 1.1](Assets/Fonts/LICENSE.txt); see [font provenance](Assets/Fonts/README.md). Impact is used when available as a system font and is not bundled.

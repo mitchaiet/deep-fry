@@ -1,15 +1,16 @@
 DEEP FRY @VERSION@ FOR WINDOWS X64
 
+JPEG YOUR MUSIC
+
 Audio becomes 8 x 8 image tiles, gets JPEG compression artifacts, and becomes
-audio again. The live display shows the image before and after processing.
+audio again. The live display shows matching input/output images with left and
+right channels side by side by default. Save JPEG exports a real JPEG picture.
 
 VALIDATION STATUS
 
-This Windows preview passed codec, plugin integration, and pluginval audio
-checks under Wine 11.0. GUI checks did not complete: pluginval's editor test
-timed out, and separate rendering hit a Wine DirectWrite crash. Native Windows
-GUI, DAW sessions, and physical audio hardware have not been independently
-tested. See the release's validation notes for the full results.
+This Windows build remains a preview. Native Windows GUI, DAW sessions, and
+physical audio hardware have not been independently tested. See the release's
+validation notes for version-specific build and test results, including Wine.
 
 REQUIREMENTS
 
@@ -56,6 +57,9 @@ FIRST PLAY
 
 Start at a low monitoring volume. Lower JPEG Quality for more compression
 damage, increase Fry for stronger distortion, and use Mix to blend dry audio.
+Effect ON / OFF controls the sound. View, Palette, and Stereo / L / R change
+only the image. Save JPEG captures the selected image layout at 92% JPEG
+encoding quality; it does not change the sound or the JPEG Quality control.
 
 PACKAGE CONTENTS AND LICENSES
 
@@ -71,6 +75,7 @@ COMPLETE SOURCE AND CHECKSUMS
 
 Download Deep-Fry-@VERSION@-source.tar.gz from the same release for the complete
 corresponding source, including the pinned JUCE archive and build scripts.
+Bundled IBM Plex fonts and their SIL Open Font License are included as well.
 See its README for Windows build instructions using Visual Studio and CMake.
 GitHub's automatic source archives do not contain the vendored JUCE archive.
 

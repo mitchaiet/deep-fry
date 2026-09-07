@@ -1,5 +1,7 @@
 # Release validation
 
+See [0.3.0 validation](validation-v0.3.0.md) for the current release. Sections below record earlier versions.
+
 ## 0.2.1 — 2026-09-06
 
 This release replaces the inverted Effect On/Bypassed button with explicit
@@ -21,8 +23,7 @@ algorithm, parameter IDs, presets, and latency are unchanged.
 | Windows pluginval 1.0.4, strictness 5, GUI tests skipped | Passed under Wine 11 |
 
 Thirteen native PNGs were inspected, including the open menus, effect OFF,
-compact Grayscale, help, and paired export. The [README screenshot](deep-fry-ui.png)
-shows this version. Evidence is in `.context/clarity-021-preview/`,
+compact Grayscale, help, and paired export. The [README screenshot](deep-fry-ui.png) is updated for the current release. Evidence is in `.context/clarity-021-preview/`,
 `.context/artifacts-clarity-021.log`, `.context/pluginval-021-*.log`, and
 `.context/windows-cross/*021*`. The OS Save dialog was not automated.
 
