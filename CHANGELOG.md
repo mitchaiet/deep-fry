@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.3.1 — 2026-09-07
+
+Restore the meme-style controls throughout the interface.
+
+- Bring back uppercase Impact button text and section headings.
+- Restore thick black borders, offset ink shadows, bright paper hover states,
+  and a visible pressed offset on buttons.
+- Give sliders chunky tracks and handles, with bordered editable value fields.
+- Keep small captions and menu text in readable IBM Plex Sans, with IBM Plex
+  Mono for numeric values.
+
+The **JPEG YOUR MUSIC** header, default Stereo view, L/R tile inspection, and
+real JPEG export from 0.3.0 remain available. This update changes the interface;
+audio processing, sound parameters, presets, and saved-state format are
+unchanged. See [0.3.1 validation](docs/validation-v0.3.1.md) for version-specific
+checks and platform limitations.
+
 ## 0.3.0 — 2026-09-06
 
 See both stereo channels and save their visual output as a real JPEG.

@@ -59,8 +59,8 @@ void label (juce::Graphics& g, const juce::String& text, juce::Rectangle<float> 
             bool headline = false)
 {
     g.setColour (colour);
-    g.setFont (sans (size, headline));
-    g.drawFittedText (text, bounds.toNearestInt(), alignment, 1);
+    g.setFont (headline ? impact (size) : sans (size));
+    g.drawFittedText (headline ? text.toUpperCase() : text, bounds.toNearestInt(), alignment, 1);
 }
 
 juce::Path memePath (const juce::String& text, juce::Rectangle<float> bounds, float size,
@@ -196,24 +196,27 @@ public:
         const auto left = static_cast<float> (x);
         const auto right = static_cast<float> (x + width);
         const auto position = juce::jlimit (left, right, sliderPosition);
-        const juce::Rectangle<float> track (left, centreY - 2.0f, static_cast<float> (width), 4.0f);
-        g.setColour (muted.withAlpha (0.22f));
+        const juce::Rectangle<float> track (left, centreY - 6.0f, static_cast<float> (width), 12.0f);
+        g.setColour (white);
         g.fillRect (track);
         g.setColour (slider.findColour (juce::Slider::trackColourId));
         g.fillRect (track.withWidth (position - left));
         g.setColour (ink);
+        g.drawRect (track, 1.5f);
         for (int tick = 0; tick <= 8; ++tick)
         {
             const auto tickX = left + static_cast<float> (width * tick) / 8.0f;
-            g.setColour (muted.withAlpha (0.55f));
-            g.drawLine (tickX, centreY + 10.0f, tickX, centreY + (tick % 4 == 0 ? 14.0f : 12.0f), 1.0f);
+            g.drawLine (tickX, centreY + 10.0f, tickX, centreY + (tick % 4 == 0 ? 16.0f : 13.0f), 1.0f);
         }
-        const juce::Rectangle<float> thumb (position - 5.0f, centreY - 11.0f, 10.0f, 22.0f);
-        g.setColour (slider.isMouseButtonDown() ? yellow : white);
+        const juce::Rectangle<float> thumb (position - 7.0f, centreY - 14.0f, 14.0f, 28.0f);
+        g.setColour (ink);
+        g.fillRect (thumb.translated (2, 2));
+        g.setColour (slider.isMouseButtonDown() ? yellow : paper);
         g.fillRect (thumb);
         g.setColour (ink);
-        g.drawRect (thumb, 1.0f);
-        g.drawLine (position, centreY - 5.0f, position, centreY + 5.0f, 1.0f);
+        g.drawRect (thumb, 2.0f);
+        g.drawLine (position - 2.0f, centreY - 6.0f, position - 2.0f, centreY + 6.0f, 1.0f);
+        g.drawLine (position + 2.0f, centreY - 6.0f, position + 2.0f, centreY + 6.0f, 1.0f);
         if (slider.hasKeyboardFocus (true))
         {
             g.setColour (blue);
@@ -226,7 +229,7 @@ public:
         auto* box = juce::LookAndFeel_V4::createSliderTextBox (slider);
         box->setFont (mono (16.0f));
         box->setJustificationType (juce::Justification::centred);
-        box->setColour (juce::Label::outlineColourId, juce::Colours::transparentBlack);
+        box->setColour (juce::Label::outlineColourId, ink);
         box->setColour (juce::Label::outlineWhenEditingColourId, blue);
         box->setColour (juce::TextEditor::textColourId, ink);
         box->setColour (juce::TextEditor::backgroundColourId, white);
@@ -236,21 +239,31 @@ public:
     void drawButtonBackground (juce::Graphics& g, juce::Button& button,
                                const juce::Colour&, bool highlighted, bool down) override
     {
-        const auto bounds = button.getLocalBounds().toFloat().reduced (0.5f);
-        g.setColour (button.getToggleState() ? button.findColour (juce::TextButton::buttonOnColourId)
-                                             : down ? paper.darker (0.08f) : highlighted ? white : paper);
+        auto bounds = button.getLocalBounds().toFloat().reduced (1.5f, 1.5f).withTrimmedRight (3).withTrimmedBottom (3);
+        g.setColour (ink);
+        g.fillRect (bounds.translated (3, 3));
+        if (down)
+            bounds = bounds.translated (2, 2);
+        highlighted = highlighted && button.isEnabled();
+        auto fill = button.getToggleState() ? button.findColour (juce::TextButton::buttonOnColourId)
+                                           : highlighted ? white : paper;
+        if (highlighted && button.getToggleState())
+            fill = fill.brighter (0.12f);
+        g.setColour (fill);
         g.fillRect (bounds);
-        g.setColour (button.hasKeyboardFocus (true) ? blue : muted.withAlpha (button.getToggleState() ? 0.8f : 0.4f));
-        g.drawRect (bounds, button.hasKeyboardFocus (true) ? 2.0f : 1.0f);
+        g.setColour (button.hasKeyboardFocus (true) ? blue : ink);
+        g.drawRect (bounds, highlighted ? 3.0f : 2.0f);
     }
 
-    void drawButtonText (juce::Graphics& g, juce::TextButton& button, bool, bool) override
+    void drawButtonText (juce::Graphics& g, juce::TextButton& button, bool, bool down) override
     {
-        const auto bounds = button.getLocalBounds().toFloat().reduced (6, 2);
-        const auto textColour = button.getToggleState() ? button.findColour (juce::TextButton::textColourOnId) : ink;
-        label (g, button.getButtonText(), bounds,
-               juce::jmin (15.0f, static_cast<float> (button.getHeight()) * 0.45f),
-               textColour.withMultipliedAlpha (button.isEnabled() ? 1.0f : 0.35f),
+        auto bounds = button.getLocalBounds().toFloat().reduced (8, 3).translated (-1.5f, -1.5f);
+        if (down)
+            bounds = bounds.translated (2, 2);
+        label (g, button.getButtonText().toUpperCase(), bounds,
+               button.getHeight() >= 32 ? 19.0f : 16.0f,
+               (button.getToggleState() ? button.findColour (juce::TextButton::textColourOnId) : ink)
+                   .withMultipliedAlpha (button.isEnabled() ? 1.0f : 0.35f),
                juce::Justification::centred, true);
     }
 
@@ -261,8 +274,8 @@ public:
                                               static_cast<float> (height - 2));
         g.setColour (white);
         g.fillRect (bounds);
-        g.setColour (box.hasKeyboardFocus (true) ? blue : muted.withAlpha (0.4f));
-        g.drawRect (bounds, box.hasKeyboardFocus (true) ? 2.0f : 1.0f);
+        g.setColour (box.hasKeyboardFocus (true) ? blue : ink);
+        g.drawRect (bounds, box.isMouseOver (true) || box.hasKeyboardFocus (true) ? 3.0f : 2.0f);
         const auto arrowX = static_cast<float> (width - 19);
         const auto arrowY = static_cast<float> (height) * 0.5f;
         juce::Path arrow;
@@ -539,7 +552,7 @@ void DeepFryAudioProcessorEditor::drawImagePanel (juce::Graphics& g,
                                                  juce::Rectangle<float> bounds, bool processed)
 {
     g.setColour (ink);
-    g.fillRect (bounds.expanded (1));
+    g.fillRect (bounds.expanded (3).translated (4, 4));
     if (tileCount > 0)
     {
         g.setImageResamplingQuality (juce::Graphics::lowResamplingQuality);
@@ -560,7 +573,7 @@ void DeepFryAudioProcessorEditor::drawImagePanel (juce::Graphics& g,
             }
     }
     g.setColour (ink);
-    g.drawRect (bounds.expanded (0.5f), 1);
+    g.drawRect (bounds.expanded (1.5f), 3);
     if (stereoViewActive())
     {
         g.setColour (paper);
@@ -614,10 +627,10 @@ void DeepFryAudioProcessorEditor::paint (juce::Graphics& g)
         g.drawFittedText ("JPEG YOUR MUSIC", stamp.reduced (12, 0).toNearestInt(), juce::Justification::centred, 1);
     }
 
-    label (g, "Input", { 24, 156, 96, 24 }, 16, ink, juce::Justification::centredLeft, true);
+    label (g, "Input", { 24, 156, 96, 24 }, 20, ink, juce::Justification::centredLeft, true);
     label (g, "View", { 360, 150, 44, 33 }, 13);
     label (g, "Palette", { 664, 150, 63, 33 }, 13);
-    label (g, "Effect", { 24, 479, 57, 44 }, 15, ink, juce::Justification::centredLeft, true);
+    label (g, "Effect", { 24, 479, 57, 44 }, 20, ink, juce::Justification::centredLeft, true);
     const auto bypassed = effectOffButton.getToggleState();
     const auto hasSignal = inputMeter > 0.0001f && ticksSinceFrame < 15;
     const juce::String status = saveStatusTicks > 0 ? saveStatus : frozen ? "FROZEN" : bypassed ? "EFFECT OFF"
@@ -635,8 +648,8 @@ void DeepFryAudioProcessorEditor::paint (juce::Graphics& g)
     {
         label (g, "L / Left", { 24, 343, 152, 22 }, 14, muted);
         label (g, "R / Right", { 176, 343, 152, 22 }, 14, muted);
-        label (g, "L / Left", { 360, 555, 368, 17 }, 13, muted);
-        label (g, "R / Right", { 728, 555, 368, 17 }, 13, muted);
+        label (g, "L / Left", { 360, 556, 368, 16 }, 13, muted);
+        label (g, "R / Right", { 728, 556, 368, 16 }, 13, muted);
     }
     else
         label (g, channelText, { 24, 343, 304, 22 }, 14, muted);
@@ -649,8 +662,8 @@ void DeepFryAudioProcessorEditor::paint (juce::Graphics& g)
     // A single ruled strip groups the five audio controls.
     g.setColour (paper);
     g.fillRect (24, 572, 1072, 132);
-    g.setColour (muted.withAlpha (0.4f));
-    g.drawRect (24, 572, 1072, 132, 1);
+    g.setColour (ink);
+    g.drawRect (24, 572, 1072, 132, 2);
     const std::array<const char*, 5> names { "JPEG quality", "Fry", "Pixel depth", "Mix", "Output" };
     const std::array<const char*, 5> hints { "Image detail", "Contrast + sharpen", "Pixel resolution", "Dry / wet", "Output gain" };
     for (size_t index = 0; index < names.size(); ++index)
@@ -659,16 +672,16 @@ void DeepFryAudioProcessorEditor::paint (juce::Graphics& g)
         const auto width = cellEdges[index + 1] - x;
         if (index > 0)
         {
-            g.setColour (muted.withAlpha (0.25f));
-            g.fillRect (x, 572.0f, 1.0f, 132.0f);
+            g.setColour (ink);
+            g.fillRect (x, 572.0f, 2.0f, 132.0f);
         }
-        label (g, names[index], { x + 16, 577, width - 32, 29 }, 19, ink,
+        label (g, names[index], { x + 12, 577, width - 24, 29 }, 25, ink,
                juce::Justification::centredLeft, true);
         label (g, hints[index], { x + 8, 684, width - 16, 15 }, 11.5f, muted,
                juce::Justification::centred);
     }
 
-    label (g, "Presets", { 24, 720, 106, 37 }, 16, ink, juce::Justification::centredLeft, true);
+    label (g, "Presets", { 24, 720, 106, 37 }, 24, ink, juce::Justification::centredLeft, true);
     drawMeter (g, { 818, 722, 278, 17 }, inputMeter, "IN");
     drawMeter (g, { 818, 743, 278, 17 }, outputMeter, "OUT");
 
@@ -686,11 +699,12 @@ void DeepFryAudioProcessorEditor::paint (juce::Graphics& g)
     {
         const juce::Rectangle<float> sheet (373, 198, 710, 343);
         g.setColour (ink);
+        g.fillRect (sheet.translated (5, 5));
         g.setColour (paper);
         g.fillRect (sheet);
         g.setColour (ink);
-        g.drawRect (sheet, 1);
-        label (g, "How it works", { 394, 210, 668, 48 }, 30, ink,
+        g.drawRect (sheet, 3);
+        label (g, "How it works", { 394, 210, 668, 48 }, 39, ink,
                juce::Justification::centredLeft, true);
         const std::array<const char*, 3> steps {
             "01 / 64 samples fill an 8x8 tile, one row at a time.",
@@ -838,7 +852,7 @@ void DeepFryAudioProcessorEditor::drawTileInspector (juce::Graphics& g)
     }
     const auto channelName = frame != nullptr && frame->channelCount == 1 ? "Mono" : selectedChannel == 0 ? "Left" : "Right";
     label (g, juce::String (channelName) + (frozen ? " / Selected" : " / Latest"), { 198, 370, 130, 19 }, 14, ink,
-           juce::Justification::centredLeft, true);
+           juce::Justification::centredLeft);
     label (g, frame != nullptr ? "Tile " + juce::String (static_cast<int> (index + 1)) + " of " + juce::String (static_cast<int> (tileCount)) : "No tile yet",
            { 198, 390, 130, 20 }, 14);
     const auto* latest = tileCount > 0 ? historyFrame (tileCount - 1) : nullptr;

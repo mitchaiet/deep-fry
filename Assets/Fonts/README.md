@@ -3,13 +3,16 @@
 Deep Fry embeds unchanged static TrueType files from the official
 [IBM Plex repository](https://github.com/IBM/plex), pinned to commit
 [`bf260093582f04622aacc1e9f9ca604d7ccd0c42`](https://github.com/IBM/plex/tree/bf260093582f04622aacc1e9f9ca604d7ccd0c42).
-The fonts load from the plugin binary so interface typography does not depend on
-the fonts installed on the user's computer. No font installation is required.
+The fonts load from the plugin binary so supporting text and numeric values do
+not depend on locally installed Plex fonts. Impact supplies the wordmark,
+uppercase button text, and section headings; it uses a system font with the
+fallbacks described in the [visual style notes](../../docs/visual-style.md).
+No font installation is required.
 
 | File | Interface use | Bytes | SHA-256 |
 | --- | --- | ---: | --- |
-| `IBMPlexSans-Regular.ttf` | Body text and descriptions | 200500 | `975dcda37d80f038dcd143c22e33ca2d97a0cc5a929aace1c749153b0fe1afa5` |
-| `IBMPlexSans-SemiBold.ttf` | Controls and labels | 202632 | `a20caf8286023a6a7a85e40b1d2a4ae9fc3e3b1f9eda8f4c542dd4986af67bb1` |
+| `IBMPlexSans-Regular.ttf` | Small captions, descriptions, and menu text | 200500 | `975dcda37d80f038dcd143c22e33ca2d97a0cc5a929aace1c749153b0fe1afa5` |
+| `IBMPlexSans-SemiBold.ttf` | Semibold companion for supporting text | 202632 | `a20caf8286023a6a7a85e40b1d2a4ae9fc3e3b1f9eda8f4c542dd4986af67bb1` |
 | `IBMPlexMono-Regular.ttf` | Numeric values and technical readouts | 173052 | `7c6fbddca4b700be918f5f6183d9bd4464fa427fe435f0b480d77fe2bb8c5a43` |
 | `LICENSE.txt` | Unchanged upstream license | 4456 | `7e6b2818edbd8f6a01ae80641cc8f16a51080d08fb4e532be3a0b6f74adb07da` |
 

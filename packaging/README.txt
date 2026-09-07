@@ -5,6 +5,9 @@ JPEG YOUR MUSIC
 Audio becomes 8 x 8 image tiles, gets JPEG compression artifacts, and becomes
 audio again. The live display shows matching input/output images with left and
 right channels side by side by default. Save JPEG exports a real JPEG picture.
+Impact buttons and headings, thick ink borders, offset shadows, and responsive
+hover/press states carry the meme style through the controls. Small captions
+and numeric values use bundled IBM Plex fonts.
 
 REQUIREMENTS
 

@@ -4,20 +4,20 @@ A JPEG compression audio effect. Deep Fry turns short blocks of audio into grays
 
 ![Deep Fry processing audio: input and final-output mosaics, tile inspectors, and effect controls](docs/deep-fry-ui.png)
 
-**[Download the latest release](https://github.com/mitchaiet/deep-fry/releases/latest)** · [v0.3.0 release notes](https://github.com/mitchaiet/deep-fry/releases/tag/v0.3.0) · [Report an issue](https://github.com/mitchaiet/deep-fry/issues)
+**[Download the latest release](https://github.com/mitchaiet/deep-fry/releases/latest)** · [v0.3.1 release notes](https://github.com/mitchaiet/deep-fry/releases/tag/v0.3.1) · [Report an issue](https://github.com/mitchaiet/deep-fry/issues)
 
 ## Install
 
 | Download | Includes | Requirements |
 | --- | --- | --- |
-| [macOS universal ZIP](https://github.com/mitchaiet/deep-fry/releases/download/v0.3.0/Deep-Fry-0.3.0-macOS-universal.zip) | VST3, Audio Unit, standalone app | macOS 11+, Apple Silicon or Intel |
-| [Windows x64 ZIP (preview)](https://github.com/mitchaiet/deep-fry/releases/download/v0.3.0/Deep-Fry-0.3.0-Windows-x64.zip) | VST3, standalone EXE | Windows 10 version 1607+, 64-bit Intel or AMD |
+| [macOS universal ZIP](https://github.com/mitchaiet/deep-fry/releases/download/v0.3.1/Deep-Fry-0.3.1-macOS-universal.zip) | VST3, Audio Unit, standalone app | macOS 11+, Apple Silicon or Intel |
+| [Windows x64 ZIP (preview)](https://github.com/mitchaiet/deep-fry/releases/download/v0.3.1/Deep-Fry-0.3.1-Windows-x64.zip) | VST3, standalone EXE | Windows 10 version 1607+, 64-bit Intel or AMD |
 
 **macOS:** Extract the complete ZIP, save your session and close your DAW, then open `Install.command`. It installs for your user account and backs up existing versions. The binaries are ad-hoc signed and **not Apple-notarized**, so macOS may require explicit approval. [Mac installation, security prompts, and removal](docs/installation.md)
 
 **Windows:** Extract the complete ZIP, close your DAW, and copy the entire `VST3\Deep Fry.vst3` bundle into `C:\Program Files\Common Files\VST3`. Administrator permission may be needed. The standalone EXE runs from its extracted folder. [Windows installation and removal](docs/installation-windows.md)
 
-Reopen your DAW and rescan plug-ins after installing. The Mac build targets macOS 11+. The Windows download is a preview; native Windows DAW and GUI compatibility remain unverified. See [validation results](docs/validation-v0.3.0.md) for version-specific checks and tested configurations. Linux binaries are not currently provided.
+Reopen your DAW and rescan plug-ins after installing. The Mac build targets macOS 11+. The Windows download is a preview; native Windows DAW and GUI compatibility remain unverified. See [validation results](docs/validation-v0.3.1.md) for version-specific checks and tested configurations. Linux binaries are not currently provided.
 
 ### Ableton Live 11
 
@@ -118,7 +118,7 @@ The export captures the picture when the button is pressed, so audio and the liv
 - **DCT DETAIL** is the percentage of the inspected channel/tile's 64 quantized DCT coefficients that are nonzero, including its average-value coefficient. It follows the latest tile while live and the selected tile while frozen. It is measured before Pixel Depth reduction and varies with both the signal and compression settings; it does not measure JPEG file size or perceptual fidelity.
 - **Silence** gradually fills both images with mid-gray in Grayscale mode or red-orange in Colour mode. Before any captured tile arrives, the editor shows a checkerboard. If the host stops sending audio blocks, the last picture stays visible; the playback-status label follows incoming frame activity.
 
-These visual controls do not change the sound parameters and reset when the editor is reopened. The surrounding paper grain, stamps, and registration marks are static interface artwork. See the [visual style notes](docs/visual-style.md).
+These visual controls do not change the sound parameters and reset when the editor is reopened. Impact button text and headings, thick black borders, offset shadows, and hover/press feedback give the controls their meme style. Small captions and numeric values stay readable in bundled IBM Plex fonts. The surrounding paper grain, stamps, and registration marks are static interface artwork. See the [visual style notes](docs/visual-style.md).
 
 ## Build from source
 
@@ -141,7 +141,7 @@ ctest --test-dir build -C Release --output-on-failure
 
 Products are in `build/DeepFry_artefacts/Release/`. Follow the platform installation guide to copy the VST3 into your host's plug-in folder. On macOS, `./scripts/install-macos.sh` copies the VST3 and Audio Unit for your user account; it does not install the standalone app or create the release installer's backups.
 
-For an **offline build**, download `Deep-Fry-0.3.0-source.tar.gz` from the [release](https://github.com/mitchaiet/deep-fry/releases/tag/v0.3.0). This shared source archive includes Deep Fry, the pinned JUCE source archive, license notices, and a source manifest. You still need your platform's compiler/SDK and CMake. On macOS, extract it and run `./scripts/build-offline.sh` from the extracted directory. See the [Windows offline build instructions](docs/installation-windows.md#offline-source-build) for Windows. GitHub's automatic “Source code” archives do not contain the vendored JUCE archive.
+For an **offline build**, download `Deep-Fry-0.3.1-source.tar.gz` from the [release](https://github.com/mitchaiet/deep-fry/releases/tag/v0.3.1). This shared source archive includes Deep Fry, the pinned JUCE source archive, license notices, and a source manifest. You still need your platform's compiler/SDK and CMake. On macOS, extract it and run `./scripts/build-offline.sh` from the extracted directory. See the [Windows offline build instructions](docs/installation-windows.md#offline-source-build) for Windows. GitHub's automatic “Source code” archives do not contain the vendored JUCE archive.
 
 To build and test only the dependency-free codec:
 
@@ -151,7 +151,7 @@ cmake --build build-codec --config Release
 ctest --test-dir build-codec -C Release --output-on-failure
 ```
 
-Integration tests cover processing timing, channel isolation, host buffer sizes, automation, saved state, and the live display. `DeepFryVerify --artifacts <directory>` also generates synthetic before/after audio and native editor screenshots. See [validation results and reproduction commands](docs/validation-v0.3.0.md) for tested configurations and remaining limitations.
+Integration tests cover processing timing, channel isolation, host buffer sizes, automation, saved state, and the live display. `DeepFryVerify --artifacts <directory>` also generates synthetic before/after audio and native editor screenshots. See [validation results and reproduction commands](docs/validation-v0.3.1.md) for tested configurations and remaining limitations.
 
 ## Package a macOS release
 
@@ -166,8 +166,8 @@ curl --fail --location \
   --output .context/juce-8.0.13.tar.gz
 ./scripts/package-macos.sh --juce-archive .context/juce-8.0.13.tar.gz
 cd dist
-shasum -a 256 -c Deep-Fry-0.3.0-macOS-universal.zip.sha256
-shasum -a 256 -c Deep-Fry-0.3.0-source.tar.gz.sha256
+shasum -a 256 -c Deep-Fry-0.3.1-macOS-universal.zip.sha256
+shasum -a 256 -c Deep-Fry-0.3.1-source.tar.gz.sha256
 ```
 
 The packager verifies the JUCE archive's SHA-256 against the CMake pin and checks bundle versions, both architectures, the minimum macOS version, and code signatures. It writes a binary ZIP, complete source archive, and SHA-256 sidecars under `dist/`. The ZIP includes all three formats, installer, license notices, and a release manifest; the source archive includes vendored JUCE and an offline build script. It does not install the bundles. [Installer verification instructions](docs/installation.md#isolated-installer-check) use a separate directory.

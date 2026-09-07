@@ -1,6 +1,6 @@
 # Release validation
 
-See [0.3.0 validation](validation-v0.3.0.md) for the current release. Sections below record earlier versions.
+See [0.3.1 validation](validation-v0.3.1.md) for the current release. Sections below record earlier versions.
 
 ## 0.2.1 — 2026-09-06
 

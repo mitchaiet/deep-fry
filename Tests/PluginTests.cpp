@@ -761,6 +761,19 @@ void captureEditor(juce::Component& editor, const juce::File& screenshotFile)
     imageStream->flush();
 }
 
+void captureButtonAppearance(juce::AudioProcessorEditor& editor, const char* name,
+                             juce::Button::ButtonState state, const juce::File& screenshotFile)
+{
+    auto* button = dynamic_cast<juce::TextButton*>(findEditorControl(editor, name));
+    require(button != nullptr, std::string("native button appearance capture exists: ") + name);
+    const auto previousState = button->getState();
+    // JUCE's appearance state API does not click or change the toggle value.
+    // Capture synchronously so mouse dispatch cannot reset the forced state.
+    button->setState(state);
+    captureEditor(editor, screenshotFile);
+    button->setState(previousState);
+}
+
 void captureChoiceMenu(juce::AudioProcessorEditor& editor, const char* name, const juce::File& screenshotFile)
 {
     auto* choice = dynamic_cast<juce::ComboBox*>(findEditorControl(editor, name));
@@ -1125,6 +1138,10 @@ void makeArtifacts(const juce::File& directory)
             juce::MessageManager::getInstance()->runDispatchLoopUntil(50);
             clickEditorButton(*editor, "Show stereo channels");
             captureEditor(*editor, directory.getChildFile("deep-fry-ui.png"));
+            captureButtonAppearance(*editor, "Save visualization JPEG", juce::Button::buttonOver,
+                                    directory.getChildFile("deep-fry-ui-hover.png"));
+            captureButtonAppearance(*editor, "Save visualization JPEG", juce::Button::buttonDown,
+                                    directory.getChildFile("deep-fry-ui-pressed.png"));
             captureChoiceMenu(*editor, "Image view", directory.getChildFile("deep-fry-ui-view-menu.png"));
             captureChoiceMenu(*editor, "Image palette", directory.getChildFile("deep-fry-ui-palette-menu.png"));
             selectEditorChoice(*editor, "Image palette", 2);
@@ -1163,6 +1180,8 @@ void makeArtifacts(const juce::File& directory)
             clickEditorButton(*editor, "Turn effect off");
             checkEffectSelection(processor, *editor, false, "effect-off screenshot");
             captureEditor(*editor, directory.getChildFile("deep-fry-ui-effect-off.png"));
+            captureButtonAppearance(*editor, "Turn effect off", juce::Button::buttonOver,
+                                    directory.getChildFile("deep-fry-ui-effect-off-hover.png"));
             clickEditorButton(*editor, "Turn effect on");
             capturedLiveStates = true;
         }
