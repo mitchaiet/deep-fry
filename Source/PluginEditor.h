@@ -23,7 +23,6 @@ public:
 
 private:
     using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
-    using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
 
     void timerCallback() override;
     void rebuildImages();
@@ -47,19 +46,19 @@ private:
     std::array<juce::Slider, 5> knobs;
     std::array<std::unique_ptr<SliderAttachment>, 5> knobAttachments;
     std::array<juce::TextButton, 4> presetButtons;
-    juce::TextButton bypassButton { "EFFECT ON" };
+    juce::TextButton effectOnButton { "ON" };
+    juce::TextButton effectOffButton { "OFF" };
     juce::TextButton freezeButton { "FREEZE" };
     juce::TextButton helpButton { "?" };
-    juce::TextButton wetViewButton { "JPEG WET" };
-    juce::TextButton outputViewButton { "FINAL OUT" };
-    juce::TextButton paletteButton { "COLOUR" };
+    juce::ComboBox viewSelector;
+    juce::ComboBox paletteSelector;
     juce::TextButton leftChannelButton { "L" };
     juce::TextButton rightChannelButton { "R" };
     juce::TextButton saveImageButton { "SAVE PNG" };
     std::unique_ptr<juce::FileChooser> imageChooser;
     juce::HyperlinkButton licenseLink { "LICENSE", juce::URL ("https://github.com/mitchaiet/deep-fry/blob/master/LICENSE") };
     juce::HyperlinkButton sourceLink { "SOURCE", juce::URL ("https://github.com/mitchaiet/deep-fry/releases") };
-    std::unique_ptr<ButtonAttachment> bypassAttachment;
+    std::unique_ptr<juce::ParameterAttachment> bypassAttachment;
 
     std::array<deepfry::VisualFrame, 128> tileHistory {};
     juce::Image beforeImage { juce::Image::RGB, 128, 64, true };

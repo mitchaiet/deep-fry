@@ -163,6 +163,16 @@ public:
         setColour (juce::TooltipWindow::backgroundColourId, yellow);
         setColour (juce::TooltipWindow::textColourId, ink);
         setColour (juce::TooltipWindow::outlineColourId, ink);
+        setColour (juce::TextButton::buttonOnColourId, yellow);
+        setColour (juce::TextButton::textColourOnId, ink);
+        setColour (juce::ComboBox::backgroundColourId, white);
+        setColour (juce::ComboBox::textColourId, ink);
+        setColour (juce::ComboBox::outlineColourId, ink);
+        setColour (juce::ComboBox::arrowColourId, ink);
+        setColour (juce::PopupMenu::backgroundColourId, paper);
+        setColour (juce::PopupMenu::textColourId, ink);
+        setColour (juce::PopupMenu::highlightedBackgroundColourId, yellow);
+        setColour (juce::PopupMenu::highlightedTextColourId, ink);
     }
 
     void drawLinearSlider (juce::Graphics& g, int x, int y, int width, int height,
@@ -221,7 +231,8 @@ public:
         g.fillRect (bounds.translated (3, 3));
         if (down)
             bounds = bounds.translated (2, 2);
-        g.setColour (button.getToggleState() ? yellow : highlighted ? white : paper);
+        g.setColour (button.getToggleState() ? button.findColour (juce::TextButton::buttonOnColourId)
+                                             : highlighted ? white : paper);
         g.fillRect (bounds);
         g.setColour (button.hasKeyboardFocus (true) ? blue : ink);
         g.drawRect (bounds, 2.0f);
@@ -233,7 +244,41 @@ public:
         if (down)
             bounds = bounds.translated (2, 2);
         label (g, button.getButtonText().toUpperCase(), bounds,
-               button.getHeight() >= 32 ? 19.0f : 16.0f, ink, juce::Justification::centred, true);
+               button.getHeight() >= 32 ? 19.0f : 16.0f,
+               button.getToggleState() ? button.findColour (juce::TextButton::textColourOnId) : ink,
+               juce::Justification::centred, true);
+    }
+
+    void drawComboBox (juce::Graphics& g, int width, int height, bool,
+                       int, int, int, int, juce::ComboBox& box) override
+    {
+        const juce::Rectangle<float> bounds (1.0f, 1.0f, static_cast<float> (width - 2),
+                                              static_cast<float> (height - 2));
+        g.setColour (white);
+        g.fillRect (bounds);
+        g.setColour (box.hasKeyboardFocus (true) ? blue : ink);
+        g.drawRect (bounds, 2.0f);
+        const auto arrowX = static_cast<float> (width - 19);
+        const auto arrowY = static_cast<float> (height) * 0.5f;
+        juce::Path arrow;
+        arrow.startNewSubPath (arrowX - 4, arrowY - 2);
+        arrow.lineTo (arrowX, arrowY + 2);
+        arrow.lineTo (arrowX + 4, arrowY - 2);
+        g.strokePath (arrow, juce::PathStrokeType (1.5f));
+    }
+
+    juce::Font getComboBoxFont (juce::ComboBox& box) override
+    {
+        return mono (juce::jmin (13.0f, static_cast<float> (box.getHeight()) * 0.46f));
+    }
+
+    juce::Font getPopupMenuFont() override { return mono (14.0f); }
+
+    void positionComboBoxText (juce::ComboBox& box, juce::Label& textLabel) override
+    {
+        textLabel.setBounds (8, 1, box.getWidth() - 34, box.getHeight() - 2);
+        textLabel.setFont (getComboBoxFont (box));
+        textLabel.setJustificationType (juce::Justification::centredLeft);
     }
 };
 
@@ -312,15 +357,30 @@ DeepFryAudioProcessorEditor::DeepFryAudioProcessorEditor (DeepFryAudioProcessor&
         addAndMakeVisible (button);
     }
 
-    bypassButton.setClickingTogglesState (true);
-    bypassButton.setName ("Bypass effect");
-    bypassButton.setTooltip ("Bypass the effect while preserving its reported latency.");
-    bypassButton.onStateChange = [this]
+    for (auto* button : { &effectOnButton, &effectOffButton })
     {
-        bypassButton.setButtonText (bypassButton.getToggleState() ? "BYPASSED" : "EFFECT ON");
-    };
-    addAndMakeVisible (bypassButton);
-    bypassAttachment = std::make_unique<ButtonAttachment> (effectProcessor.parameters, "bypass", bypassButton);
+        button->setClickingTogglesState (true);
+        button->setRadioGroupId (1001);
+        button->setWantsKeyboardFocus (true);
+        addAndMakeVisible (*button);
+    }
+    effectOnButton.setName ("Turn effect on");
+    effectOffButton.setName ("Turn effect off");
+    effectOnButton.setTooltip ("Apply the JPEG effect with the current Mix and Output settings.");
+    effectOffButton.setTooltip ("Play the original audio at its original level. This is the host's Bypass setting.");
+    effectOffButton.setColour (juce::TextButton::buttonOnColourId, ink);
+    effectOffButton.setColour (juce::TextButton::textColourOnId, white);
+    bypassAttachment = std::make_unique<juce::ParameterAttachment> (
+        *effectProcessor.parameters.getParameter ("bypass"), [this] (float value)
+        {
+            const auto bypassed = value >= 0.5f;
+            effectOnButton.setToggleState (! bypassed, juce::dontSendNotification);
+            effectOffButton.setToggleState (bypassed, juce::dontSendNotification);
+            repaint();
+        });
+    effectOnButton.onClick = [this] { bypassAttachment->setValueAsCompleteGesture (0.0f); };
+    effectOffButton.onClick = [this] { bypassAttachment->setValueAsCompleteGesture (1.0f); };
+    bypassAttachment->sendInitialUpdate();
 
     freezeButton.setButtonText ("FREEZE IMAGE");
     freezeButton.setClickingTogglesState (true);
@@ -332,18 +392,26 @@ DeepFryAudioProcessorEditor::DeepFryAudioProcessorEditor (DeepFryAudioProcessor&
     };
     addAndMakeVisible (freezeButton);
 
-    for (auto* button : { &wetViewButton, &outputViewButton, &paletteButton,
-                           &leftChannelButton, &rightChannelButton, &saveImageButton })
+    for (auto* button : { &leftChannelButton, &rightChannelButton, &saveImageButton })
     {
         button->setWantsKeyboardFocus (true);
         addAndMakeVisible (*button);
     }
-    wetViewButton.setName ("Show JPEG wet signal");
-    wetViewButton.setTooltip ("Inspect decoded JPEG samples before Mix, Output gain, and Bypass.");
-    outputViewButton.setName ("Show final output");
-    outputViewButton.setTooltip ("Inspect the actual output after Mix, gain, and Bypass, aligned with its original input.");
-    paletteButton.setName ("Toggle visualization palette");
-    paletteButton.setTooltip ("Use the same colour or grayscale mapping in both panels. Colours encode signed amplitude.");
+    viewSelector.setName ("Image view");
+    viewSelector.addItem ("Output (what you hear)", 1);
+    viewSelector.addItem ("JPEG only (before mix)", 2);
+    viewSelector.setSelectedId (1, juce::dontSendNotification);
+    viewSelector.setTooltip ("Change the image only. Output shows the sound after Mix, Output gain and Effect ON/OFF. JPEG only shows the compression stage before those controls.");
+    paletteSelector.setName ("Image palette");
+    paletteSelector.addItem ("Colour", 1);
+    paletteSelector.addItem ("Grayscale", 2);
+    paletteSelector.setSelectedId (1, juce::dontSendNotification);
+    paletteSelector.setTooltip ("Change the image colours only. Both images use the same amplitude scale; the sound stays the same.");
+    for (auto* selector : { &viewSelector, &paletteSelector })
+    {
+        selector->setWantsKeyboardFocus (true);
+        addAndMakeVisible (*selector);
+    }
     leftChannelButton.setName ("Inspect left channel");
     rightChannelButton.setName ("Inspect right channel");
     leftChannelButton.setTooltip ("View the left channel, or the mono signal.");
@@ -357,9 +425,8 @@ DeepFryAudioProcessorEditor::DeepFryAudioProcessorEditor (DeepFryAudioProcessor&
         rebuildImages();
         repaint();
     };
-    wetViewButton.onClick = [this, refreshView] { showFinalOutput = false; refreshView(); };
-    outputViewButton.onClick = [this, refreshView] { showFinalOutput = true; refreshView(); };
-    paletteButton.onClick = [this, refreshView] { useColour = ! useColour; refreshView(); };
+    viewSelector.onChange = [this, refreshView] { showFinalOutput = viewSelector.getSelectedId() == 1; refreshView(); };
+    paletteSelector.onChange = [this, refreshView] { useColour = paletteSelector.getSelectedId() == 1; refreshView(); };
     leftChannelButton.onClick = [this, refreshView] { selectedChannel = 0; refreshView(); };
     rightChannelButton.onClick = [this, refreshView] { selectedChannel = 1; refreshView(); };
     saveImageButton.onClick = [this] { saveSnapshot(); };
@@ -421,15 +488,15 @@ void DeepFryAudioProcessorEditor::resized()
     for (size_t index = 0; index < presetButtons.size(); ++index)
         presetButtons[index].setBounds (scaledBounds ({ 139.0f + static_cast<float> (index) * 165.0f,
                                                        720.0f, 153.0f, 41.0f }));
-    bypassButton.setBounds (scaledBounds ({ 24, 479, 200, 44 }));
+    effectOnButton.setBounds (scaledBounds ({ 85, 479, 64, 44 }));
+    effectOffButton.setBounds (scaledBounds ({ 156, 479, 68, 44 }));
     helpButton.setBounds (scaledBounds ({ 236, 479, 92, 44 }));
     leftChannelButton.setBounds (scaledBounds ({ 224, 150, 47, 33 }));
     rightChannelButton.setBounds (scaledBounds ({ 281, 150, 47, 33 }));
-    wetViewButton.setBounds (scaledBounds ({ 360, 150, 132, 33 }));
-    outputViewButton.setBounds (scaledBounds ({ 502, 150, 132, 33 }));
-    paletteButton.setBounds (scaledBounds ({ 646, 150, 108, 33 }));
-    saveImageButton.setBounds (scaledBounds ({ 766, 150, 130, 33 }));
-    freezeButton.setBounds (scaledBounds ({ 908, 150, 188, 33 }));
+    viewSelector.setBounds (scaledBounds ({ 408, 150, 246, 33 }));
+    paletteSelector.setBounds (scaledBounds ({ 731, 150, 116, 33 }));
+    saveImageButton.setBounds (scaledBounds ({ 857, 150, 103, 33 }));
+    freezeButton.setBounds (scaledBounds ({ 970, 150, 126, 33 }));
     licenseLink.setBounds (scaledBounds ({ 394, 508, 80, 24 }));
     sourceLink.setBounds (scaledBounds ({ 490, 508, 80, 24 }));
     for (auto* link : { &licenseLink, &sourceLink })
@@ -529,9 +596,12 @@ void DeepFryAudioProcessorEditor::paint (juce::Graphics& g)
     }
 
     label (g, "01 / INPUT", { 24, 156, 186, 24 }, 13);
-    const auto bypassed = bypassButton.getToggleState();
+    label (g, "VIEW", { 360, 150, 44, 33 }, 12);
+    label (g, "PALETTE", { 664, 150, 63, 33 }, 11.5f);
+    label (g, "EFFECT", { 24, 479, 57, 44 }, 17, ink, juce::Justification::centredLeft, true);
+    const auto bypassed = effectOffButton.getToggleState();
     const auto hasSignal = inputMeter > 0.0001f && ticksSinceFrame < 15;
-    const juce::String status = saveStatusTicks > 0 ? saveStatus : frozen ? "FROZEN" : bypassed ? "BYPASSED"
+    const juce::String status = saveStatusTicks > 0 ? saveStatus : frozen ? "FROZEN" : bypassed ? "EFFECT OFF"
                                      : ticksSinceFrame >= 15 && tileCount > 0 ? "PLAYBACK STOPPED"
                                      : hasSignal ? "LIVE" : tileCount == 0 ? "WAITING FOR AUDIO" : "INPUT SILENT";
     g.setColour (hasSignal && ! frozen && ! bypassed ? red : muted);
@@ -579,8 +649,7 @@ void DeepFryAudioProcessorEditor::paint (juce::Graphics& g)
     const auto rateText = sampleRate > 0 ? juce::String (sampleRate / 1000.0, 1) + " kHz" : "DEVICE IDLE";
     const auto latencyText = sampleRate > 0 ? juce::String (1000.0 * effectProcessor.getLatencySamples() / sampleRate, 2) + " ms" : "-- ms";
     label (g, rateText + " / " + latencyText + " LATENCY", { 24, 777, 366, 22 }, 10, paper);
-    const auto viewText = showFinalOutput ? "FINAL OUTPUT" : "JPEG WET";
-    label (g, juce::String (viewText) + (useColour ? " / COLOUR" : " / GRAYSCALE") + " / +/-1",
+    label (g, "VIEW + PALETTE: IMAGE ONLY",
            { 393, 777, 370, 22 }, 10, paper,
            juce::Justification::centred);
     label (g, tileCount == 0 ? "DCT DETAIL: --" : "DCT DETAIL: " + juce::String (juce::roundToInt (retention * 100.0f)) + "% RETAINED",
@@ -606,8 +675,8 @@ void DeepFryAudioProcessorEditor::paint (juce::Graphics& g)
             label (g, steps[i], { 394, 272 + static_cast<float> (i) * 35, 668, 31 }, 13);
         g.setColour (ink);
         g.fillRect (394, 387, 668, 2);
-        label (g, "FINAL OUT includes Mix, gain and Bypass. JPEG WET precedes them.", { 394, 400, 668, 27 }, 11.5f);
-        label (g, "Both panes use one palette. The centre colour means zero.", { 394, 425, 668, 27 }, 11.5f);
+        label (g, "EFFECT ON applies the sound controls. OFF plays the original audio.", { 394, 400, 668, 27 }, 11.5f);
+        label (g, "VIEW and PALETTE change the image only. JPEG only is before Mix.", { 394, 425, 668, 27 }, 11.5f);
         label (g, "Click a tile to freeze and inspect it. SAVE PNG exports the pair.", { 394, 450, 668, 27 }, 11.5f);
         label (g, "(C) 2026 Mitch Chaiet. AGPLv3. You may redistribute under this license.",
                { 394, 482, 668, 20 }, 10.5f);
@@ -638,10 +707,8 @@ float DeepFryAudioProcessorEditor::displayedPixel (const deepfry::VisualChannelF
 
 void DeepFryAudioProcessorEditor::updateViewControls()
 {
-    wetViewButton.setToggleState (! showFinalOutput, juce::dontSendNotification);
-    outputViewButton.setToggleState (showFinalOutput, juce::dontSendNotification);
-    paletteButton.setToggleState (useColour, juce::dontSendNotification);
-    paletteButton.setButtonText (useColour ? "COLOUR" : "GRAY");
+    // Menu changes notify asynchronously. Leave their selection alone here so
+    // the refresh timer cannot overwrite a choice before onChange receives it.
     leftChannelButton.setToggleState (selectedChannel == 0, juce::dontSendNotification);
     rightChannelButton.setToggleState (selectedChannel == 1, juce::dontSendNotification);
     const auto* latest = tileCount > 0 ? historyFrame (tileCount - 1) : nullptr;
@@ -700,7 +767,7 @@ void DeepFryAudioProcessorEditor::drawAmplitudeLegend (juce::Graphics& g, juce::
 void DeepFryAudioProcessorEditor::drawTileInspector (juce::Graphics& g)
 {
     label (g, "INPUT", { 24, 369, 74, 18 }, 9.5f, muted);
-    label (g, showFinalOutput ? "FINAL OUT" : "JPEG WET", { 112, 369, 80, 18 }, 9.5f, muted);
+    label (g, showFinalOutput ? "OUTPUT" : "JPEG ONLY", { 112, 369, 80, 18 }, 9.5f, muted);
     const auto index = selectedTile >= 0 ? static_cast<size_t> (selectedTile) : tileCount > 0 ? tileCount - 1 : 0;
     const auto* frame = historyFrame (index);
     const auto* channel = frame != nullptr ? channelFrame (*frame) : nullptr;
@@ -750,7 +817,7 @@ juce::Image DeepFryAudioProcessorEditor::createVisualizationSnapshot() const
     label (g, juce::String (channel) + (useColour ? " / COLOUR" : " / GRAYSCALE"),
            { 780, 12, 280, 20 }, 11, ink, juce::Justification::centredRight);
     label (g, "01 / INPUT", { 20, 35, 512, 17 }, 10, muted);
-    label (g, showFinalOutput ? "02 / FINAL OUTPUT" : "02 / JPEG WET", { 548, 35, 512, 17 }, 10, muted);
+    label (g, showFinalOutput ? "02 / OUTPUT (WHAT YOU HEAR)" : "02 / JPEG ONLY (BEFORE MIX)", { 548, 35, 512, 17 }, 10, muted);
     g.setImageResamplingQuality (juce::Graphics::lowResamplingQuality);
     g.drawImage (beforeImage, juce::Rectangle<float> (20, 54, 512, 256));
     g.drawImage (afterImage, juce::Rectangle<float> (548, 54, 512, 256));

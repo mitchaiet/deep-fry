@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.2.1 — 2026-09-06
+
+Make effect state and image-only controls clear at a glance.
+
+- Replace the changing Effect On / Bypassed button with fixed **Effect ON / OFF**
+  choices. Selected ON is yellow; selected OFF uses white text on dark ink.
+- Replace JPEG Wet / Final Out buttons with a labeled **View** menu:
+  **Output (what you hear)** or **JPEG only (before mix)**.
+- Replace the Colour / Gray button with a labeled **Palette** menu offering
+  **Colour** and **Grayscale**.
+- State below the main image that View and Palette change the image only.
+  Use **OUTPUT**, **JPEG ONLY**, and **EFFECT OFF** consistently in readouts.
+- Update the README's before/after instructions and platform download examples.
+
+The existing Bypass automation parameter still controls Effect ON/OFF. Audio
+processing, latency, presets, and saved-state compatibility are unchanged. See
+[validation results](docs/validation.md) for checks and platform limitations.
+
 ## 0.2.0 — 2026-09-05
 
 Make the live visualizer useful for comparing, inspecting, and saving the sound's image.

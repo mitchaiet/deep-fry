@@ -1,5 +1,42 @@
 # Release validation
 
+## 0.2.1 — 2026-09-06
+
+This release replaces the inverted Effect On/Bypassed button with explicit
+ON/OFF choices and separates image View and Palette into labeled menus. The
+existing `bypass` parameter still saves and automates the effect state. The audio
+algorithm, parameter IDs, presets, and latency are unchanged.
+
+| Check | Result |
+| --- | --- |
+| macOS codec and plugin integration CTest suites | Passed |
+| Native editor/artifact run | 1,368,275 integration checks passed |
+| ON/OFF initial state, repeated selection, host automation, and state recall | Passed |
+| Native menu opening, rendering, and dismissal | Passed for View and Palette |
+| Asynchronous menu choice with an intervening display refresh | Passed |
+| Image menus preserve saved sound parameters and callback audio | Passed |
+| Default/compact layouts, including compact Grayscale and both effect states | Passed |
+| Mac VST3 pluginval 1.0.4, strictness 5 | Passed on arm64 and x86_64 under Rosetta |
+| Windows codec/integration CTest suites | Passed under Wine 11 |
+| Windows pluginval 1.0.4, strictness 5, GUI tests skipped | Passed under Wine 11 |
+
+Thirteen native PNGs were inspected, including the open menus, effect OFF,
+compact Grayscale, help, and paired export. The [README screenshot](deep-fry-ui.png)
+shows this version. Evidence is in `.context/clarity-021-preview/`,
+`.context/artifacts-clarity-021.log`, `.context/pluginval-021-*.log`, and
+`.context/windows-cross/*021*`. The OS Save dialog was not automated.
+
+The Mac bundles contain arm64 and x86_64 slices, target macOS 11+, and retain
+ad-hoc signatures without Apple notarization. Runtime checks used macOS 26.2.
+Windows PE binaries report 0.2.1.0, use a static compiler runtime with system DLL
+imports only, and include the canonical VST3 manifest for 0.2.1.
+
+Windows remains an unsigned preview: the checks above use Wine with GUI tests
+skipped, and native Windows GUI/DAW compatibility remains unverified. A live DAW
+session with this 0.2.1 interface, physical audio hardware, older macOS versions,
+and Audio Unit host validation were not independently tested. Existing platform
+and packaging limitations from the releases below still apply.
+
 ## 0.2.0 — 2026-09-05
 
 This release adds paired input/final-output capture, stereo inspection, a shared
@@ -30,10 +67,9 @@ The stream-restart regression holds negative-amplitude history, prepares a new
 positive-amplitude stream, advances beyond the old sample positions while frozen,
 and compares the resumed image with a fresh editor receiving only new captures.
 
-Nine native images were inspected: idle, live, compact, grayscale, JPEG wet,
-right channel, selected tile, help, and paired PNG export. The current
-[README screenshot](deep-fry-ui.png) comes from this run. Local screenshots and
-synthetic before/after audio are in `.context/visualizer-020-preview/`.
+Nine native images were inspected for 0.2.0: idle, live, compact, grayscale,
+JPEG wet, right channel, selected tile, help, and paired PNG export. Local
+screenshots and synthetic audio are in `.context/visualizer-020-preview/`.
 
 The Mac VST3, Audio Unit, and standalone bundles contain arm64 and x86_64 slices,
 target macOS 11.0+, and use ad-hoc signatures. They are not Apple-notarized.

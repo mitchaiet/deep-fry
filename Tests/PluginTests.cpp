@@ -607,6 +607,32 @@ void clickEditorButton(juce::AudioProcessorEditor& editor, const char* name)
     juce::MessageManager::getInstance()->runDispatchLoopUntil(50);
 }
 
+void selectEditorChoice(juce::AudioProcessorEditor& editor, const char* name, int itemId)
+{
+    auto* choice = dynamic_cast<juce::ComboBox*>(findEditorControl(editor, name));
+    require(choice != nullptr, std::string("accessible editor choice exists: ") + name);
+    choice->setSelectedId(itemId, juce::sendNotificationAsync);
+    // Native menu selection notifies asynchronously. Let a visualization timer
+    // refresh intervene first, so stale display state cannot undo the choice.
+    juce::Thread::sleep(40);
+    juce::Timer::callPendingTimersSynchronously();
+    juce::MessageManager::getInstance()->runDispatchLoopUntil(50);
+    require(choice->getSelectedId() == itemId, std::string("requested display choice is selected: ") + name);
+}
+
+void checkEffectSelection(DeepFryAudioProcessor& processor, juce::AudioProcessorEditor& editor,
+                          bool effectOn, const char* context)
+{
+    auto* on = dynamic_cast<juce::Button*>(findEditorControl(editor, "Turn effect on"));
+    auto* off = dynamic_cast<juce::Button*>(findEditorControl(editor, "Turn effect off"));
+    require(on != nullptr && off != nullptr, "effect exposes separate accessible ON and OFF controls");
+    require(on->getButtonText() == "ON" && off->getButtonText() == "OFF",
+            "effect control labels retain their meaning in both states");
+    require(on->getToggleState() == effectOn && off->getToggleState() != effectOn
+                && processor.parameters.getRawParameterValue("bypass")->load() == (effectOn ? 0.0f : 1.0f),
+            std::string(context) + ": selected effect state matches the saved host bypass value");
+}
+
 bool imagesEqual(const juce::Image& first, const juce::Image& second)
 {
     if (first.getBounds() != second.getBounds() || first.isValid() != second.isValid())
@@ -638,7 +664,7 @@ void inspectImageTile(juce::AudioProcessorEditor& editor)
     require(freeze != nullptr && freeze->getToggleState(), "clicking an image tile freezes its matching input and processed history for inspection");
 }
 
-void captureEditor(juce::AudioProcessorEditor& editor, const juce::File& screenshotFile)
+void captureEditor(juce::Component& editor, const juce::File& screenshotFile)
 {
     const auto snapshot = editor.createComponentSnapshot(editor.getLocalBounds(), true, 1.0f);
     require(snapshot.isValid() && snapshot.getWidth() == editor.getWidth()
@@ -651,6 +677,36 @@ void captureEditor(juce::AudioProcessorEditor& editor, const juce::File& screens
     juce::PNGImageFormat png;
     require(png.writeImageToStream(snapshot, *imageStream), "native editor screenshot is encoded as PNG");
     imageStream->flush();
+}
+
+void captureChoiceMenu(juce::AudioProcessorEditor& editor, const char* name, const juce::File& screenshotFile)
+{
+    auto* choice = dynamic_cast<juce::ComboBox*>(findEditorControl(editor, name));
+    require(choice != nullptr, std::string("display menu exists: ") + name);
+    auto& desktop = juce::Desktop::getInstance();
+    std::vector<juce::Component*> existingWindows;
+    for (int i = 0; i < desktop.getNumComponents(); ++i)
+        existingWindows.push_back(desktop.getComponent(i));
+    choice->showPopup();
+    // JUCE creates its native popup synchronously. Capture it before dispatch:
+    // this console verifier has no foreground host window, so JUCE's normal
+    // application-focus handling may otherwise dismiss the menu immediately.
+    require(choice->isPopupActive(), std::string("display menu opens: ") + name);
+    bool captured = false;
+    for (int i = 0; i < desktop.getNumComponents(); ++i)
+    {
+        auto* window = desktop.getComponent(i);
+        if (window->isVisible() && std::find(existingWindows.begin(), existingWindows.end(), window) == existingWindows.end())
+        {
+            captureEditor(*window, screenshotFile);
+            captured = true;
+            break;
+        }
+    }
+    require(captured, std::string("display menu renders its choices in a native popup: ") + name);
+    choice->hidePopup();
+    juce::MessageManager::getInstance()->runDispatchLoopUntil(30);
+    require(!choice->isPopupActive(), std::string("display menu dismisses cleanly: ") + name);
 }
 
 void visualizationRestartWhileFrozen()
@@ -723,12 +779,37 @@ void editorInteractions(DeepFryAudioProcessor& processor, juce::AudioProcessorEd
     juce::MessageManager::getInstance()->runDispatchLoopUntil(20);
     require(quality->getValue() == 47.0, "host parameter automation updates the visible knob");
 
-    clickButton("Bypass effect");
-    require(processor.parameters.getRawParameterValue("bypass")->load() == 1.0f,
-            "clicking bypass enables the saved host bypass parameter");
-    clickButton("Bypass effect");
-    require(processor.parameters.getRawParameterValue("bypass")->load() == 0.0f,
-            "clicking bypass again re-enables the effect");
+    checkEffectSelection(processor, editor, true, "initial active effect");
+    juce::MemoryBlock effectOnState, effectOffState;
+    processor.getStateInformation(effectOnState);
+    clickButton("Turn effect on");
+    checkEffectSelection(processor, editor, true, "clicking the selected ON choice");
+    clickButton("Turn effect off");
+    checkEffectSelection(processor, editor, false, "choosing OFF");
+    processor.getStateInformation(effectOffState);
+    clickButton("Turn effect off");
+    checkEffectSelection(processor, editor, false, "clicking the selected OFF choice");
+
+    for (const bool effectOn : { true, false })
+    {
+        setParameter(processor, "bypass", effectOn ? 0.0f : 1.0f);
+        juce::MessageManager::getInstance()->runDispatchLoopUntil(50);
+        checkEffectSelection(processor, editor, effectOn, "host parameter automation");
+    }
+    for (const auto* state : { &effectOnState, &effectOffState })
+    {
+        processor.setStateInformation(state->getData(), static_cast<int>(state->getSize()));
+        juce::MessageManager::getInstance()->runDispatchLoopUntil(50);
+        checkEffectSelection(processor, editor, state == &effectOnState, "restoring a saved state with an open editor");
+    }
+    {
+        DeepFryAudioProcessor restoredProcessor;
+        restoredProcessor.setStateInformation(effectOffState.getData(), static_cast<int>(effectOffState.getSize()));
+        std::unique_ptr<juce::AudioProcessorEditor> restoredEditor(restoredProcessor.createEditor());
+        checkEffectSelection(restoredProcessor, *restoredEditor, false, "creating an editor for an already bypassed effect");
+    }
+    clickButton("Turn effect on");
+    checkEffectSelection(processor, editor, true, "choosing ON after restoring bypass");
 
     juce::MemoryBlock beforeFreeze;
     processor.getStateInformation(beforeFreeze);
@@ -768,10 +849,15 @@ void editorInteractions(DeepFryAudioProcessor& processor, juce::AudioProcessorEd
     for (auto& channel : changedInput)
         for (auto& sample : channel)
             sample *= 0.63f;
-    for (const auto* control : { "Show JPEG wet signal", "Toggle visualization palette", "Inspect right channel",
-                                "Show final output", "Inspect left channel", "Toggle visualization palette" })
+    struct DisplayAction { const char* name; int itemId; };
+    for (const auto& control : { DisplayAction { "Image view", 2 }, { "Image palette", 2 },
+                                { "Inspect right channel", 0 }, { "Image view", 1 },
+                                { "Inspect left channel", 0 }, { "Image palette", 1 } })
     {
-        clickButton(control);
+        if (control.itemId == 0)
+            clickButton(control.name);
+        else
+            selectEditorChoice(editor, control.name, control.itemId);
         juce::MemoryBlock afterDisplayChange;
         processor.getStateInformation(afterDisplayChange);
         require(beforeFreeze == afterDisplayChange, "visual view, palette, and channel choices leave saved sound parameters unchanged");
@@ -860,12 +946,14 @@ void makeArtifacts(const juce::File& directory)
             // while preserving the complete eight-second audio render below.
             juce::MessageManager::getInstance()->runDispatchLoopUntil(50);
             captureEditor(*editor, directory.getChildFile("deep-fry-ui.png"));
-            clickEditorButton(*editor, "Toggle visualization palette");
+            captureChoiceMenu(*editor, "Image view", directory.getChildFile("deep-fry-ui-view-menu.png"));
+            captureChoiceMenu(*editor, "Image palette", directory.getChildFile("deep-fry-ui-palette-menu.png"));
+            selectEditorChoice(*editor, "Image palette", 2);
             captureEditor(*editor, directory.getChildFile("deep-fry-ui-gray.png"));
-            clickEditorButton(*editor, "Toggle visualization palette");
-            clickEditorButton(*editor, "Show JPEG wet signal");
+            selectEditorChoice(*editor, "Image palette", 1);
+            selectEditorChoice(*editor, "Image view", 2);
             captureEditor(*editor, directory.getChildFile("deep-fry-ui-wet.png"));
-            clickEditorButton(*editor, "Show final output");
+            selectEditorChoice(*editor, "Image view", 1);
             clickEditorButton(*editor, "Inspect right channel");
             captureEditor(*editor, directory.getChildFile("deep-fry-ui-right.png"));
             clickEditorButton(*editor, "Inspect left channel");
@@ -885,11 +973,20 @@ void makeArtifacts(const juce::File& directory)
             require(constrainer != nullptr, "resizable native editor exposes its minimum size");
             editor->setSize(constrainer->getMinimumWidth(), constrainer->getMinimumHeight());
             captureEditor(*editor, directory.getChildFile("deep-fry-ui-small.png"));
+            selectEditorChoice(*editor, "Image palette", 2);
+            captureEditor(*editor, directory.getChildFile("deep-fry-ui-small-gray.png"));
+            selectEditorChoice(*editor, "Image palette", 1);
             editor->setBounds(originalBounds);
 
             clickEditorButton(*editor, "Explain JPEG audio processing");
             captureEditor(*editor, directory.getChildFile("deep-fry-ui-help.png"));
             clickEditorButton(*editor, "Explain JPEG audio processing");
+            // No callback runs between these changes, so the additional control
+            // state screenshot cannot alter any sample in the musical demo.
+            clickEditorButton(*editor, "Turn effect off");
+            checkEffectSelection(processor, *editor, false, "effect-off screenshot");
+            captureEditor(*editor, directory.getChildFile("deep-fry-ui-effect-off.png"));
+            clickEditorButton(*editor, "Turn effect on");
             capturedLiveStates = true;
         }
     }
